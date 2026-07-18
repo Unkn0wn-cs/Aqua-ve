@@ -34,7 +34,7 @@ footer{scroll-snap-align:end}
 [data-techscroller] [data-snap]{height:100svh !important}
 #problem,#product,#why,#applications,#about{min-height:100svh !important}
 }
-@media (max-width:1260px){[data-retpanel]{left:auto !important;right:4vw !important;top:50% !important;transform:translateY(-50%) !important}}
+@media (max-width:1260px){[data-retpanel]{right:4vw !important;bottom:5vh !important}}
 @media (max-width:700px){
 body{overflow-x:clip}
 #home h1{font-size:clamp(30px,9.4vw,42px) !important}
@@ -49,8 +49,6 @@ body{overflow-x:clip}
 [data-tch]{padding:15px 16px !important;gap:8px !important}
 [data-tch] h3{font-size:17.5px !important}
 [data-tch] p{font-size:13px !important;line-height:1.55 !important}
-[data-prodwrap]{height:auto !important}
-[data-prodwrap]>*{width:100% !important;max-width:100% !important;height:auto !important;aspect-ratio:8/5 !important}
 #why [data-cmptable]>div{grid-template-columns:1fr !important}
 #why [data-cmptable]>div:first-child{display:none !important}
 #why [data-cmptable]>div>div{padding:10px 14px !important}
@@ -211,7 +209,7 @@ input::placeholder,textarea::placeholder{color:#5F7484}
       </div>
 
       <!-- return results panel -->
-      <div data-retpanel="1" style="position: absolute; top: 631px; transform: translateY(-50%); width: min(330px,86vw); opacity: 0; transition: opacity 0.5s; pointer-events: none; display: flex; flex-direction: column; gap: 12px; z-index: 3; left: 821px">
+      <div data-retpanel="1" style="position: absolute; right: 5vw; bottom: 6vh; width: min(330px,86vw); opacity: 0; transition: opacity 0.5s; pointer-events: none; display: flex; flex-direction: column; gap: 12px; z-index: 3">
         
         <div style="background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.22);border-radius:6px;padding:18px 20px;backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:14px">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#7E93A2">CAPTURE — PASSIVE vs AQUA</div>
@@ -301,8 +299,8 @@ input::placeholder,textarea::placeholder{color:#5F7484}
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:22px;align-items:flex-start">
     <div data-reveal="1" style="flex:1 1 460px;min-width:0">
-      <div data-prodwrap="1" style="width:100%;height:270px">
-        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="product-render" shape="rounded" radius="6" placeholder="Drop Aqua module render / prototype photo" hint-size="100%,420px" style="width: 523px; height: 329px"></x-import>
+      <div data-prodwrap="1" style="width:100%;height:auto;aspect-ratio:8/5">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="product-render" shape="rounded" radius="6" placeholder="Drop Aqua module render / prototype photo" hint-size="100%,420px" style="width:100%;height:100%"></x-import>
       </div>
       
     </div>
@@ -538,9 +536,8 @@ input::placeholder,textarea::placeholder{color:#5F7484}
       </div>
       <div style="display:flex;flex-direction:column;gap:7px">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.18em;color:#5F7484">CONTACT</div>
-        <span style="font-size:13px;color:#9FB3C0">[ add contact email ]</span>
-        <span style="font-size:13px;color:#9FB3C0">[ add LinkedIn ]</span>
-        <span style="font-size:13px;color:#9FB3C0">Venezuela</span>
+        <a href="mailto:Sam@aqua-ve.com" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Sam@aqua-ve.com</a>
+        <span style="font-size:13px;color:#9FB3C0">Caracas, Venezuela</span>
       </div>
     </div>
   </div>
