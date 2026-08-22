@@ -1,0 +1,69 @@
+# Netlify configuration — static site, no build step.
+
+[build]
+  publish = "."
+  command = ""
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # Self-hosted assets only, plus Google Fonts and the Formspree endpoint.
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self';
+      style-src 'self' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data:;
+      connect-src 'self' https://formspree.io;
+      form-action 'self' https://formspree.io;
+      base-uri 'self';
+      frame-ancestors 'self';
+      object-src 'none'
+    """
+
+# ---------------------------------------------------------------------------
+# Caching
+# HTML must revalidate so content edits go live immediately; fingerprint-free
+# assets get a shorter TTL with revalidation.
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/assets/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/assets/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# ---------------------------------------------------------------------------
+# Canonical host: force the apex domain.
+# ---------------------------------------------------------------------------
+[[redirects]]
+  from = "https://www.aqua-ve.com/*"
+  to = "https://aqua-ve.com/:splat"
+  status = 301
+  force = true

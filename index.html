@@ -1,1037 +1,561 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Aqua — Electrostatic Fog Recovery for Refinery Cooling Towers</title>
+<meta name="description" content="Aqua builds modular electrostatic recovery systems for refinery cooling towers. A corona emitter charges escaping microdroplets and an electric field returns them to the loop — built on technology validated at MIT, engineered for Venezuela.">
+<link rel="canonical" href="https://aqua-ve.com/">
+
+<meta name="theme-color" content="#0B1218">
+<meta name="color-scheme" content="dark">
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aqua">
+<meta property="og:title" content="Aqua — Electrostatic Fog Recovery">
+<meta property="og:description" content="The water your cooling towers lose as fog. Recovered. Modular electrostatic recovery systems for industrial cooling towers, engineered in Venezuela.">
+<meta property="og:url" content="https://aqua-ve.com/">
+<meta property="og:image" content="https://aqua-ve.com/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Aqua electrostatic recovery module mounted over a cooling tower cell.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/aqua-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/aqua-logo.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-<style>
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-@media (prefers-reduced-motion: no-preference){html{scroll-snap-type:y mandatory}}
-[data-snap]{scroll-snap-align:start;scroll-snap-stop:always}
-header[id],section[id]{scroll-snap-align:start}
-footer{scroll-snap-align:end}
-@media (max-height:780px){
-#home [data-heroinner]{gap:16px !important;padding:80px 6vw 40px !important}
-#home h1{font-size:clamp(30px,4.6vw,44px) !important}
-#home [data-heroinner] > p{font-size:14.5px !important}
-#home [data-herostats]{margin-top:12px !important;padding-top:14px !important;gap:24px !important}
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Space+Grotesk:wght@600&display=swap">
+
+<link rel="stylesheet" href="assets/site.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Aqua",
+  "url": "https://aqua-ve.com/",
+  "logo": "https://aqua-ve.com/assets/aqua-logo.png",
+  "description": "Modular electrostatic fog-recovery systems for industrial cooling towers.",
+  "email": "sam@aqua-ve.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Caracas", "addressCountry": "VE" },
+  "founder": { "@type": "Person", "name": "Samuel Hernández", "jobTitle": "Founder & CEO" }
 }
-@media (max-height:600px){#home [data-herostats]{display:none !important}}
-[data-navtoggle]{display:none}
-@media (max-width:920px){[data-navlinks],[data-navcta]{display:none !important}[data-navtoggle]{display:inline-flex !important}}
-@supports (height:100svh){
-#home{height:100svh !important}
-[data-stage]{height:100svh !important}
-[data-techscroller] [data-snap]{height:100svh !important}
-#problem,#product,#why,#applications,#about{min-height:100svh !important}
-}
-@media (max-width:1260px){[data-retpanel]{right:4vw !important;bottom:5vh !important}}
-@media (max-width:700px){
-body{overflow-x:clip}
-#home h1{font-size:clamp(30px,9.4vw,42px) !important}
-#home [data-heroinner]{padding:84px 5vw 36px !important;gap:20px !important}
-#home [data-heroinner]>p{font-size:14.5px !important}
-[data-herostats]{gap:16px 26px !important;margin-top:16px !important;padding-top:16px !important}
-#problem,#product,#why,#applications,#about,#contact{padding-left:5vw !important;padding-right:5vw !important}
-[data-hudpanel]{min-width:0 !important;top:66px !important;right:4vw !important;transform:scale(0.82);transform-origin:top right}
-[data-hudpanel]>div{padding:7px 12px !important;gap:12px !important}
-[data-techintro] h2{font-size:clamp(28px,8.4vw,36px) !important}
-[data-techintro] p{font-size:14px !important}
-[data-tch]{padding:15px 16px !important;gap:8px !important}
-[data-tch] h3{font-size:17.5px !important}
-[data-tch] p{font-size:13px !important;line-height:1.55 !important}
-#why [data-cmptable]>div{grid-template-columns:1fr !important}
-#why [data-cmptable]>div:first-child{display:none !important}
-#why [data-cmptable]>div>div{padding:10px 14px !important}
-#why [data-cmptable]>div>div:nth-child(2)::before{content:"PASSIVE MESH";display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;color:#5F7585;margin-bottom:5px}
-#why [data-cmptable]>div>div:nth-child(3)::before{content:"AQUA SYSTEM";display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;color:#1489A8;margin-bottom:5px}
-#why [data-cmptable]>div>div:first-child{padding-bottom:2px !important}
-}
-body{margin:0;background:#0B1218;color:#E7EEF2;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:#8FD9EA;text-decoration:none}
-a:hover{color:#C9EFF8}
-::selection{background:rgba(86,200,223,.32)}
-input::placeholder,textarea::placeholder{color:#5F7484}
-@keyframes aquaPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
-</style>
-</helmet>
+</script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ============ NAV ============ -->
-<nav data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:13px 4vw;background:rgba(11,18,24,0.8);backdrop-filter:blur(14px);border-bottom:1px solid rgba(120,150,170,0.14)">
-  <a href="#home" style="display:flex;align-items:center;gap:10px;color:#E7EEF2">
-    <img src="assets/aqua-logo.png" alt="Aqua logo" style="width:26px;height:26px;filter:drop-shadow(0 0 1px rgba(230,245,250,0.9))">
-    <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;letter-spacing:0.28em">AQUA</span>
+<nav class="nav" aria-label="Primary">
+  <a class="nav__brand" href="#home">
+    <img src="assets/aqua-logo.png" alt="" width="26" height="26">
+    <span class="nav__wordmark">AQUA</span>
+    <span class="visually-hidden">Aqua — home</span>
   </a>
-  <div data-navlinks="1" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap">
-    <a href="#problem" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Problem</a>
-    <a href="#technology" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Technology</a>
-    <a href="#product" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">System</a>
-    <a href="#why" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Why Aqua</a>
-    <a href="#applications" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Applications</a>
-    <a href="#about" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">About</a>
+
+  <div class="nav__links" data-nav-links>
+    <a href="#problem">Problem</a>
+    <a href="#technology">Technology</a>
+    <a href="#product">System</a>
+    <a href="#why">Why Aqua</a>
+    <a href="#applications">Applications</a>
+    <a href="#about">About</a>
   </div>
-  <div style="display:flex;align-items:center;gap:16px">
-    <div style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em">
-      <span style="color:#E7EEF2">EN</span>
-      <span style="color:#42525F">/</span>
-      <button onClick="{{ esClick }}" title="Español — próximamente" style="background:none;border:none;padding:0;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5F7484" style-hover="color:#9FB3C0">ES</button>
-      <sc-if value="{{ esNote }}" hint-placeholder-val="{{ false }}">
-        <span style="color:#56C8DF;font-size:10px">próximamente</span>
-      </sc-if>
-    </div>
-    <a href="#contact" data-navcta="1" style="background:#56C8DF;color:#06222B;font-weight:600;font-size:13px;padding:9px 16px;border-radius:4px" style-hover="background:#7FDCEE;color:#06222B">Request a consultation</a>
-    <button data-navtoggle="1" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center;justify-content:center;background:none;border:1px solid rgba(120,150,170,0.35);border-radius:4px;color:#E7EEF2;padding:7px 11px;cursor:pointer;font-size:16px;line-height:1" style-hover="border-color:#56C8DF">☰</button>
+
+  <div class="nav__actions">
+    <a href="#contact" class="btn btn--primary btn--sm nav__cta">Request a consultation</a>
+    <button class="nav__toggle" type="button"
+            data-nav-toggle
+            aria-expanded="false"
+            aria-controls="nav-drawer"
+            aria-label="Open menu"><span></span></button>
   </div>
-  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div onClick="{{ closeMenu }}" style="position:absolute;top:100%;left:0;right:0;background:rgba(9,15,22,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(120,150,170,0.2);box-shadow:0 18px 40px rgba(0,0,0,0.4);display:flex;flex-direction:column;padding:4px 4vw 18px">
-      <a href="#problem" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(120,150,170,0.12);font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>Problem</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">01</span></a>
-      <a href="#technology" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(120,150,170,0.12);font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>Technology</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">02</span></a>
-      <a href="#product" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(120,150,170,0.12);font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>System</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">03</span></a>
-      <a href="#why" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(120,150,170,0.12);font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>Why Aqua</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">04</span></a>
-      <a href="#applications" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(120,150,170,0.12);font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>Applications</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">05</span></a>
-      <a href="#about" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;font-size:14.5px;color:#E7EEF2" style-hover="color:#7FDCEE"><span>About</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56C8DF">06</span></a>
-      <a href="#contact" style="margin-top:14px;background:#56C8DF;color:#06222B;font-weight:600;font-size:14px;padding:12px 16px;border-radius:4px;text-align:center" style-hover="background:#7FDCEE;color:#06222B">Request a consultation</a>
-    </div>
-  </sc-if>
+
+  <div class="nav__drawer" id="nav-drawer" data-nav-drawer hidden>
+    <a href="#problem"><span>Problem</span><span class="nav__num">01</span></a>
+    <a href="#technology"><span>Technology</span><span class="nav__num">02</span></a>
+    <a href="#product"><span>System</span><span class="nav__num">03</span></a>
+    <a href="#why"><span>Why Aqua</span><span class="nav__num">04</span></a>
+    <a href="#applications"><span>Applications</span><span class="nav__num">05</span></a>
+    <a href="#about"><span>About</span><span class="nav__num">06</span></a>
+    <a href="#contact" class="btn btn--primary">Request a consultation</a>
+  </div>
 </nav>
 
+<main id="main">
+
 <!-- ============ HERO ============ -->
-<header id="home" data-screen-label="Hero" style="position:relative;height:100vh;box-sizing:border-box;display:flex;align-items:center;overflow:hidden;background:linear-gradient(180deg,#0B1218 0%,#0C141C 60%,#0B1218 100%)">
-  <canvas ref="{{ heroRef }}" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-  <div style="position:absolute;inset:auto 0 0 0;height:180px;background:linear-gradient(180deg,rgba(11,18,24,0) 0%,#0B1218 100%);pointer-events:none"></div>
-  <div data-heroinner="1" style="position:relative;z-index:2;max-width:1060px;padding:100px 6vw 60px;display:flex;flex-direction:column;gap:28px">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">ELECTROSTATIC FOG RECOVERY — VENEZUELA</div>
-    <h1 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(42px,6.4vw,82px);line-height:1.03;letter-spacing:-0.03em;color:#EDF4F8;text-wrap:balance">The water your cooling towers lose as fog. Recovered.</h1>
-    <p style="margin:0;max-width:640px;font-size:17px;line-height:1.65;color:#A7BAC7">Aqua builds modular electrostatic recovery systems for refinery cooling towers: a corona emitter charges the microdroplets escaping in the plume, and a controlled electric field pulls them back into the loop. Built on technology validated at MIT — engineered for Venezuela's refining system.</p>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px">
-      <a href="#contact" style="background:#56C8DF;color:#06222B;font-weight:600;font-size:14px;padding:13px 22px;border-radius:4px" style-hover="background:#7FDCEE;color:#06222B">Request a consultation</a>
-      <a href="#technology" style="border:1px solid rgba(134,170,190,0.4);color:#C9D9E2;font-weight:500;font-size:14px;padding:13px 22px;border-radius:4px" style-hover="border-color:#56C8DF;color:#E7EEF2">How it works ↓</a>
+<header class="hero" id="home">
+  <canvas class="hero__canvas" data-hero-canvas aria-hidden="true"></canvas>
+  <div class="hero__fade"></div>
+  <div class="hero__inner">
+    <p class="eyebrow">Electrostatic fog recovery — Venezuela</p>
+    <h1>The water your cooling towers lose as fog. Recovered.</h1>
+    <p class="hero__lede">Aqua builds modular electrostatic recovery systems for refinery cooling towers: a corona emitter charges the microdroplets escaping in the plume, and a controlled electric field pulls them back into the loop. Built on technology validated at MIT — engineered for Venezuela's refining system.</p>
+    <div class="hero__actions">
+      <a href="#contact" class="btn btn--primary">Request a consultation</a>
+      <a href="#technology" class="btn btn--ghost">How it works ↓</a>
     </div>
-    <div data-herostats="1" style="display:flex;gap:40px;flex-wrap:wrap;margin-top:34px;padding-top:26px;border-top:1px solid rgba(120,150,170,0.16)">
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;color:#EDF4F8">up to 8×</div>
-        <div style="font-size:12.5px;color:#8CA0AE">capture vs. passive mesh <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;margin-left:6px;vertical-align:1px">MIT LAB</span></div>
+    <div class="hero__stats">
+      <div class="hero__stat">
+        <b>20–30%</b>
+        <span>of cooling-tower water loss recovered <a class="badge badge-ref" href="#ref-3">FIELD DATA<span class="visually-hidden"> — see reference 3</span></a></span>
       </div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;color:#EDF4F8">~0.2 kWh/m³</div>
-        <div style="font-size:12.5px;color:#8CA0AE">energy per m³ recovered <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;margin-left:6px;vertical-align:1px">MIT LAB</span></div>
+      <div class="hero__stat">
+        <b>~0.2 kWh/m³</b>
+        <span>energy per m³ recovered <a class="badge badge-ref" href="#ref-1">MIT LAB<span class="visually-hidden"> — see reference 1</span></a></span>
       </div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;color:#EDF4F8">4–10 m³/day</div>
-        <div style="font-size:12.5px;color:#8CA0AE">returned per tower installation <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;margin-left:6px;vertical-align:1px">ESTIMATE</span></div>
+      <div class="hero__stat">
+        <b>4–10 m³/day</b>
+        <span>returned per tower installation <span class="badge">ESTIMATE</span></span>
       </div>
     </div>
   </div>
 </header>
 
 <!-- ============ PROBLEM ============ -->
-<section id="problem" data-screen-label="Problem" style="min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:safe center;padding:90px 6vw 48px;border-top:1px solid rgba(120,150,170,0.1)">
-  <div data-reveal="1" style="max-width:780px;display:flex;flex-direction:column;gap:16px">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">01 — THE PROBLEM</div>
-    <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#EDF4F8;text-wrap:balance">Refineries lose water they can never get back — as fog.</h2>
-    <p style="margin:0;font-size:16px;line-height:1.65;color:#A7BAC7;max-width:680px">Venezuela hosts some of the largest refineries on Earth. The Paraguaná Refining Complex — Amuay and Cardón, in Falcón — has installed capacity above 940,000 barrels a day; El Palito and Puerto La Cruz add more. All of them depend on cooling towers circulating massive volumes of fresh water — and a share of it leaves irrecoverably as micron-scale fog drift. No active recovery technology is deployed in the Venezuelan market today.</p>
+<section class="section" id="problem" aria-labelledby="problem-title">
+  <div class="section__head reveal">
+    <p class="eyebrow">01 — The problem</p>
+    <h2 class="section-title" id="problem-title">Refineries lose water they can never get back — as fog.</h2>
+    <p class="lede">Venezuela hosts some of the largest refineries on Earth. The Paraguaná Refining Complex — Amuay and Cardón, in Falcón — has installed capacity above 940,000 barrels a day<a class="badge badge-ref" href="#ref-4">4</a>; El Palito and Puerto La Cruz add more. All of them depend on cooling towers circulating massive volumes of fresh water — and a share of it leaves irrecoverably through the fan stacks, as an evaporative plume that recondenses into micron-scale droplets in the air above. No active recovery technology is deployed in the Venezuelan market today.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:32px">
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:14px 18px;background:#0E161E;display:flex;flex-direction:column;gap:12px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#7E93A2">LOST AS FOG</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:600;color:#9BE0EF">3–5%</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">of circulating cooling water escapes as microdroplet drift. Passive meshes recover barely 1–2% of it in real conditions — the droplets simply follow the air around them.</p>
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;align-self:flex-start">INDUSTRY DATA</span>
+
+  <div class="grid-auto">
+    <div class="card reveal">
+      <p class="card__label">Lost to the plume</p>
+      <p class="card__stat">3–5%</p>
+      <p>of circulating cooling water leaves as evaporative loss — roughly 1% for every 10&nbsp;°F of cooling range. It rises through the fan stacks and recondenses as a plume of micron-scale droplets. Passive fog mesh recovers 1–2% of droplets that size: they simply follow the air around every wire.</p>
+      <p><a class="badge badge-ref" href="#ref-2">INDUSTRY DATA<span class="visually-hidden"> — see reference 2</span></a></p>
     </div>
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:14px 18px;background:#0E161E;display:flex;flex-direction:column;gap:12px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#7E93A2">WATER STRESS</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:600;color:#9BE0EF">Falcón · Anzoátegui</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">The states hosting CRP and Puerto La Cruz have documented water deficits. Refineries and communities draw on the same aqueducts, with droughts more frequent — social tension that becomes operational risk.</p>
+    <div class="card reveal">
+      <p class="card__label">Water stress</p>
+      <p class="card__stat">Falcón · Anzoátegui</p>
+      <p>The states hosting CRP and Puerto La Cruz have documented water deficits<a class="badge badge-ref" href="#ref-5">5</a>. Refineries and communities draw on the same aqueducts, with droughts more frequent — social tension that becomes operational risk.</p>
     </div>
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:14px 18px;background:#0E161E;display:flex;flex-direction:column;gap:12px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#7E93A2">AVOIDABLE COST</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:600;color:#9BE0EF">$150–400K/yr</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">What recovering 15% of the fog lost from a single tower can represent at complex scale — direct operating relief for installations running under severe financial pressure, on deteriorated infrastructure that makes every loss worse.</p>
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;align-self:flex-start">AQUA ESTIMATE</span>
+    <div class="card reveal">
+      <p class="card__label">Avoidable cost</p>
+      <p class="card__stat">$150–400K/yr</p>
+      <p>What recovering 15% of the fog lost from a single tower can represent at complex scale — direct operating relief for installations running under severe financial pressure, on deteriorated infrastructure that makes every loss worse.</p>
+      <p><span class="badge">AQUA ESTIMATE</span></p>
     </div>
   </div>
-  <p data-reveal="1" style="margin:28px 0 0;font-size:12.5px;line-height:1.7;color:#5F7484;max-width:780px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;padding:2px 5px;border:1px solid rgba(110,140,160,0.35);border-radius:3px;color:#6E8494;margin-right:8px">SCALE</span>For a sense of the stream being tapped: an independent 2024 case study of a single 620 MW U.S. power plant (not an Aqua installation) measured its 12-cell cooling towers consuming 2–3 million gallons of water per day — and found the towers running at 80% capability before anyone instrumented them.</p>
+
+  <p class="reveal footnote">
+    <span class="badge">SCALE</span>
+    For a sense of the stream being tapped: a US Department of Energy–funded full-scale prototype on the cooling tower of a 620&nbsp;MW power plant in Wisconsin — not an Aqua installation — recovered 20–30% of the water that plant was losing through its towers, a rate worth up to 150 million gallons a year at 600&nbsp;MW scale.<a class="badge badge-ref" href="#ref-3">3</a>
+  </p>
 </section>
 
-<!-- ============ TECHNOLOGY — LIVE PHYSICS ============ -->
-<section id="technology" data-screen-label="Technology" style="border-top:1px solid rgba(120,150,170,0.1);background:#0C141C;position:relative">
-  <div data-techscroller="1" style="position:relative">
-    <div data-stage="1" style="position:sticky;top:0;height:100vh;overflow:hidden;background:#0A1118">
-      <canvas ref="{{ techRef }}" style="position: absolute; inset: 0px; width: 100%; height: 100%;"></canvas>
+<!-- ============ TECHNOLOGY ============ -->
+<section class="tech" id="technology" aria-labelledby="tech-title">
+  <div class="tech__scroller">
+    <div class="tech__stage">
+      <canvas class="tech__canvas" data-tech-canvas aria-hidden="true"></canvas>
 
-      <!-- full-page intro overlay — zooms into the simulation on scroll -->
-      <div data-techintro="1" style="position:absolute;inset:0;z-index:4;background:rgba(6,11,17,0.84);backdrop-filter:blur(14px) saturate(1.15);-webkit-backdrop-filter:blur(14px) saturate(1.15);display:flex;align-items:center;justify-content:center;text-align:center;pointer-events:none;will-change:transform,opacity">
-        <div style="max-width:860px;padding:0 6vw;display:flex;flex-direction:column;align-items:center;gap:16px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">02 — THE TECHNOLOGY</div>
-          <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(32px,4.2vw,58px);letter-spacing:-0.02em;line-height:1.06;color:#EDF4F8;text-wrap:balance">Watch the physics work.</h2>
-          <p style="margin:0;font-size:15.5px;line-height:1.65;color:#A7BAC7;max-width:640px">A 10-micron fog droplet has almost no inertia — it rides the air around anything in its path, which is why denser mesh never helps. Scroll from the loss through <span style="color:#C9E9F2">aerodynamics → ionization → acceleration → collection</span> to the return: the whole process runs live, computed in your browser from the physics published at MIT.</p>
-          <div style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#56C8DF">SCROLL — THE EXPERIMENT RUNS AS YOU READ ↓</div>
-          <button data-skip="1" style="margin-top:4px;pointer-events:auto;background:transparent;border:1px solid rgba(120,150,170,0.4);color:#9FB3C0;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;padding:10px 18px;border-radius:4px;cursor:pointer" style-hover="border-color:#56C8DF;color:#7FDCEE">SKIP THE SIMULATION ↓</button>
+      <!-- intro overlay: zooms into the simulation on scroll -->
+      <div class="tech__intro" data-tech-intro>
+        <div class="tech__intro-inner">
+          <p class="eyebrow">02 — The technology</p>
+          <h2 id="tech-title">Watch the physics work.</h2>
+          <p>A 10-micron fog droplet has almost no inertia — it rides the air around anything in its path, which is why denser mesh never helps. Scroll from the loss through <em>aerodynamics → ionization → acceleration → collection</em> to the return: the whole process runs live, computed in your browser from the physics published at MIT.<a class="badge badge-ref" href="#ref-1">1</a></p>
+          <p class="tech__cue">Scroll — the experiment runs as you read ↓</p>
+          <button class="tech__skip" type="button" data-skip>Skip the simulation ↓</button>
         </div>
       </div>
 
-      <!-- persistent skip — visible through the whole explanation -->
-      <button data-skip="1" data-skipfloat="1" style="position:absolute;right:5vw;bottom:6vh;z-index:5;opacity:0;visibility:hidden;background:rgba(10,17,24,0.72);border:1px solid rgba(120,150,170,0.35);color:#9FB3C0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;padding:9px 14px;border-radius:4px;cursor:pointer;backdrop-filter:blur(8px)" style-hover="border-color:#56C8DF;color:#7FDCEE">SKIP ↓</button>
+      <button class="tech__skip tech__skip--float" type="button" data-skip data-skip-float>Skip ↓</button>
 
-      <!-- live badge -->
-      <div data-fadein="1" style="position:absolute;top:74px;left:5vw;display:flex;align-items:center;gap:9px;pointer-events:none;z-index:3;opacity:0">
-        
-        
-      </div>
-      <div data-fadein="1" style="position:absolute;left:5vw;top:98px;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.16em;color:#42525F;z-index:3;opacity:0">SCHEMATIC — NOT TO SCALE</div>
+      <p class="tech__note" data-fade-in>Schematic — not to scale</p>
 
-      <!-- HUD readouts -->
-      <div data-hudpanel="1" style="position:absolute;top:74px;right:5vw;display:flex;flex-direction:column;gap:0;background:rgba(10,17,24,0.72);border:1px solid rgba(120,150,170,0.2);border-radius:6px;overflow:hidden;backdrop-filter:blur(8px);pointer-events:none;min-width:214px;z-index:3;opacity:0">
-        <div style="display:flex;justify-content:space-between;gap:18px;padding:11px 16px;border-bottom:1px solid rgba(120,150,170,0.14);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em"><span style="color:#5F7484">PHASE</span><span data-hud="phase" style="color:#56C8DF">LOSS</span></div>
-        <div style="display:flex;justify-content:space-between;gap:18px;padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em"><span style="color:#5F7484">EMITTER</span><span data-hud="v" style="color:#E7EEF2">0.0 kV</span></div>
-        <div style="display:flex;justify-content:space-between;gap:18px;padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em"><span style="color:#5F7484">CORONA</span><span data-hud="i" style="color:#E7EEF2">0.000 mA</span></div>
-        <div style="display:flex;justify-content:space-between;gap:18px;padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em"><span style="color:#5F7484">CAPTURE GAIN</span><span data-hud="g" style="color:#56C8DF">×1.0</span></div>
-        <div style="display:flex;justify-content:space-between;gap:18px;padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em"><span style="color:#5F7484">RECOVERED</span><span data-hud="r" style="color:#E7EEF2">0 L/d</span></div>
-      </div>
+      <dl class="tech__hud" data-hud-panel aria-hidden="true">
+        <div><dt>Phase</dt><dd class="is-accent" data-hud="phase">LOSS</dd></div>
+        <div><dt>Emitter</dt><dd data-hud="v">0.0 kV</dd></div>
+        <div><dt>Corona</dt><dd data-hud="i">0.000 mA</dd></div>
+        <div><dt>Capture gain</dt><dd class="is-accent" data-hud="g">×1.0</dd></div>
+        <div><dt>Recovered</dt><dd data-hud="r">0 L/d</dd></div>
+      </dl>
 
-      <!-- phase rail -->
-      <div data-railwrap="1" style="position:absolute;right:5vw;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;pointer-events:none;transition:opacity 0.4s;z-index:3">
-        <div data-rail="0" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">01 LOSS</span></div>
-        <div data-rail="1" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">02 AERODYNAMICS</span></div>
-        <div data-rail="2" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">03 IONIZATION</span></div>
-        <div data-rail="3" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">04 ACCELERATION</span></div>
-        <div data-rail="4" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">05 COLLECTION</span></div>
-        <div data-rail="5" style="display:flex;align-items:center;gap:10px;opacity:0.38"><span style="width:16px;height:2px;background:rgba(120,150,170,0.5);display:block;transition:all 0.3s"></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#9FB3C0">06 RETURN</span></div>
-      </div>
+      <ol class="tech__rail" data-rail-wrap aria-hidden="true">
+        <li data-rail><i></i><span>01 Loss</span></li>
+        <li data-rail><i></i><span>02 Aerodynamics</span></li>
+        <li data-rail><i></i><span>03 Ionization</span></li>
+        <li data-rail><i></i><span>04 Acceleration</span></li>
+        <li data-rail><i></i><span>05 Collection</span></li>
+        <li data-rail><i></i><span>06 Return</span></li>
+      </ol>
 
-      <!-- return results panel -->
-      <div data-retpanel="1" style="position: absolute; right: 5vw; bottom: 6vh; width: min(330px,86vw); opacity: 0; transition: opacity 0.5s; pointer-events: none; display: flex; flex-direction: column; gap: 12px; z-index: 3">
-        
-        <div style="background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.22);border-radius:6px;padding:18px 20px;backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:14px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#7E93A2">CAPTURE — PASSIVE vs AQUA</div>
-          <div style="display:flex;flex-direction:column;gap:7px">
-            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#9FB3C0"><span>PASSIVE MESH</span><span>1–2%</span></div>
-            <div style="height:7px;border-radius:4px;background:rgba(120,150,170,0.18);overflow:hidden"><div data-ret="barp" style="height:100%;width:14%;background:#5F7484;border-radius:4px"></div></div>
+      <div class="tech__return" data-return-panel aria-hidden="true">
+        <div class="panel">
+          <p class="panel__label">Capture — passive vs Aqua</p>
+          <div class="meter">
+            <div class="meter__row"><span>Passive fog mesh</span><span>1–2%</span></div>
+            <div class="meter__track"><div class="meter__fill"></div></div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:7px">
-            <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#C9E9F2"><span>AQUA SYSTEM</span><span>up to 8×</span></div>
-            <div style="height:7px;border-radius:4px;background:rgba(86,200,223,0.16);overflow:hidden"><div data-ret="bara" style="height:100%;width:0%;background:linear-gradient(90deg,#2BA8C6,#7FDCEE);border-radius:4px;transition:width 0.15s linear"></div></div>
+          <div class="meter">
+            <div class="meter__row meter__row--accent"><span>Aqua system</span><span>20–30%</span></div>
+            <div class="meter__track meter__track--accent"><div class="meter__fill meter__fill--accent" data-ret-bar></div></div>
           </div>
-        </div><div style="background:rgba(10,17,24,0.82);border:1px solid rgba(86,200,223,0.28);border-radius:6px;padding:18px 20px;backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:4px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#56C8DF">RECOVERED — PER INSTALLATION</div>
-          <div style="display:flex;align-items:baseline;gap:8px"><span data-ret="rec" style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:600;color:#EDF4F8;font-variant-numeric:tabular-nums">0</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8CA0AE">L / day</span></div>
-        </div><div style="background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.22);border-radius:6px;padding:18px 20px;backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:10px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#7E93A2">ENERGY PER m³</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:#7FDCEE">~0.2 kWh</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;color:#7E93A2">AQUA RECOVERY</span></div>
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5F7484">vs</span>
-            <div style="display:flex;flex-direction:column;gap:2px;text-align:right"><span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:#9FB3C0">3–5 kWh</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;color:#7E93A2">RO DESALINATION</span></div>
+        </div>
+        <div class="panel panel--accent">
+          <p class="panel__label panel__label--accent">Recovered — per installation</p>
+          <p class="panel__big"><b data-ret-rec>0</b><span>L / day</span></p>
+        </div>
+        <div class="panel">
+          <p class="panel__label">Energy per m³</p>
+          <div class="panel__compare">
+            <div><b>~0.2 kWh</b><small>Aqua recovery</small></div>
+            <span class="panel__vs">vs</span>
+            <div class="is-right"><b class="is-muted">3–5 kWh</b><small>RO desalination</small></div>
           </div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#56C8DF;border-top:1px solid rgba(120,150,170,0.16);padding-top:9px">UP TO 25× LESS ENERGY THAN REPLACING IT</div>
-        </div>
-        
-      </div>
-
-      <!-- captions -->
-      <div style="position:absolute;left:5vw;bottom:6vh;width:min(452px,88vw);pointer-events:none;z-index:3">
-        <div data-tch="0" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 01 / 06 — THE INVISIBLE LOSS</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Every cooling tower loses water.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Fans draw air up through the fill as warm water rains down inside. Most of it cools and returns — but 3–5% is swept out through the fan stacks as micron-scale drift and escapes into the atmosphere. At that size, water moves like air: it can’t be piped or filtered back.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">3–5% OF CIRCULATING WATER · ESCAPES AS FOG</div>
-        </div>
-        <div data-tch="1" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 02 / 06 — AERODYNAMICS</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Fog outruns the mesh.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Zoom to a single collector wire, magnified ~1,000×. A fog droplet has too little inertia to leave its streamline, and the streamlines bend around the wire. Only the razor-thin window A₀ ever lands — which is why denser passive mesh never helps.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">PASSIVE CAPTURE WINDOW A₀ · 1–2% RECOVERY</div>
-        </div>
-        <div data-tch="2" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 03 / 06 — IONIZATION</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Charge the fog.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">An emitter is raised to ~10 kV. A corona discharge — drawing just ~0.01 mA — floods the air with ions that collide with the passing droplets and stick. Within milliseconds every droplet in the plume carries charge.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">~10 kV · ~0.01 mA · ~40 W/m² OF MESH</div>
-        </div>
-        <div data-tch="3" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 04 / 06 — ACCELERATION</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Pull it across the flow.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">A charged droplet feels a force the moving air cannot cancel. The trajectories peel off the streamlines and bend onto the grounded wire — the effective capture window widens from A₀ to A, far larger than the wire itself.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">CAPTURE WINDOW A₀ → A · ELECTROSTATIC FORCE</div>
-        </div>
-        <div data-tch="4" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 05 / 06 — COLLECTION</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Captured and coalesced.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Droplets land on the wire and merge into a running film. The same fog that slipped past a bare mesh is now collected — up to eight times the water, from the very same footprint.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">UP TO 8× vs PASSIVE MESH</div>
-        </div>
-        <div data-tch="5" style="position:absolute;left:0;bottom:0;width:100%;box-sizing:border-box;opacity:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,17,24,0.82);border:1px solid rgba(120,150,170,0.2);border-radius:6px;padding:22px 24px;backdrop-filter:blur(10px)">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56C8DF">STAGE 06 / 06 — CLOSE THE LOOP</div>
-          <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:#EDF4F8">Back to the basin.</h3>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Scaled back out: circular collector arrays sit over each fan, capturing the plume — the drift never escapes. Recovered water settles straight into the tower’s full basin below: 4,000–10,000 L a day, at ~0.2 kWh/m³.</p>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7E93A2;border-top:1px solid rgba(120,150,170,0.18);padding-top:10px">4,000–10,000 L/DAY · ~0.2 kWh/m³</div>
+          <p class="panel__foot">Up to 25× less energy than replacing it</p>
         </div>
       </div>
 
+      <div class="tech__captions">
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 01 / 06 — The invisible loss</p>
+          <h3>Every cooling tower loses water.</h3>
+          <p>Fans draw air up through the fill as warm water rains down inside. Most of it cools and returns — but 3–5% evaporates and leaves through the fan stacks, recondensing above the tower as a plume of micron-scale droplets. At that size, water moves like air: it can't be piped or filtered back.</p>
+          <p class="tech__caption-foot">3–5% of circulating water · leaves as plume</p>
+        </div>
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 02 / 06 — Aerodynamics</p>
+          <h3>Fog outruns the mesh.</h3>
+          <p>Zoom to a single collector wire, magnified ~1,000×. A fog droplet has too little inertia to leave its streamline, and the streamlines bend around the wire. Only the razor-thin window A₀ ever lands — which is why denser passive mesh never helps.</p>
+          <p class="tech__caption-foot">Passive capture window A₀ · 1–2% recovery</p>
+        </div>
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 03 / 06 — Ionization</p>
+          <h3>Charge the fog.</h3>
+          <p>An emitter is raised to ~10 kV. A corona discharge — drawing just ~0.01 mA — floods the air with ions that collide with the passing droplets and stick. Within milliseconds every droplet in the plume carries charge.</p>
+          <p class="tech__caption-foot">~10 kV · ~0.01 mA · ~40 W/m² of mesh</p>
+        </div>
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 04 / 06 — Acceleration</p>
+          <h3>Pull it across the flow.</h3>
+          <p>A charged droplet feels a force the moving air cannot cancel. The trajectories peel off the streamlines and bend onto the grounded wire — the effective capture window widens from A₀ to A, far larger than the wire itself.</p>
+          <p class="tech__caption-foot">Capture window A₀ → A · electrostatic force</p>
+        </div>
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 05 / 06 — Collection</p>
+          <h3>Captured and coalesced.</h3>
+          <p>Droplets land on the wire and merge into a running film. The same plume that slips straight through a bare mesh is now collected — from the very same footprint, with no change to the airflow the tower depends on.</p>
+          <p class="tech__caption-foot">20–30% of tower water loss recovered</p>
+        </div>
+        <div class="tech__caption" data-caption>
+          <p class="tech__caption-step">Stage 06 / 06 — Close the loop</p>
+          <h3>Back to the basin.</h3>
+          <p>Scaled back out: circular collector arrays sit over each fan, capturing the plume before it clears the stack. Recovered water settles straight into the tower's full basin below: 4,000–10,000 L a day, at ~0.2 kWh/m³.</p>
+          <p class="tech__caption-foot">4,000–10,000 L/day · ~0.2 kWh/m³</p>
+        </div>
+      </div>
     </div>
 
-    <!-- snap anchors: the sticky stage itself is the intro stop; one per stage -->
-    <div data-snap="1" style="height:100vh"></div>
-    <div data-snap="1" style="height:100vh"></div>
-    <div data-snap="1" style="height:100vh"></div>
-    <div data-snap="1" style="height:100vh"></div>
-    <div data-snap="1" style="height:100vh"></div>
-    <div data-snap="1" style="height:100vh"></div>
+    <!-- scroll anchors: one per stage -->
+    <div class="tech__anchor"></div>
+    <div class="tech__anchor"></div>
+    <div class="tech__anchor"></div>
+    <div class="tech__anchor"></div>
+    <div class="tech__anchor"></div>
+    <div class="tech__anchor"></div>
   </div>
 
-
-</section>
-
-<!-- ============ PRODUCT (light) ============ -->
-<section id="product" data-screen-label="Product" style="background:#EEF2F4;color:#17222B;min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:safe center;padding:80px 6vw 36px">
-  <div data-reveal="1" style="max-width:760px;display:flex;flex-direction:column;gap:16px">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#1489A8">03 — THE SYSTEM</div>
-    <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#101B24;text-wrap:balance">The Aqua recovery module.</h2>
-    <p style="margin:0;font-size:14.5px;line-height:1.6;color:#4A5D6B;max-width:660px">A corona ion emitter and grounded collector mesh, packaged as a modular panel that mounts over existing cooling-tower cells. Retrofittable on infrastructure already in the field — no tower redesign, minimal installation downtime.</p>
-  </div>
-  <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:22px;align-items:flex-start">
-    <div data-reveal="1" style="flex:1 1 460px;min-width:0">
-      <div data-prodwrap="1" style="width:100%;height:auto;aspect-ratio:8/5">
-        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="product-render" shape="rounded" radius="6" placeholder="Drop Aqua module render / prototype photo" hint-size="100%,420px" style="width:100%;height:100%"></x-import>
+  <!-- Restates the overlay panels for small screens, where they are hidden -->
+  <div class="tech__summary">
+    <div class="panel panel--accent">
+      <p class="panel__label panel__label--accent">Recovered — per installation</p>
+      <p class="panel__big"><b>4,000–10,000</b><span>L / day</span></p>
+    </div>
+    <div class="panel">
+      <p class="panel__label">Energy per m³</p>
+      <div class="panel__compare">
+        <div><b>~0.2 kWh</b><small>Aqua recovery</small></div>
+        <span class="panel__vs">vs</span>
+        <div class="is-right"><b class="is-muted">3–5 kWh</b><small>RO desalination</small></div>
       </div>
-      
-    </div>
-    <div data-reveal="1" style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(20,45,60,0.14);border:1px solid rgba(20,45,60,0.14);border-radius:6px;overflow:hidden">
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">CAPTURE VS. PASSIVE MESH</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">up to 8×</div>
-        </div>
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">ENERGY / m³ RECOVERED</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">~0.2 kWh</div>
-        </div>
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">ELECTRODE LOAD</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">~40 W/m² · 0.01 mA</div>
-        </div>
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">RECOVERY / INSTALLATION</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">4,000–10,000 L/day</div>
-        </div>
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">INTEGRATION</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">Retrofit — no redesign</div>
-        </div>
-        <div style="background:#F7FAFB;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#5F7585">PAYBACK</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:#101B24">2–4 years</div>
-        </div>
-      </div>
-      <p style="margin: 0; font-size: 7px; line-height: 1.6; color: #5F7585"><span style="font-family: 'IBM Plex Mono',monospace; font-size: 7px; letter-spacing: 0.13em; padding: 2px 5px; border: 1px solid rgba(60,90,110,0.3); border-radius: 3px; color: #5F7585; margin-right: 8px">STATUS</span>Capture and energy figures are laboratory results from the MIT research underlying Aqua's system; recovery and payback are engineering estimates for CRP-scale towers, pending validation on our lab prototype. Request the technical brief for current test data.</p>
-      
-      <a href="#contact" style="align-self:flex-start;background:#101B24;color:#EDF4F8;font-weight:600;font-size:14px;padding:12px 20px;border-radius:4px" style-hover="background:#1F3240;color:#EDF4F8">Request the technical brief</a>
-    </div>
-  </div>
-  <div data-reveal="1" style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
-    <div style="border:1px solid rgba(20,45,60,0.14);border-radius:6px;background:#F7FAFB;padding:18px 20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#1489A8">MODEL A — FIXED O&amp;M CONTRACT</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#101B24">USD $20–50K per tower, annually</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#4A5D6B">Aqua installs the system and operates it under a fixed annual contract: maintenance, remote monitoring, calibration and technical support. Predictable cost, long-term operating partner.</p>
-    </div>
-    <div style="border:1px solid rgba(20,45,60,0.14);border-radius:6px;background:#F7FAFB;padding:18px 20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#1489A8">MODEL B — PERFORMANCE CONTRACT</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#101B24">$0 upfront · 20–25% of certified savings</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#4A5D6B">Aqua installs at no cost and is paid a share of the water and energy savings measured and certified each month. Validate results first — then migrate to a fixed contract if you prefer.</p>
+      <p class="panel__foot">Up to 25× less energy than replacing it</p>
     </div>
   </div>
 </section>
 
-<!-- ============ WHY AQUA (light) ============ -->
-<section id="why" data-screen-label="Why Aqua" style="background:#EEF2F4;color:#17222B;border-top:1px solid rgba(20,45,60,0.12);min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:safe center;padding:80px 6vw 44px">
-  <div data-reveal="1" style="max-width:760px;display:flex;flex-direction:column;gap:16px">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#1489A8">04 — WHY AQUA</div>
-    <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#101B24;text-wrap:balance">Against passive recovery.</h2>
+<!-- ============ PRODUCT ============ -->
+<section class="section section--light" id="product" aria-labelledby="product-title">
+  <div class="section__head reveal">
+    <p class="eyebrow eyebrow--light">03 — The system</p>
+    <h2 class="section-title section-title--light" id="product-title">The Aqua recovery module.</h2>
+    <p class="lede lede--light">A corona ion emitter and grounded collector mesh, packaged as a modular panel that mounts over existing cooling-tower cells. Retrofittable on infrastructure already in the field — no tower redesign, minimal installation downtime.</p>
   </div>
-  <div data-reveal="1" data-cmptable="1" style="margin-top:26px;border:1px solid rgba(20,45,60,0.14);border-radius:6px;overflow:hidden;background:#F7FAFB">
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;background:#101B24">
-      <div style="padding:11px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#8CA0AE">CRITERION</div>
-      <div style="padding:11px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#8CA0AE">PASSIVE MESH / DRIFT ELIMINATORS</div>
-      <div style="padding:11px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7FDCEE">AQUA SYSTEM</div>
-    </div>
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;border-top:1px solid rgba(20,45,60,0.1)">
-      <div style="padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#101B24">Capture</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#4A5D6B">1–2% of fog microdroplets in real conditions, regardless of mesh area</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#17313C;background:rgba(86,200,223,0.1);border-left:2px solid #2BA8C6">Up to 8× higher — charged droplets are pulled onto the collector</div>
-    </div>
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;border-top:1px solid rgba(20,45,60,0.1)">
-      <div style="padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#101B24">Root cause</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#4A5D6B">Unaddressed — droplets ride the streamlines around every wire</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#17313C;background:rgba(86,200,223,0.1);border-left:2px solid #2BA8C6">Space-charge injection forces droplets across the streamlines</div>
-    </div>
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;border-top:1px solid rgba(20,45,60,0.1)">
-      <div style="padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#101B24">Energy</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#4A5D6B">Replacing lost water via RO desalination costs 3–5 kWh/m³</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#17313C;background:rgba(86,200,223,0.1);border-left:2px solid #2BA8C6">~0.2 kWh/m³ recovered — up to 25× less energy</div>
-    </div>
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;border-top:1px solid rgba(20,45,60,0.1)">
-      <div style="padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#101B24">Integration</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#4A5D6B">Efficiency fixed at design time; upgrades mean tower rework</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#17313C;background:rgba(86,200,223,0.1);border-left:2px solid #2BA8C6">Modular panels retrofit onto existing cells, no redesign</div>
-    </div>
-    <div style="display:grid;grid-template-columns:minmax(110px,200px) 1fr 1fr;border-top:1px solid rgba(20,45,60,0.1)">
-      <div style="padding:14px 18px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#101B24">Commercial</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#4A5D6B">Capital purchase; recovered value goes unmeasured</div>
-      <div style="padding:14px 18px;font-size:14px;line-height:1.55;color:#17313C;background:rgba(86,200,223,0.1);border-left:2px solid #2BA8C6">Zero-capex performance contract — billed from certified savings</div>
+
+  <div class="product__body">
+    <figure class="product__figure reveal">
+      <img src="assets/product-render.webp"
+           alt="Render of the Aqua recovery module: a circular collector mesh array mounted above a cooling tower fan stack."
+           width="809" height="541" loading="lazy" decoding="async">
+      <figcaption>Aqua recovery module — concept render</figcaption>
+    </figure>
+
+    <div class="product__side reveal">
+      <dl class="spec">
+        <div><dt>Recovery of tower water loss</dt><dd>20–30%</dd></div>
+        <div><dt>Energy / m³ recovered</dt><dd>~0.2 kWh</dd></div>
+        <div><dt>Electrode load</dt><dd>~40 W/m² · 0.01 mA</dd></div>
+        <div><dt>Recovery / installation</dt><dd>4,000–10,000 L/day</dd></div>
+        <div><dt>Integration</dt><dd>Retrofit — no redesign</dd></div>
+        <div><dt>Payback</dt><dd>2–4 years</dd></div>
+      </dl>
+
+      <p class="disclaimer">
+        <span class="badge">STATUS</span>
+        Energy and electrode figures are laboratory results from the MIT research underlying Aqua's system<a class="badge badge-ref" href="#ref-1">1</a>; the 20–30% recovery rate is from a DOE-funded full-scale prototype on a 620&nbsp;MW plant<a class="badge badge-ref" href="#ref-3">3</a>. Volume per installation and payback are Aqua engineering estimates for CRP-scale towers, pending validation on our lab prototype. Payback applies to the capital-purchase route — under Model B below there is no upfront cost to pay back. Request the technical brief for current test data.
+      </p>
+
+      <a href="#contact" class="btn btn--dark">Request the technical brief</a>
     </div>
   </div>
+
+  <div class="models reveal">
+    <div class="model">
+      <p class="model__label">Model A — fixed O&amp;M contract</p>
+      <p class="model__price">USD $20–50K per tower, annually</p>
+      <p>Aqua installs the system and operates it under a fixed annual contract: maintenance, remote monitoring, calibration and technical support. Predictable cost, long-term operating partner.</p>
+    </div>
+    <div class="model">
+      <p class="model__label">Model B — performance contract</p>
+      <p class="model__price">$0 upfront · 20–25% of certified savings</p>
+      <p>Aqua installs at no cost and is paid a share of the water and energy savings measured and certified each month. Validate results first — then migrate to a fixed contract if you prefer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY AQUA ============ -->
+<section class="section section--light" id="why" aria-labelledby="why-title">
+  <div class="section__head reveal">
+    <p class="eyebrow eyebrow--light">04 — Why Aqua</p>
+    <h2 class="section-title section-title--light" id="why-title">Against passive recovery.</h2>
+  </div>
+
+  <table class="cmp reveal">
+    <caption class="visually-hidden">Comparison of passive fog-collection mesh against the Aqua electrostatic system</caption>
+    <thead>
+      <tr>
+        <th scope="col">Criterion</th>
+        <th scope="col">Passive fog-collection mesh</th>
+        <th scope="col">Aqua system</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Capture</th>
+        <td class="is-passive">1–2% of plume microdroplets in real conditions, regardless of mesh area<a class="badge badge-ref" href="#ref-2">2</a></td>
+        <td class="is-aqua">20–30% of tower water loss recovered — charged droplets are pulled onto the collector</td>
+      </tr>
+      <tr>
+        <th scope="row">Root cause</th>
+        <td class="is-passive">Unaddressed — droplets ride the streamlines around every wire</td>
+        <td class="is-aqua">Space-charge injection forces droplets across the streamlines</td>
+      </tr>
+      <tr>
+        <th scope="row">Energy</th>
+        <td class="is-passive">Replacing lost water via RO desalination costs 3–5 kWh/m³</td>
+        <td class="is-aqua">~0.2 kWh/m³ recovered — up to 25× less energy</td>
+      </tr>
+      <tr>
+        <th scope="row">Integration</th>
+        <td class="is-passive">Efficiency fixed at design time; upgrades mean tower rework</td>
+        <td class="is-aqua">Modular panels retrofit onto existing cells, no redesign</td>
+      </tr>
+      <tr>
+        <th scope="row">Commercial</th>
+        <td class="is-passive">Capital purchase; recovered value goes unmeasured</td>
+        <td class="is-aqua">Zero-capex performance contract — billed from certified savings</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <!-- ============ APPLICATIONS ============ -->
-<section id="applications" data-screen-label="Applications" style="min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:safe center;padding:90px 6vw 48px;border-top:1px solid rgba(120,150,170,0.1)">
-  <div data-reveal="1" style="max-width:760px;display:flex;flex-direction:column;gap:16px">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">05 — APPLICATIONS</div>
-    <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#EDF4F8;text-wrap:balance">Built for Venezuela's refining complexes first.</h2>
+<section class="section" id="applications" aria-labelledby="applications-title">
+  <div class="section__head reveal">
+    <p class="eyebrow">05 — Applications</p>
+    <h2 class="section-title" id="applications-title">Built for Venezuela's refining complexes first.</h2>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:32px">
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:20px 20px;background:#0E161E;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56C8DF">A-01</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#EDF4F8">Refinery cooling towers</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">The primary target. CRP alone — Amuay and Cardón — concentrates more than 40 operating cooling towers; El Palito and Puerto La Cruz extend the map. Massive circulating volumes in water-stressed states.</p>
+
+  <div class="grid-auto">
+    <div class="card reveal">
+      <p class="card__label">A-01</p>
+      <p class="card__title">Refinery cooling towers</p>
+      <p>The primary target. CRP alone — Amuay and Cardón — concentrates more than 40 operating cooling towers; El Palito and Puerto La Cruz extend the map. Massive circulating volumes in water-stressed states.</p>
     </div>
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:20px 20px;background:#0E161E;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56C8DF">A-02</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#EDF4F8">Petrochemical complexes</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Pequiven plants run the same cooling-tower infrastructure with the same drift losses — the natural second market once refinery pilots are proven.</p>
+    <div class="card reveal">
+      <p class="card__label">A-02</p>
+      <p class="card__title">Petrochemical complexes</p>
+      <p>Pequiven plants run the same cooling-tower infrastructure with the same evaporative losses — the natural second market once refinery pilots are proven.</p>
     </div>
-    <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:20px 20px;background:#0E161E;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56C8DF">A-03</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#EDF4F8">Thermoelectric generation</div>
-      <p style="margin:0;font-size:14px;line-height:1.6;color:#A7BAC7">Steam-cycle power plants lose water through their towers the same way — recovery feeds directly into the plant water balance.</p>
+    <div class="card reveal">
+      <p class="card__label">A-03</p>
+      <p class="card__title">Thermoelectric generation</p>
+      <p>Steam-cycle power plants lose water through their towers the same way — recovery feeds directly into the plant water balance.</p>
     </div>
   </div>
-  <p data-reveal="1" style="margin:28px 0 0;font-size:14px;line-height:1.65;color:#7E93A2;max-width:640px">First deployments target PDVSA and mixed-enterprise refineries; petrochemical and power applications follow in the medium term.</p>
+
+  <p class="reveal section-note">First deployments target PDVSA and mixed-enterprise refineries; petrochemical and power applications follow in the medium term.</p>
 </section>
 
 <!-- ============ ABOUT ============ -->
-<section id="about" data-screen-label="About" style="min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:safe center;padding:88px 6vw 44px;border-top:1px solid rgba(120,150,170,0.1);background:#0C141C">
-  <div style="display:flex;flex-wrap:wrap;gap:38px;align-items:flex-start">
-    <div data-reveal="1" style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:16px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">06 — ABOUT</div>
-      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#EDF4F8;text-wrap:balance">Engineered in Venezuela.</h2>
-      <p style="margin:0;font-size:14.5px;line-height:1.65;color:#A7BAC7">Aqua was founded by Samuel Hernández and Bruno Pacillo to bring frontier water-recovery technology to the industry Venezuela is built on. The science is published and validated — electrostatic fog collection by space-charge injection, from MIT — and we are building the first reduced-scale prototype that reproduces the plume of a real cooling tower.</p>
-      <p style="margin:0;font-size:14.5px;line-height:1.65;color:#A7BAC7">Our mission is to make the water Venezuelan industry already circulates go further — for the refineries, and for the communities sharing the same basins. A single CRP-scale installation can return 4,000–10,000 liters a day to the local water balance.</p>
-      <div style="margin-top:14px;display:flex;flex-direction:column;gap:0;border:1px solid rgba(120,150,170,0.18);border-radius:6px;background:#0E161E;overflow:hidden">
-        <div style="padding:14px 20px;border-bottom:1px solid rgba(120,150,170,0.14);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.18em;color:#56C8DF">STATUS — EARLY PROTOTYPE · LAB VALIDATION</div>
-        <div style="display:flex;gap:14px;padding:12px 18px;border-bottom:1px solid rgba(120,150,170,0.1)">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#56C8DF;flex:none;width:64px">M 1–2</span>
-          <span style="font-size:13.5px;line-height:1.55;color:#A7BAC7">Complete the lab prototype; publish comparative efficiency data vs. passive mesh as a client-ready technical brief.</span>
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="about__body">
+    <div class="about__main reveal">
+      <p class="eyebrow">06 — About</p>
+      <h2 class="section-title" id="about-title">Engineered in Venezuela.</h2>
+      <p>Aqua was founded by Samuel Hernández to bring frontier water-recovery technology to the industry Venezuela is built on. The science is published and validated — electrostatic fog collection by space-charge injection, from MIT<a class="badge badge-ref" href="#ref-1">1</a> — and we are building the first reduced-scale prototype that reproduces the plume of a real cooling tower.</p>
+      <p>Our mission is to make the water Venezuelan industry already circulates go further — for the refineries, and for the communities sharing the same basins. A single CRP-scale installation can return 4,000–10,000 liters a day to the local water balance.</p>
+
+      <div class="roadmap">
+        <p class="roadmap__head">Status — early prototype · lab validation</p>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Months 1–2</span>
+          <span class="roadmap__what">Complete the lab prototype; publish comparative efficiency data vs. passive mesh as a client-ready technical brief.</span>
         </div>
-        <div style="display:flex;gap:14px;padding:12px 18px;border-bottom:1px solid rgba(120,150,170,0.1)">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#56C8DF;flex:none;width:64px">M 2–4</span>
-          <span style="font-size:13.5px;line-height:1.55;color:#A7BAC7">First formal contact with mixed-enterprise operators to scope a pilot under a performance contract.</span>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Months 2–4</span>
+          <span class="roadmap__what">First formal contact with mixed-enterprise operators to scope a pilot under a performance contract.</span>
         </div>
-        <div style="display:flex;gap:14px;padding:12px 18px">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#56C8DF;flex:none;width:64px">M 4–6</span>
-          <span style="font-size:13.5px;line-height:1.55;color:#A7BAC7">Sign the first pilot at a refining installation; apply prototype data to international innovation funds (IDB Lab, CAF, UN Environment) to finance industrial scale.</span>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Months 4–6</span>
+          <span class="roadmap__what">Sign the first pilot at a refining installation; apply prototype data to international innovation funds (IDB Lab, CAF, UN Environment) to finance industrial scale.</span>
         </div>
       </div>
     </div>
-    <div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:18px">
-      <div data-reveal="1" style="display:flex;align-items:center;gap:18px;border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:18px 20px;background:#0E161E">
-        <div style="width:76px;height:76px;flex:none">
-          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="team-1" shape="circle" placeholder="Photo" hint-size="76px,76px" style="width:76px;height:76px"></x-import>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#EDF4F8">Samuel Hernández</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#7E93A2">CO-FOUNDER</div>
-        </div>
-      </div>
-      <div data-reveal="1" style="display:flex;align-items:center;gap:18px;border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:18px 20px;background:#0E161E">
-        <div style="width:76px;height:76px;flex:none">
-          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="team-2" shape="circle" placeholder="Photo" hint-size="76px,76px" style="width:76px;height:76px"></x-import>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#EDF4F8">Bruno Pacillo</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#7E93A2">CO-FOUNDER</div>
+
+    <div class="about__side">
+      <div class="person reveal">
+        <img class="person__photo" src="assets/samuel-hernandez.webp"
+             alt="Samuel Hernández, founder and CEO of Aqua."
+             width="76" height="76" loading="lazy" decoding="async">
+        <div>
+          <p class="person__name">Samuel Hernández</p>
+          <p class="person__role">Founder &amp; CEO</p>
         </div>
       </div>
-      <div data-reveal="1" style="border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:14px 18px;background:#0E161E;display:flex;flex-direction:column;gap:8px">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.18em;color:#56C8DF">IMPACT</div>
-        <p style="margin:0;font-size:13.5px;line-height:1.6;color:#A7BAC7">Aligned with SDG 6 (clean water), SDG 9 (industry &amp; innovation) and SDG 13 (climate action): recovered water eases pressure on the aqueducts that supply refineries and communities from the same watershed, and cuts the energy embedded in extracting, treating and pumping replacement water.</p>
+
+      <div class="card reveal">
+        <p class="card__label card__label--accent">Impact</p>
+        <p>Aligned with SDG 6 (clean water), SDG 9 (industry &amp; innovation) and SDG 13 (climate action): recovered water eases pressure on the aqueducts that supply refineries and communities from the same watershed, and cuts the energy embedded in extracting, treating and pumping replacement water.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============ CONTACT ============ -->
-<section id="contact" data-screen-label="Contact" style="box-sizing:border-box;padding:76px 6vw 40px;border-top:1px solid rgba(120,150,170,0.1)">
-  <div style="display:flex;flex-wrap:wrap;gap:38px;align-items:flex-start">
-    <div data-reveal="1" style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;color:#56C8DF">07 — CONTACT</div>
-      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,3vw,40px);letter-spacing:-0.02em;line-height:1.1;color:#EDF4F8;text-wrap:balance">Request a consultation.</h2>
-      <p style="margin:0;font-size:14.5px;line-height:1.65;color:#A7BAC7;max-width:460px">Tell us about your towers — cell count, circulating flow, water constraints — and we'll come back with a recovery estimate. Pilots run under performance contracts: no upfront investment, Aqua is paid from certified savings. For investors: same form, mention it in the message.</p>
-      <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8CA0AE">
-        <div><span style="color: rgb(86, 200, 223); margin-right: 10px;">MAIL</span>Sam@aqua-ve.com</div>
-        
-        <div><span style="color: rgb(86, 200, 223); margin-right: 10px;">HQ</span>Caracas, Venezuela</div>
-      </div>
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact__body">
+    <div class="contact__intro reveal">
+      <p class="eyebrow">07 — Contact</p>
+      <h2 class="section-title" id="contact-title">Request a consultation.</h2>
+      <p>Tell us about your towers — cell count, circulating flow, water constraints — and we'll come back with a recovery estimate. Pilots run under performance contracts: no upfront investment, Aqua is paid from certified savings. For investors: same form, mention it in the message.</p>
+      <dl class="contact__meta">
+        <div><dt>Mail</dt><dd><a href="mailto:sam@aqua-ve.com">sam@aqua-ve.com</a></dd></div>
+        <div><dt>HQ</dt><dd>Caracas, Venezuela</dd></div>
+      </dl>
     </div>
-    <div data-reveal="1" style="flex:1 1 420px;min-width:0">
-      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
-        <form onSubmit="{{ onSubmit }}" noValidate="{{ false }}" style="display:flex;flex-direction:column;gap:16px;border:1px solid rgba(120,150,170,0.18);border-radius:6px;padding:22px 22px;background:#0E161E">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
-            <label style="display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7E93A2">NAME
-              <input name="name" required="{{ true }}" style="background:#0B1218;border:1px solid rgba(120,150,170,0.25);border-radius:4px;color:#E7EEF2;padding:10px 12px;font-size:14px;width:100%;box-sizing:border-box" style-focus="border-color:#56C8DF;outline:none">
-            </label>
-            <label style="display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7E93A2">COMPANY
-              <input name="company" required="{{ true }}" style="background:#0B1218;border:1px solid rgba(120,150,170,0.25);border-radius:4px;color:#E7EEF2;padding:10px 12px;font-size:14px;width:100%;box-sizing:border-box" style-focus="border-color:#56C8DF;outline:none">
-            </label>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
-            <label style="display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7E93A2">ROLE
-              <input name="role" placeholder="e.g. Operations manager" style="background:#0B1218;border:1px solid rgba(120,150,170,0.25);border-radius:4px;color:#E7EEF2;padding:10px 12px;font-size:14px;width:100%;box-sizing:border-box" style-focus="border-color:#56C8DF;outline:none">
-            </label>
-            <label style="display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7E93A2">EMAIL
-              <input name="email" type="email" required="{{ true }}" style="background:#0B1218;border:1px solid rgba(120,150,170,0.25);border-radius:4px;color:#E7EEF2;padding:10px 12px;font-size:14px;width:100%;box-sizing:border-box" style-focus="border-color:#56C8DF;outline:none">
-            </label>
-          </div>
-          <label style="display:flex;flex-direction:column;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:#7E93A2">MESSAGE
-            <textarea name="message" rows="{{ textareaRows }}" required="{{ true }}" placeholder="Tower count, circulating flow, current drift losses, water constraints…" style="background:#0B1218;border:1px solid rgba(120,150,170,0.25);border-radius:4px;color:#E7EEF2;padding:10px 12px;font-size:14px;min-height:84px;resize:vertical;width:100%;box-sizing:border-box;font-family:'IBM Plex Sans',sans-serif" style-focus="border-color:#56C8DF;outline:none"></textarea>
-          </label>
-          <button type="submit" style="background:#56C8DF;color:#06222B;font-weight:600;font-size:14px;padding:13px 22px;border-radius:4px;border:none;cursor:pointer;align-self:flex-start" style-hover="background:#7FDCEE">Send request</button>
-        </form>
-      </sc-if>
-      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-        <div style="border:1px solid rgba(86,200,223,0.4);border-radius:6px;padding:44px 36px;background:rgba(86,200,223,0.06);display:flex;flex-direction:column;gap:12px">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#56C8DF">REQUEST RECEIVED</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;color:#EDF4F8">Thank you — we'll be in touch.</div>
-          <p style="margin:0;font-size:14.5px;line-height:1.6;color:#A7BAC7">Expect a first response within two business days. If your inquiry is time-sensitive, reach us directly by email.</p>
-        </div>
-      </sc-if>
+
+    <!--
+      Submissions post to Formspree (form mnqkanye). If the endpoint ever
+      changes it must be updated BOTH here and in assets/site.js (FORM_ENDPOINT).
+      The plain action= makes the form work even with JavaScript disabled.
+    -->
+    <form class="form reveal"
+          data-form
+          action="https://formspree.io/f/mnqkanye"
+          method="POST">
+      <div class="form__row">
+        <label>Name
+          <input name="name" type="text" autocomplete="name" required>
+        </label>
+        <label>Company
+          <input name="company" type="text" autocomplete="organization" required>
+        </label>
+      </div>
+      <div class="form__row">
+        <label>Role
+          <input name="role" type="text" autocomplete="organization-title" placeholder="e.g. Operations manager">
+        </label>
+        <label>Email
+          <input name="email" type="email" autocomplete="email" inputmode="email" required>
+        </label>
+      </div>
+      <label>Message
+        <textarea name="message" rows="4" required placeholder="Tower count, circulating flow, cooling range, water constraints…"></textarea>
+      </label>
+
+      <!-- honeypot: bots fill this, humans never see it -->
+      <div class="form__hp" aria-hidden="true">
+        <label>Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+      <button class="btn btn--primary" type="submit">Send request</button>
+    </form>
+
+    <div class="form-sent" data-form-sent hidden>
+      <p class="form-sent__label">Request received</p>
+      <p class="form-sent__title">Thank you — we'll be in touch.</p>
+      <p>Expect a first response within two business days. If your inquiry is time-sensitive, reach us directly at <a href="mailto:sam@aqua-ve.com">sam@aqua-ve.com</a>.</p>
     </div>
   </div>
 </section>
 
+</main>
+
 <!-- ============ FOOTER ============ -->
-<footer data-screen-label="Footer" style="border-top:1px solid rgba(120,150,170,0.14);padding:28px 6vw 20px;background:#0A1016">
-  <div style="display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:flex-start">
-    <div style="display:flex;flex-direction:column;gap:14px;max-width:340px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <img src="assets/aqua-logo.png" alt="Aqua logo" style="width:24px;height:24px">
-        <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;letter-spacing:0.28em;color:#E7EEF2">AQUA</span>
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <div>
+        <img src="assets/aqua-logo.png" alt="" width="24" height="24">
+        <span>AQUA</span>
       </div>
-      <p style="margin:0;font-size:13px;line-height:1.6;color:#7E93A2">Modular electrostatic fog-recovery systems for industrial cooling towers — engineered in Venezuela.</p>
+      <p>Modular electrostatic fog-recovery systems for industrial cooling towers — engineered in Venezuela.</p>
     </div>
-    <div style="display:flex;gap:40px;flex-wrap:wrap">
-      <div style="display:flex;flex-direction:column;gap:7px">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.18em;color:#5F7484">SITE</div>
-        <a href="#technology" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Technology</a>
-        <a href="#product" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">System</a>
-        <a href="#applications" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Applications</a>
-        <a href="#about" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">About</a>
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h2>Site</h2>
+        <a href="#technology">Technology</a>
+        <a href="#product">System</a>
+        <a href="#applications">Applications</a>
+        <a href="#about">About</a>
       </div>
-      <div style="display:flex;flex-direction:column;gap:7px">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.18em;color:#5F7484">CONTACT</div>
-        <a href="mailto:Sam@aqua-ve.com" style="font-size:13px;color:#9FB3C0" style-hover="color:#E7EEF2">Sam@aqua-ve.com</a>
-        <span style="font-size:13px;color:#9FB3C0">Caracas, Venezuela</span>
+      <div class="footer__col">
+        <h2>Contact</h2>
+        <a href="mailto:sam@aqua-ve.com">sam@aqua-ve.com</a>
+        <span>Caracas, Venezuela</span>
       </div>
     </div>
   </div>
-  <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid rgba(120,150,170,0.1)">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#5F7484">© 2026 AQUA — ELECTROSTATIC FOG RECOVERY</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#5F7484">EN · ES (PRÓXIMAMENTE)</span>
+
+  <div class="sources">
+    <h2>References</h2>
+    <ol>
+      <li id="ref-1">Damak, M. &amp; Varanasi, K. K. “Electrostatically driven fog collection using space charge injection.” <cite>Science Advances</cite> <b>4</b>(6), eaao5323 (2018). <a href="https://doi.org/10.1126/sciadv.aao5323" rel="noopener">doi:10.1126/sciadv.aao5323</a> — source of the ~0.2 kWh/m³ figure for concentrated cooling-tower plumes, the ~10 kV emitter voltage, the ~0.01 mA corona current, the ~40 W/m² electrode load, and the 3–5 kWh/m³ reverse-osmosis comparison.</li>
+      <li id="ref-2">Li, D. <i>et al.</i> “Sustainable solutions for water scarcity: a review of electrostatic fog harvesting technology.” <cite>Communications Engineering</cite> <b>4</b>, 34 (2025). <a href="https://doi.org/10.1038/s44172-025-00381-x" rel="noopener">doi:10.1038/s44172-025-00381-x</a> — source of the 1–2% collection efficiency of passive fog mesh.</li>
+      <li id="ref-3">Patel, S. C. “Harnessing Cooling Tower Plumes to Provide Purified Water.” <cite>POWER Magazine</cite> (2022), and US DOE/NETL, “NETL Supports Start-Up’s Technology to Produce Clean Water from Cooling Tower Plumes.” <a href="https://www.powermag.com/harnessing-cooling-tower-plumes-to-provide-purified-water/" rel="noopener">powermag.com</a> · <a href="https://netl.doe.gov/node/11907" rel="noopener">netl.doe.gov</a> — full-scale prototype at the 620 MW Fox Energy Center (Wrightstown, Wisconsin), reported to recover 20–30% of cooling-tower water loss, up to 150 million gallons a year at 600 MW scale.</li>
+      <li id="ref-4">Paraguaná Refinery Complex (Amuay + Cardón), combined nameplate capacity 955,000 bbl/day. <a href="https://www.nsenergybusiness.com/projects/paraguana-refinery-complex/" rel="noopener">NS Energy — Paraguaná Refinery Complex</a>.</li>
+      <li id="ref-5">PROVEA, <cite>Informe Anual 2024: la crisis del agua compromete la salud de la población</cite>, and Observatorio de Ecología Política de Venezuela, “La crisis del agua en Venezuela: algunos datos” — Falcón and Anzoátegui among the states with the highest incidence of water-service failure. <a href="https://provea.org/actualidad/informe-anual-crisis-del-agua-compromete-la-salud-de-la-poblacion-y-el-desarrollo-sostenible-del-pais/" rel="noopener">provea.org</a> · <a href="https://ecopoliticavenezuela.org/la-crisis-del-agua-en-venezuela-algunos-datos/" rel="noopener">ecopoliticavenezuela.org</a>.</li>
+    </ol>
+  </div>
+
+  <div class="footer__legal">
+    <span>© 2026 Aqua — Electrostatic fog recovery</span>
   </div>
 </footer>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;techStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Atmospheric&quot;,&quot;Schematic&quot;],&quot;default&quot;:&quot;Atmospheric&quot;,&quot;section&quot;:&quot;Technology walkthrough&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;techAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;section&quot;:&quot;Technology walkthrough&quot;,&quot;tsType&quot;:&quot;boolean&quot;},&quot;particleDensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0.5,&quot;max&quot;:2,&quot;step&quot;:0.25,&quot;default&quot;:2,&quot;section&quot;:&quot;Motion&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;heroFieldLines&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;section&quot;:&quot;Motion&quot;,&quot;tsType&quot;:&quot;boolean&quot;}}">
-class Component extends DCLogic {
-  state = { sent: false, esNote: false };
 
-  constructor(props) {
-    super(props);
-    this._heroRef = (el) => { if (el && el !== this._heroC) { this._heroC = el; this._initHero(); } };
-    this._techRef = (el) => { if (el && el !== this._techC) { this._techC = el; this._initTech(); } };
-    this._mouse = null;
-  }
-
-  _reduced() {
-    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  _density() { return this.props.particleDensity ?? 1; }
-
-  componentDidMount() {
-    if (!this._reduced()) {
-      const io = new IntersectionObserver((es) => {
-        es.forEach((e) => {
-          if (e.isIntersecting) {
-            const t = e.target;
-            t.style.transition = 'opacity .6s ease, transform .6s ease';
-            t.style.opacity = '1';
-            t.style.transform = 'none';
-            io.unobserve(t);
-          }
-        });
-      }, { threshold: 0.12 });
-      document.querySelectorAll('[data-reveal]').forEach((el) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(16px)';
-        io.observe(el);
-      });
-      this._revealIO = io;
-    }
-  }
-
-  componentWillUnmount() {
-    if (this._heroRaf) cancelAnimationFrame(this._heroRaf);
-    if (this._techRaf) cancelAnimationFrame(this._techRaf);
-    if (this._revealIO) this._revealIO.disconnect();
-    if (this._resizeFn) window.removeEventListener('resize', this._resizeFn);
-    if (this._techResize) window.removeEventListener('resize', this._techResize);
-    if (this._techScroll) window.removeEventListener('scroll', this._techScroll);
-  }
-
-  // ---------- HERO ----------
-  _initHero() {
-    const c = this._heroC;
-    const ctx = c.getContext('2d');
-    if (this._heroRaf) cancelAnimationFrame(this._heroRaf);
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    let W = 0, H = 0;
-    const fit = () => {
-      const r = c.parentElement.getBoundingClientRect();
-      W = r.width; H = r.height;
-      c.width = W * dpr; c.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    fit();
-    if (!this._resizeFn) {
-      this._resizeFn = () => { fit(); };
-      window.addEventListener('resize', this._resizeFn);
-    }
-    const P = [];
-    const seed = () => {
-      P.length = 0;
-      const n = Math.round(70 * this._density());
-      for (let i = 0; i < n; i++) P.push({
-        x: Math.random() * W, y: Math.random() * H,
-        r: 0.6 + Math.random() * 1.6,
-        vx: 0.05 + Math.random() * 0.18, vy: -0.06 - Math.random() * 0.16,
-        a: 0.1 + Math.random() * 0.3
-      });
-    };
-    seed();
-    if (!this._heroPtr) {
-      this._heroPtr = true;
-      const host = c.parentElement;
-      host.addEventListener('pointermove', (e) => {
-        const r = c.getBoundingClientRect();
-        this._mouse = { x: e.clientX - r.left, y: e.clientY - r.top };
-      });
-      host.addEventListener('pointerleave', () => { this._mouse = null; });
-    }
-    let run = true;
-    new IntersectionObserver((es) => { run = es[0].isIntersecting; }).observe(c);
-    const draw = (t) => {
-      ctx.clearRect(0, 0, W, H);
-      if (this.props.heroFieldLines ?? true) {
-        ctx.strokeStyle = 'rgba(86,200,223,0.06)';
-        ctx.lineWidth = 1;
-        const step = Math.max(70, W / 16);
-        for (let x = step * 0.5; x < W; x += step) {
-          ctx.beginPath();
-          for (let y = 0; y <= H; y += 14) {
-            const xx = x + Math.sin(y * 0.006 + t * 0.00035 + x * 0.02) * 16;
-            if (y === 0) ctx.moveTo(xx, y); else ctx.lineTo(xx, y);
-          }
-          ctx.stroke();
-        }
-      }
-      const m = this._mouse;
-      for (const p of P) {
-        p.x += p.vx; p.y += p.vy;
-        if (m) {
-          const dx = m.x - p.x, dy = m.y - p.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 > 16 && d2 < 25600) {
-            const d = Math.sqrt(d2);
-            const f = (1 - d / 160) * 0.5;
-            p.x += (dx / d) * f; p.y += (dy / d) * f;
-          }
-        }
-        if (p.x > W + 4) p.x = -4; if (p.x < -4) p.x = W + 4;
-        if (p.y < -4) p.y = H + 4; if (p.y > H + 4) p.y = -4;
-        ctx.fillStyle = 'rgba(180,225,240,' + p.a + ')';
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
-      }
-      if (m) {
-        ctx.strokeStyle = 'rgba(86,200,223,0.14)';
-        ctx.beginPath(); ctx.arc(m.x, m.y, 60, 0, 6.2832); ctx.stroke();
-        ctx.strokeStyle = 'rgba(86,200,223,0.3)';
-        ctx.beginPath();
-        ctx.moveTo(m.x - 6, m.y); ctx.lineTo(m.x + 6, m.y);
-        ctx.moveTo(m.x, m.y - 6); ctx.lineTo(m.x, m.y + 6);
-        ctx.stroke();
-      }
-    };
-    if (this._reduced()) { draw(0); return; }
-    const loop = (t) => { if (run) draw(t); this._heroRaf = requestAnimationFrame(loop); };
-    this._heroRaf = requestAnimationFrame(loop);
-  }
-
-  // ---------- TECHNOLOGY : scroll-driven live physics, 5 stages ----------
-  // 01 LOSS (iso tower)  02 IONIZATION 03 ACCELERATION 04 COLLECTION (micro wire)
-  // 05 RETURN (iso tower, circular arrays capture plume -> pipe -> basin)
-  _initTech() {
-    const c = this._techC;
-    const ctx = c.getContext('2d');
-    if (this._techRaf) cancelAnimationFrame(this._techRaf);
-    if (this._techResize) window.removeEventListener('resize', this._techResize);
-    if (this._techScroll) window.removeEventListener('scroll', this._techScroll);
-    const stage = c.parentElement;
-    const scroller = stage.parentElement;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const density = () => this._density();
-    const annot = () => this.props.techAnnotations ?? true;
-    const schematic = () => (this.props.techStyle ?? 'Atmospheric') === 'Schematic';
-    let W = 0, H = 0, tick = 0, vig = null;
-
-    const caps = Array.from(stage.querySelectorAll('[data-tch]'));
-    const rails = Array.from(stage.querySelectorAll('[data-rail]'));
-    const railWrap = stage.querySelector('[data-railwrap]');
-    const hudPanel = stage.querySelector('[data-hudpanel]');
-    const retpanel = stage.querySelector('[data-retpanel]');
-    const recEl = stage.querySelector('[data-ret="rec"]');
-    const barA = stage.querySelector('[data-ret="bara"]');
-    const intro = stage.querySelector('[data-techintro]');
-    const fadeEls = Array.from(stage.querySelectorAll('[data-fadein]'));
-    const skipFloat = stage.querySelector('[data-skipfloat]');
-    const skipFn = () => { const r = scroller.getBoundingClientRect(); window.scrollTo({ top: window.scrollY + r.bottom, behavior: 'smooth' }); };
-    stage.querySelectorAll('[data-skip]').forEach((b) => { if (!b._skipBound) { b._skipBound = 1; b.addEventListener('click', skipFn); } });
-    const hud = {};
-    ['phase', 'v', 'i', 'g', 'r'].forEach((k) => { hud[k] = stage.querySelector('[data-hud="' + k + '"]'); });
-    const PHASES = ['LOSS', 'AERODYNAMICS', 'IONIZATION', 'ACCELERATION', 'COLLECTION', 'RETURN'];
-
-    const mkSprite = (r, g, b) => {
-      const s = document.createElement('canvas'); s.width = s.height = 64;
-      const x = s.getContext('2d');
-      const gr = x.createRadialGradient(32, 32, 0, 32, 32, 30);
-      gr.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b + ',1)');
-      gr.addColorStop(0.3, 'rgba(' + r + ',' + g + ',' + b + ',0.5)');
-      gr.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)');
-      x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return s;
-    };
-    const spW = mkSprite(210, 236, 246), spC = mkSprite(86, 200, 223);
-
-    const layA = document.createElement('canvas'), layB = document.createElement('canvas');
-    const ctxA = layA.getContext('2d'), ctxB = layB.getContext('2d');
-
-    const MP = [], IONS = [], SPL = [], DRIPS = [], PLM = []; let basin = 0;
-    const bez = (P, t) => { const u = 1 - t, a = u * u * u, b = 3 * u * u * t, cc = 3 * u * t * t, d = t * t * t; return { x: a * P[0].x + b * P[1].x + cc * P[2].x + d * P[3].x, y: a * P[0].y + b * P[1].y + cc * P[2].y + d * P[3].y }; };
-
-    let mg = null, mac = null;
-    const buildGeo = () => {
-      const R = Math.min(W, H) * 0.088;
-      const cx = W * 0.605, cy = H * 0.5;
-      const ex = W * 0.16, ey = cy;
-      const U0 = Math.max(1.0, W / 950);
-      const air = (x, y) => { const dx = x - cx, dy = y - cy, r2 = dx * dx + dy * dy, R2 = R * R; if (r2 < R2 * 1.02) return { u: 0, v: 0 }; const r4 = r2 * r2; return { u: U0 * (1 - R2 * (dx * dx - dy * dy) / r4), v: -U0 * (2 * R2 * dx * dy / r4) }; };
-      const d = Math.hypot(cx - ex, cy - ey);
-      const ix = cx + (ex - cx) * (R * R) / (d * d), iy = cy + (ey - cy) * (R * R) / (d * d);
-      const ef = (x, y) => { let dx = x - ex, dy = y - ey, r2 = dx * dx + dy * dy + 60; let Ex = dx / r2, Ey = dy / r2; dx = x - ix; dy = y - iy; r2 = dx * dx + dy * dy + 60; return { x: Ex - dx / r2, y: Ey - dy / r2 }; };
-      const streams = []; const nS = 15;
-      for (let i = 0; i < nS; i++) { const y0 = cy + ((i + 0.5 - nS / 2) / (nS / 2)) * H * 0.42; let px = -12, py = y0; const pts = [px, py]; for (let k = 0; k < 460; k++) { const a = air(px, py); const sp = Math.hypot(a.u, a.v); if (sp < 0.02) break; px += a.u / sp * 7; py += a.v / sp * 7; pts.push(px, py); if (px > W + 12) break; } streams.push(pts); }
-      const flines = []; const nF = 28;
-      for (let i = 0; i < nF; i++) { const a0 = (i / nF) * Math.PI * 2; let px = ex + Math.cos(a0) * 5, py = ey + Math.sin(a0) * 5; const pts = [px, py]; for (let k = 0; k < 460; k++) { const e = ef(px, py); const m = Math.hypot(e.x, e.y) || 1e-9; px += e.x / m * 6; py += e.y / m * 6; pts.push(px, py); if (Math.hypot(px - cx, py - cy) < R + 2) break; if (px < -30 || px > W + 30 || py < -30 || py > H + 30) break; } flines.push(pts); }
-      mg = { R, cx, cy, ex, ey, U0, air, ef, streams, flines };
-
-      // ----- macro: isometric mechanical-draft cooling tower -----
-      const c30 = Math.cos(Math.PI / 6), s30 = 0.5;
-      const Wx = 6.4, Wy = 3.2, Hz = 2.8;
-      const fanR = 0.8, fanH = 0.55, fanTopZ = Hz + fanH;
-      const fans = [];
-      for (let i = 0; i < 3; i++) fans.push({ x: Wx * (0.2 + 0.3 * i), y: Wy * 0.5 });
-      const basinH = 0.62, basinFwd = Wy * 0.62;
-      let u = 0.6 * W / ((Wx + Wy) * c30);
-      const measure = () => { const b = []; [[0,0,0],[Wx,0,0],[Wx,Wy,0],[0,Wy,0],[0,0,Hz],[Wx,0,Hz],[Wx,Wy,Hz],[0,Wy,Hz]].forEach(p => b.push([(p[0]-p[1])*c30*u, ((p[0]+p[1])*s30-p[2])*u])); fans.forEach(f => b.push([(f.x-f.y)*c30*u, ((f.x+f.y)*s30-fanTopZ)*u])); [[-0.28,-0.28,-basinH],[Wx+0.28,-0.28,-basinH],[Wx+0.28,Wy+0.5,-basinH],[-0.28,Wy+0.5,-basinH]].forEach(p => b.push([(p[0]-p[1])*c30*u, ((p[0]+p[1])*s30-p[2])*u])); const a = { miX:1e9, maX:-1e9, miY:1e9, maY:-1e9 }; b.forEach(p => { a.miX=Math.min(a.miX,p[0]); a.maX=Math.max(a.maX,p[0]); a.miY=Math.min(a.miY,p[1]); a.maY=Math.max(a.maY,p[1]); }); return a; };
-      let mm = measure();
-      if ((mm.maY - mm.miY) > 0.52 * H) { u *= 0.52 * H / (mm.maY - mm.miY); mm = measure(); }
-      if ((mm.maX - mm.miX) > 0.54 * W) { u *= 0.54 * W / (mm.maX - mm.miX); mm = measure(); }
-      const ox = W / 2 - (mm.miX + mm.maX) / 2, oy = H * 0.5 - (mm.miY + mm.maY) / 2;
-      const proj = (x, y, z) => [ox + (x - y) * c30 * u, oy + ((x + y) * s30 - z) * u];
-      const pipe = [[Wx * 0.9, Wy * 0.5, fanTopZ * 0.86], [Wx + 0.5, Wy * 0.5, Hz * 0.55], [Wx + 0.5, Wy + basinFwd * 0.45, -basinH * 0.15], [Wx * 0.72, Wy + basinFwd * 0.55, -basinH * 0.35]];
-      const pipeS = pipe.map((p) => proj(p[0], p[1], p[2]));
-      const fanS = fans.map((f) => ({ c: proj(f.x, f.y, fanTopZ), base: proj(f.x, f.y, Hz) }));
-      mac = { c30, s30, Wx, Wy, Hz, fanR, fanH, fanTopZ, u, ox, oy, proj, fans, fanS, pipe, pipeS, basinH, basinFwd };
-    };
-
-    const fit = () => {
-      const r = stage.getBoundingClientRect(); W = r.width; H = r.height;
-      [c, layA, layB].forEach((cv) => { cv.width = W * dpr; cv.height = H * dpr; });
-      [ctx, ctxA, ctxB].forEach((x) => x.setTransform(dpr, 0, 0, dpr, 0, 0));
-      vig = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.42, W / 2, H / 2, Math.max(W, H) * 0.72);
-      vig.addColorStop(0, 'rgba(8,14,20,0)'); vig.addColorStop(1, 'rgba(8,14,20,0.5)');
-      buildGeo();
-      MP.length = 0; IONS.length = 0; SPL.length = 0; DRIPS.length = 0; PLM.length = 0; basin = 0;
-      if (railWrap) railWrap.style.display = (W < 980 || H < 660) ? 'none' : 'flex';
-      if (hudPanel) hudPanel.style.display = (W < 680 || H < 520) ? 'none' : 'flex';
-      if (retpanel) retpanel.style.display = (W < 900 || H < 540) ? 'none' : 'flex';
-      if (skipFloat) skipFloat.style.display = (W < 680 || H < 480) ? 'none' : 'block';
-    };
-
-    const prog = () => { const r = scroller.getBoundingClientRect(); const total = r.height - window.innerHeight; return total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0; };
-    const ss = (p, a, b) => { const t = Math.min(1, Math.max(0, (p - a) / (b - a))); return t * t * (3 - 2 * t); };
-    const project = (cam, x, y) => [(x - cam.fx) * cam.s + cam.fx, (y - cam.fy) * cam.s + cam.fy];
-
-    // ----- micro -----
-    const spawnM = (p) => { const g = mg; p.x = -10 - Math.random() * W * 0.2; p.y = g.cy + (Math.random() * 2 - 1) * H * 0.42; const a = g.air(Math.max(0, p.x), p.y); p.vx = a.u; p.vy = a.v; p.q = 0; p.r = 1.0 + Math.random() * 1.2; p.trail = []; };
-    const drawMicro = (g2, o, animate) => {
-      const g = mg; const fpx = Math.max(10, Math.round(11 * Math.min(W, H) / 640));
-      g2.strokeStyle = 'rgba(140,170,190,' + (schematic() ? 0.3 : 0.2) + ')'; g2.lineWidth = 1; g2.setLineDash([5, 9]); g2.lineDashOffset = -(tick * (0.4 + g.U0 * 0.35));
-      for (const pts of g.streams) { g2.beginPath(); g2.moveTo(pts[0], pts[1]); for (let k = 2; k < pts.length; k += 2) g2.lineTo(pts[k], pts[k + 1]); g2.stroke(); }
-      g2.setLineDash([]);
-      if (o.fieldR > 0.02) { g2.save(); g2.globalCompositeOperation = 'lighter'; g2.strokeStyle = 'rgba(86,200,223,' + (0.26 * o.fieldR) + ')'; g2.lineWidth = 1.1; g2.setLineDash([3, 9]); g2.lineDashOffset = -(tick * 1.1); for (const pts of g.flines) { g2.beginPath(); g2.moveTo(pts[0], pts[1]); for (let k = 2; k < pts.length; k += 2) g2.lineTo(pts[k], pts[k + 1]); g2.stroke(); } g2.setLineDash([]); g2.restore(); }
-      if (o.fieldR > 0.02) { g2.save(); g2.globalCompositeOperation = 'lighter'; g2.globalAlpha = 0.3 * o.fieldR; g2.drawImage(spC, g.cx - g.R * 2.3, g.cy - g.R * 2.3, g.R * 4.6, g.R * 4.6); g2.restore(); }
-      const wg = g2.createRadialGradient(g.cx - g.R * 0.35, g.cy - g.R * 0.4, g.R * 0.15, g.cx, g.cy, g.R); wg.addColorStop(0, '#233442'); wg.addColorStop(1, '#0D151C'); g2.fillStyle = wg; g2.beginPath(); g2.arc(g.cx, g.cy, g.R, 0, 6.2832); g2.fill();
-      g2.strokeStyle = 'rgba(150,190,210,' + (0.45 + 0.45 * o.fieldR) + ')'; g2.lineWidth = 1.5; g2.stroke();
-      if (o.fieldR > 0.05) { const gy = g.cy + g.R + 15; g2.strokeStyle = 'rgba(150,190,210,' + 0.55 * o.fieldR + ')'; g2.lineWidth = 1.4; g2.beginPath(); g2.moveTo(g.cx, g.cy + g.R); g2.lineTo(g.cx, gy); g2.moveTo(g.cx - 10, gy); g2.lineTo(g.cx + 10, gy); g2.moveTo(g.cx - 6, gy + 5); g2.lineTo(g.cx + 6, gy + 5); g2.moveTo(g.cx - 2.5, gy + 10); g2.lineTo(g.cx + 2.5, gy + 10); g2.stroke(); }
-      if (o.eIn > 0.02) { g2.save(); g2.globalAlpha = o.eIn; g2.strokeStyle = 'rgba(150,190,210,0.7)'; g2.lineWidth = 2; g2.beginPath(); g2.moveTo(g.ex - 46, g.ey); g2.lineTo(g.ex - 14, g.ey); g2.stroke(); g2.fillStyle = '#9FCADC'; g2.beginPath(); g2.moveTo(g.ex, g.ey); g2.lineTo(g.ex - 16, g.ey - 7); g2.lineTo(g.ex - 16, g.ey + 7); g2.closePath(); g2.fill();
-        if (o.chargeR > 0.02) { g2.globalCompositeOperation = 'lighter'; g2.globalAlpha = o.chargeR * (0.5 + 0.2 * Math.sin(tick * 0.15)); g2.drawImage(spC, g.ex - 26, g.ey - 26, 52, 52); const pr = (tick * 1.4) % 46; g2.globalAlpha = o.chargeR * 0.5 * (1 - pr / 46); g2.strokeStyle = '#56C8DF'; g2.lineWidth = 1; g2.beginPath(); g2.arc(g.ex, g.ey, 6 + pr, 0, 6.2832); g2.stroke(); }
-        g2.restore(); }
-      if (animate && o.chargeR > 0.05) { const want = Math.round(70 * density() * o.chargeR); if (IONS.length < want) IONS.push({ x: g.ex, y: g.ey, life: 1, j: Math.random() * 6.28 }); g2.save(); g2.globalCompositeOperation = 'lighter'; for (let i = IONS.length - 1; i >= 0; i--) { const io = IONS[i]; const e = g.ef(io.x, io.y); const m = Math.hypot(e.x, e.y) || 1e-9; io.x += (e.x / m) * 2.6 + Math.sin(tick * 0.1 + io.j) * 0.5; io.y += (e.y / m) * 2.6 + Math.cos(tick * 0.09 + io.j) * 0.5; io.life -= 0.008; if (io.life <= 0 || Math.hypot(io.x - g.cx, io.y - g.cy) < g.R + 2 || io.x > W + 10 || io.x < -10 || io.y < -10 || io.y > H + 10) { IONS.splice(i, 1); continue; } g2.globalAlpha = 0.4 * io.life * o.chargeR; g2.drawImage(spC, io.x - 3, io.y - 3, 6, 6); } g2.restore(); }
-      if (animate) {
-        const cap = Math.round(120 * density());
-        if (MP.length === 0) { for (let i = 0; i < cap; i++) { const p = {}; spawnM(p); p.x = Math.random() * W; const a0 = g.air(Math.max(0, p.x), p.y); p.vx = a0.u; p.vy = a0.v; MP.push(p); } }
-        while (MP.length < cap) { const p = {}; spawnM(p); MP.push(p); }
-        for (const p of MP) { const a = g.air(p.x, p.y); p.vx += (a.u - p.vx) * 0.1; p.vy += (a.v - p.vy) * 0.1;
-          if (o.chargeR > 0.02 && p.q < o.chargeR && p.x > g.ex - 14 && p.x < g.ex + W * 0.15 && Math.abs(p.y - g.ey) < H * 0.3) { p.q = Math.min(o.chargeR, p.q + 0.05 + 0.1 * Math.random()); }
-          if (p.q > 0.02 && o.fieldR > 0.02) { const e = g.ef(p.x, p.y); const K = 110 * o.fieldR * p.q; p.vx += Math.max(-0.6, Math.min(0.6, e.x * K)); p.vy += Math.max(-0.6, Math.min(0.6, e.y * K)); }
-          p.x += p.vx; p.y += p.vy;
-          if (p.q > 0.2 && o.fieldR > 0.05) { p.trail.push(p.x, p.y); if (p.trail.length > 44) p.trail.splice(0, 2); } else if (p.trail.length) p.trail.length = 0;
-          const dc = Math.hypot(p.x - g.cx, p.y - g.cy); if (dc < g.R + p.r) { if (SPL.length < 48) SPL.push({ ang: Math.atan2(p.y - g.cy, p.x - g.cx), s: 1.6 + p.q, life: 1 }); spawnM(p); continue; }
-          if (p.x > W + 12 || p.y < -14 || p.y > H + 14) spawnM(p);
-        }
-        for (const p of MP) { if (p.trail.length > 4) { g2.strokeStyle = 'rgba(86,200,223,' + (0.1 + 0.16 * p.q) + ')'; g2.lineWidth = 1; g2.beginPath(); g2.moveTo(p.trail[0], p.trail[1]); for (let k = 2; k < p.trail.length; k += 2) g2.lineTo(p.trail[k], p.trail[k + 1]); g2.stroke(); } }
-        g2.save(); g2.globalCompositeOperation = 'lighter'; for (const p of MP) { const s = p.r * 5; g2.globalAlpha = 0.5 + 0.4 * p.q; g2.drawImage(p.q > 0.25 ? spC : spW, p.x - s / 2, p.y - s / 2, s, s); } g2.restore();
-      } else { g2.save(); g2.globalCompositeOperation = 'lighter'; for (let si = 0; si < g.streams.length; si++) { const pts = g.streams[si]; const n2 = pts.length / 2; for (let k = (si * 7) % 20; k < n2; k += 24) { const x = pts[k * 2], y = pts[k * 2 + 1]; const q = o.chargeR > 0.4 && x > g.ex; g2.globalAlpha = 0.55; g2.drawImage(q ? spC : spW, x - 4, y - 4, 8, 8); } } g2.restore(); }
-      g2.save(); g2.globalCompositeOperation = 'lighter';
-      for (let i = SPL.length - 1; i >= 0; i--) { const sp = SPL[i]; if (animate) { sp.s = Math.min(4.2, sp.s + 0.01); sp.life -= 0.0018; const dd = Math.atan2(Math.sin(1.5708 - sp.ang), Math.cos(1.5708 - sp.ang)); sp.ang += dd * 0.002; if (sp.life <= 0) { SPL.splice(i, 1); continue; } } const x = g.cx + Math.cos(sp.ang) * (g.R - 1), y = g.cy + Math.sin(sp.ang) * (g.R - 1); g2.globalAlpha = 0.7 * sp.life; g2.drawImage(spC, x - sp.s * 2.2, y - sp.s * 2.2, sp.s * 4.4, sp.s * 4.4); }
-      if (animate && o.fieldR > 0.5 && SPL.length > 8 && Math.random() < 0.02) { DRIPS.push({ x: g.cx + (Math.random() - 0.5) * g.R * 0.6, y: g.cy + g.R, vy: 0.4, life: 1 }); }
-      for (let i = DRIPS.length - 1; i >= 0; i--) { const dr = DRIPS[i]; if (animate) { dr.vy += 0.06; dr.y += dr.vy; dr.life -= 0.02; } if (dr.life <= 0 || dr.y > H + 8) { DRIPS.splice(i, 1); continue; } g2.globalAlpha = 0.7 * dr.life; g2.drawImage(spC, dr.x - 4, dr.y - 4, 8, 8); }
-      g2.restore();
-      if (o.brIn > 0.02) { const A0 = g.R * 0.55; const A = A0 + (g.R * 4.4 - A0) * o.fieldR; const bx = g.cx - g.R * 3.1; const y0 = g.cy - A / 2, y1 = g.cy + A / 2; g2.strokeStyle = 'rgba(230,245,250,' + 0.6 * o.brIn + ')'; g2.lineWidth = 1.2; g2.beginPath(); g2.moveTo(bx, y0); g2.lineTo(bx, y1); g2.moveTo(bx - 4, y0 + 7); g2.lineTo(bx, y0); g2.lineTo(bx + 4, y0 + 7); g2.moveTo(bx - 4, y1 - 7); g2.lineTo(bx, y1); g2.lineTo(bx + 4, y1 - 7); g2.moveTo(bx - 7, y0); g2.lineTo(bx + 7, y0); g2.moveTo(bx - 7, y1); g2.lineTo(bx + 7, y1); g2.stroke(); g2.fillStyle = 'rgba(230,245,250,' + 0.85 * o.brIn + ')'; g2.font = '500 ' + fpx + "px 'IBM Plex Mono', monospace"; g2.textAlign = 'right'; g2.fillText(o.fieldR > 0.35 ? 'A' : 'A₀', bx - 12, g.cy + fpx * 0.35); g2.textAlign = 'left'; }
-      if (annot()) { g2.font = '500 ' + Math.max(9, fpx - 1) + "px 'IBM Plex Mono', monospace"; g2.fillStyle = 'rgba(140,170,190,0.6)'; g2.fillText('AIR STREAMLINES \u2192', 18, H - 20); g2.textAlign = 'center'; g2.fillStyle = 'rgba(180,210,225,0.75)'; g2.fillText(o.fieldR > 0.3 ? 'COLLECTOR \u2014 GROUNDED' : 'COLLECTOR WIRE \u00B7 \u00D71,000', g.cx, g.cy + g.R + (o.fieldR > 0.05 ? 44 : 24)); if (o.eIn > 0.1) { g2.fillStyle = 'rgba(86,200,223,' + 0.85 * o.eIn + ')'; g2.fillText('CORONA EMITTER \u00B7 ~10 kV', g.ex + 10, g.ey - 30); } if (o.fieldR > 0.2) { g2.fillStyle = 'rgba(86,200,223,' + 0.6 * o.fieldR + ')'; g2.fillText('ELECTRIC FIELD E', (g.ex + g.cx) / 2, g.cy - g.R * 2.6); } g2.textAlign = 'left'; }
-    };
-
-    // ----- macro -----
-    const spawnPL = (p, initial) => {
-      const m = mac; const f = m.fans[(Math.random() * m.fans.length) | 0];
-      const a = Math.random() * 6.2832, rr = Math.sqrt(Math.random()) * m.fanR * 0.7;
-      const s = m.proj(f.x + Math.cos(a) * rr, f.y + Math.sin(a) * rr, m.fanTopZ + 0.04);
-      p.x = s[0]; p.y = s[1]; p.vx = (Math.random() - 0.5) * 0.2; p.vy = -(0.55 + Math.random() * 0.65) * (H / 760);
-      p.r = (0.12 + Math.random() * 0.16) * m.fanR * m.u; p.gr = 1.005 + Math.random() * 0.006;
-      p.seed = Math.random() * 6.28; p.rise = 0;
-      if (initial) { const n = (Math.random() * 110) | 0; for (let k = 0; k < n; k++) { p.y += p.vy; p.r *= 1 + (p.gr - 1) * 0.55; p.rise++; } }
-    };
-    const quad = (g2, a, b, c, d, fill, stroke, lw) => { g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.lineTo(c[0], c[1]); g2.lineTo(d[0], d[1]); g2.closePath(); if (fill) { g2.fillStyle = fill; g2.fill(); } if (stroke) { g2.strokeStyle = stroke; g2.lineWidth = lw || 1; g2.stroke(); } };
-    const ellipse3 = (g2, cxu, cyu, z, r) => { const m = mac; g2.beginPath(); const n = 40; for (let i = 0; i <= n; i++) { const a = i / n * 6.2832; const s = m.proj(cxu + Math.cos(a) * r, cyu + Math.sin(a) * r, z); if (i === 0) g2.moveTo(s[0], s[1]); else g2.lineTo(s[0], s[1]); } };
-    const drawFan = (g2, f, active, meshShow) => {
-      const m = mac; const n = 40; const top = [], base = [];
-      for (let i = 0; i <= n; i++) { const a = i / n * 6.2832; top.push(m.proj(f.x + Math.cos(a) * m.fanR, f.y + Math.sin(a) * m.fanR, m.fanTopZ)); base.push(m.proj(f.x + Math.cos(a) * m.fanR, f.y + Math.sin(a) * m.fanR, m.Hz)); }
-      for (let i = 0; i < n; i++) { const sh = 0.5 + 0.5 * Math.cos(i / n * 6.2832 - 2.3); const gv = Math.round(46 + 26 * sh); g2.beginPath(); g2.moveTo(top[i][0], top[i][1]); g2.lineTo(top[i + 1][0], top[i + 1][1]); g2.lineTo(base[i + 1][0], base[i + 1][1]); g2.lineTo(base[i][0], base[i][1]); g2.closePath(); g2.fillStyle = 'rgb(' + (gv - 6) + ',' + (gv + 4) + ',' + (gv + 12) + ')'; g2.fill(); }
-      ellipse3(g2, f.x, f.y, m.Hz, m.fanR); g2.strokeStyle = 'rgba(100,130,150,0.4)'; g2.lineWidth = 1; g2.stroke();
-      ellipse3(g2, f.x, f.y, m.fanTopZ, m.fanR); g2.fillStyle = '#25333D'; g2.fill(); g2.strokeStyle = 'rgba(140,180,200,0.7)'; g2.lineWidth = 1.3; g2.stroke();
-      ellipse3(g2, f.x, f.y, m.fanTopZ, m.fanR * 0.82); g2.strokeStyle = 'rgba(120,150,170,0.45)'; g2.lineWidth = 1; g2.stroke();
-      const hub = m.proj(f.x, f.y, m.fanTopZ);
-      const rot = (this._reduced() ? 0 : tick * 0.03) + f.x * 2;
-      g2.save(); g2.strokeStyle = 'rgba(150,180,200,0.6)'; g2.lineWidth = 2.2; g2.lineCap = 'round';
-      for (let b = 0; b < 5; b++) { const a = rot + b / 5 * 6.2832; g2.beginPath(); g2.moveTo(hub[0], hub[1]); for (let k = 1; k <= 6; k++) { const rr = m.fanR * 0.78 * k / 6; const aa = a + k * 0.2; const s = m.proj(f.x + Math.cos(aa) * rr, f.y + Math.sin(aa) * rr, m.fanTopZ); g2.lineTo(s[0], s[1]); } g2.stroke(); }
-      g2.restore(); g2.lineCap = 'butt';
-      g2.fillStyle = '#7E93A2'; g2.beginPath(); g2.arc(hub[0], hub[1], Math.max(2, m.u * 0.13), 0, 6.2832); g2.fill();
-      if (meshShow > 0.02) { g2.save(); g2.globalAlpha = Math.min(1, meshShow); const mz = m.fanTopZ + 0.2;
-        for (let ri = 1; ri <= 4; ri++) { ellipse3(g2, f.x, f.y, mz, m.fanR * ri / 4); g2.strokeStyle = 'rgba(86,200,223,' + (0.35 + 0.4 * active) + ')'; g2.lineWidth = 1; g2.stroke(); }
-        g2.strokeStyle = 'rgba(86,200,223,' + (0.3 + 0.4 * active) + ')'; g2.lineWidth = 1; for (let sI = 0; sI < 12; sI++) { const a = sI / 12 * 6.2832; const cc = m.proj(f.x, f.y, mz), e = m.proj(f.x + Math.cos(a) * m.fanR, f.y + Math.sin(a) * m.fanR, mz); g2.beginPath(); g2.moveTo(cc[0], cc[1]); g2.lineTo(e[0], e[1]); g2.stroke(); }
-        if (active) { g2.globalCompositeOperation = 'lighter'; g2.globalAlpha = 0.22 * meshShow; const cc = m.proj(f.x, f.y, mz); g2.drawImage(spC, cc[0] - m.fanR * m.u * 1.3, cc[1] - m.fanR * m.u, m.fanR * m.u * 2.6, m.fanR * m.u * 2.0); }
-        g2.restore();
-      }
-    };
-    const drawPipe = (g2, active) => {
-      const m = mac; const P = m.pipeS; if (P.length < 2) return; g2.lineJoin = 'round'; g2.lineCap = 'round';
-      const trace = () => { g2.beginPath(); g2.moveTo(P[0][0], P[0][1]); for (let i = 1; i < P.length; i++) g2.lineTo(P[i][0], P[i][1]); };
-      trace(); g2.strokeStyle = 'rgba(70,86,98,0.5)'; g2.lineWidth = m.u * 0.24 + 2; g2.stroke();
-      trace(); g2.strokeStyle = '#CBD3D8'; g2.lineWidth = m.u * 0.24; g2.stroke();
-      if (active) { trace(); g2.strokeStyle = 'rgba(58,150,200,0.9)'; g2.lineWidth = Math.max(1.4, m.u * 0.1); g2.setLineDash([2, 10]); g2.lineDashOffset = -(tick * 1.5); g2.stroke(); g2.setLineDash([]); }
-      g2.lineCap = 'butt'; g2.lineJoin = 'miter';
-    };
-    const drawBasin = (g2, level) => {
-      const m = mac, P = m.proj, bz = -m.basinH;
-      const x0 = -0.28, y0 = -0.28, x1 = m.Wx + 0.28, y1 = m.Wy + 0.5;
-      const B0 = P(x1, y0, 0), C0 = P(x1, y1, 0), D0 = P(x0, y1, 0);
-      const Bb = P(x1, y0, bz), Cb = P(x1, y1, bz), Db = P(x0, y1, bz);
-      // soft ground shadow beneath the basin
-      const sA = P(x0, y0, bz), sC = P(x1, y1, bz);
-      const scx = (sA[0] + sC[0]) / 2, scy = (sA[1] + sC[1]) / 2 + m.u * 0.3;
-      const srx = Math.abs(P(x1, y0, bz)[0] - P(x0, y1, bz)[0]) * 0.62;
-      g2.save(); g2.translate(scx, scy); g2.scale(1, 0.3);
-      const sg = g2.createRadialGradient(0, 0, 0, 0, 0, srx);
-      sg.addColorStop(0, 'rgba(2,6,10,0.5)'); sg.addColorStop(1, 'rgba(2,6,10,0)');
-      g2.fillStyle = sg; g2.beginPath(); g2.arc(0, 0, srx, 0, 6.2832); g2.fill(); g2.restore();
-      // right wall (x = x1) and front wall (y = y1) dropping directly below the tower
-      quad(g2, B0, C0, Cb, Bb, '#1A2530', 'rgba(120,150,170,0.4)', 1.1);
-      quad(g2, D0, C0, Cb, Db, '#222F3A', 'rgba(120,150,170,0.4)', 1.1);
-      // full water surface, visible as a rim around the tower base
-      const wl = bz + (m.basinH - 0.05) * Math.max(0.05, level);
-      const wA = P(x0 + 0.05, y0 + 0.05, wl), wB = P(x1 - 0.05, y0 + 0.05, wl), wC = P(x1 - 0.05, y1 - 0.05, wl), wD = P(x0 + 0.05, y1 - 0.05, wl);
-      quad(g2, wA, wB, wC, wD, 'rgba(56,150,192,' + (0.12 + 0.43 * level) + ')', 'rgba(130,190,215,' + (0.12 + 0.33 * level) + ')', 1);
-      g2.save(); g2.globalCompositeOperation = 'lighter'; g2.globalAlpha = (0.05 + 0.17 * level) * (0.6 + 0.4 * Math.sin(tick * 0.05));
-      g2.strokeStyle = 'rgba(174,224,238,0.8)'; g2.lineWidth = 1; g2.beginPath(); g2.moveTo(wD[0], wD[1]); g2.lineTo(wC[0], wC[1]); g2.stroke(); g2.restore();
-      // near rim
-      g2.strokeStyle = 'rgba(150,180,200,0.5)'; g2.lineWidth = 1.1; g2.beginPath(); g2.moveTo(D0[0], D0[1]); g2.lineTo(C0[0], C0[1]); g2.lineTo(B0[0], B0[1]); g2.stroke();
-    };
-    const drawMacro = (g2, o, animate) => {
-      const m = mac; const meshOn = o.mode === 'return';
-      const z = o.zoom || 1;
-      if (z > 1.001) { const fc = [W / 2, H * 0.5]; g2.save(); g2.translate(fc[0], fc[1]); g2.scale(z, z); g2.translate(-fc[0], -fc[1]); }
-      const topY = Math.min.apply(null, m.fanS.map((s) => s.c[1]));
-      if (animate) { const cap = Math.round((meshOn ? 12 : 42) * density()); const fresh = PLM.length === 0;
-        if (PLM.length > cap) PLM.length = cap;
-        while (PLM.length < cap) { const p = {}; spawnPL(p, fresh); PLM.push(p); }
-        const maxR = m.fanR * m.u * 1.05;
-        for (const p of PLM) {
-          p.rise += 1; p.vy *= 0.998; p.r = Math.min(maxR, p.r * p.gr);
-          p.x += p.vx + Math.sin(tick * 0.017 + p.seed) * (meshOn ? 0.08 : 0.3);
-          p.y += p.vy;
-          const esc = meshOn ? H * 0.045 : H * 0.3;
-          if (p.y < topY - esc) spawnPL(p);
-        }
-      }
-      const P = (x, y, zz) => m.proj(x, y, zz);
-      // cold-water basin directly beneath the tower (full)
-      drawBasin(g2, meshOn ? 1 : 0.05);
-      // right + front faces — dark steel cladding with vertical gradient
-      const rfT = P(m.Wx, m.Wy * 0.5, m.Hz)[1], rfB = P(m.Wx, m.Wy * 0.5, 0)[1];
-      const grR = g2.createLinearGradient(0, rfT, 0, rfB); grR.addColorStop(0, '#20303B'); grR.addColorStop(1, '#131E27');
-      quad(g2, P(m.Wx, 0, 0), P(m.Wx, m.Wy, 0), P(m.Wx, m.Wy, m.Hz), P(m.Wx, 0, m.Hz), grR, 'rgba(125,155,175,0.4)', 1.1);
-      const ffT = P(m.Wx * 0.5, m.Wy, m.Hz)[1], ffB = P(m.Wx * 0.5, m.Wy, 0)[1];
-      const grF = g2.createLinearGradient(0, ffT, 0, ffB); grF.addColorStop(0, '#2A3945'); grF.addColorStop(1, '#1A2731');
-      quad(g2, P(0, m.Wy, 0), P(m.Wx, m.Wy, 0), P(m.Wx, m.Wy, m.Hz), P(0, m.Wy, m.Hz), grF, 'rgba(125,155,175,0.4)', 1.1);
-      // louver slats on both visible faces
-      g2.strokeStyle = 'rgba(110,140,160,0.28)'; g2.lineWidth = 1; const nSlat = 12;
-      for (let k = 1; k < nSlat; k++) { const zz = m.Hz * k / nSlat; let a = P(m.Wx, 0, zz), b = P(m.Wx, m.Wy, zz); g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.stroke(); let c2 = P(0, m.Wy, zz), d2 = P(m.Wx, m.Wy, zz); g2.beginPath(); g2.moveTo(c2[0], c2[1]); g2.lineTo(d2[0], d2[1]); g2.stroke(); }
-      // vertical mullions dividing the clad faces into bays
-      g2.strokeStyle = 'rgba(105,135,155,0.3)'; g2.lineWidth = 1;
-      for (let k = 1; k < 3; k++) { const yy = m.Wy * k / 3; const a = P(m.Wx, yy, 0), b = P(m.Wx, yy, m.Hz); g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.stroke(); const xx = m.Wx * k / 3; const c3 = P(xx, m.Wy, 0), d3 = P(xx, m.Wy, m.Hz); g2.beginPath(); g2.moveTo(c3[0], c3[1]); g2.lineTo(d3[0], d3[1]); g2.stroke(); }
-      // vertical corner posts
-      g2.strokeStyle = 'rgba(125,155,175,0.45)'; g2.lineWidth = 1.3;
-      [[m.Wx, 0], [m.Wx, m.Wy], [0, m.Wy]].forEach((pt) => { const a = P(pt[0], pt[1], 0), b = P(pt[0], pt[1], m.Hz); g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.stroke(); });
-      // top deck
-      quad(g2, P(0, 0, m.Hz), P(m.Wx, 0, m.Hz), P(m.Wx, m.Wy, m.Hz), P(0, m.Wy, m.Hz), '#2C3B47', 'rgba(140,175,195,0.5)', 1.2);
-      // deck seams
-      g2.strokeStyle = 'rgba(90,120,140,0.22)'; g2.lineWidth = 1;
-      for (let k = 1; k < 6; k++) { const xx = m.Wx * k / 6; const a = P(xx, 0, m.Hz), b = P(xx, m.Wy, m.Hz); g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.stroke(); }
-      // hot-water distribution header along the deck
-      const hpy = m.Wy * 0.84, hpz = m.Hz + 0.09;
-      const hA = P(0.18, hpy, hpz), hB = P(m.Wx - 0.18, hpy, hpz);
-      g2.lineCap = 'round';
-      g2.strokeStyle = 'rgba(15,24,32,0.9)'; g2.lineWidth = m.u * 0.12 + 1.6; g2.beginPath(); g2.moveTo(hA[0], hA[1]); g2.lineTo(hB[0], hB[1]); g2.stroke();
-      g2.strokeStyle = '#4E6979'; g2.lineWidth = Math.max(1.4, m.u * 0.12); g2.beginPath(); g2.moveTo(hA[0], hA[1]); g2.lineTo(hB[0], hB[1]); g2.stroke();
-      g2.strokeStyle = 'rgba(15,24,32,0.85)'; g2.lineWidth = Math.max(1.2, m.u * 0.1);
-      for (const f of m.fans) { const r1 = P(f.x, hpy, hpz), r2 = P(f.x, f.y + m.fanR * 0.95, hpz); g2.beginPath(); g2.moveTo(r1[0], r1[1]); g2.lineTo(r2[0], r2[1]); g2.stroke(); }
-      g2.lineCap = 'butt';
-      // top-deck handrail (front + right edges)
-      g2.strokeStyle = 'rgba(130,165,185,0.55)'; g2.lineWidth = 1; const rlH = 0.24;
-      [[[0, m.Wy], [m.Wx, m.Wy]], [[m.Wx, 0], [m.Wx, m.Wy]]].forEach((ed) => { const s = ed[0], e = ed[1]; const tA = P(s[0], s[1], m.Hz + rlH), tB = P(e[0], e[1], m.Hz + rlH); g2.beginPath(); g2.moveTo(tA[0], tA[1]); g2.lineTo(tB[0], tB[1]); g2.stroke(); for (let i = 0; i <= 6; i++) { const x = s[0] + (e[0] - s[0]) * i / 6, y = s[1] + (e[1] - s[1]) * i / 6; const a = P(x, y, m.Hz), b = P(x, y, m.Hz + rlH); g2.beginPath(); g2.moveTo(a[0], a[1]); g2.lineTo(b[0], b[1]); g2.stroke(); } });
-      const meshShow = meshOn ? 1 : (o.meshShow || 0);
-      for (const f of m.fans) drawFan(g2, f, meshOn ? 1 : 0, meshShow);
-      g2.save(); g2.globalCompositeOperation = 'lighter';
-      if (animate) { for (const p of PLM) { const hf = Math.min(1, p.rise / (meshOn ? 60 : 140)); const a = meshOn ? 0.06 * (1 - hf) + 0.012 : 0.06 * (1 - hf * 0.85); g2.globalAlpha = Math.max(0.008, a); g2.drawImage(meshOn ? spC : spW, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2); } }
-      else { for (const f of m.fanS) { for (let i = 0; i < 5; i++) { const fy = i / 5; const rr = m.fanR * m.u * (0.35 + fy * 0.8); g2.globalAlpha = 0.09 * (1 - fy); g2.drawImage(meshOn ? spC : spW, f.c[0] - rr + ((i * 37) % 16 - 8), f.c[1] - fy * H * 0.16 - rr, rr * 2, rr * 2); } } }
-      g2.restore();
-      if (z > 1.001) g2.restore();
-      if (annot()) { const fpx = Math.max(10, Math.round(11 * Math.min(W, H) / 640)); g2.font = '500 ' + fpx + "px 'IBM Plex Mono', monospace"; g2.textAlign = 'center';
-        if (o.mode === 'loss') { g2.fillStyle = 'rgba(150,180,200,0.85)'; g2.fillText('DRIFT LOSS \u2192 ATMOSPHERE', W * 0.5, Math.max(H * 0.085, topY - H * 0.12)); }
-        else { g2.fillStyle = 'rgba(86,200,223,0.9)'; g2.fillText('CIRCULAR COLLECTOR ARRAYS \u2014 CAPTURING', W * 0.5, Math.max(H * 0.085, topY - H * 0.12)); }
-        g2.textAlign = 'left';
-      }
-    };
-
-    const draw = (animate) => {
-      const p = prog();
-      const iv = ss(p, 0.005, 0.15);
-      const sp = Math.max(0, Math.min(1, (p * 6 - 1) / 5));
-      const stg = Math.max(0, Math.min(5, Math.round(sp * 5)));
-      const microIn = ss(sp, 0.11, 0.17), microOut = 1 - ss(sp, 0.85, 0.91); const microA = microIn * microOut;
-      const lossA = 1 - ss(sp, 0.11, 0.17); const retA = ss(sp, 0.85, 0.91);
-      const zoomLoss = 1 + 0.45 * ss(sp, 0.02, 0.14);
-      const eIn = ss(sp, 0.33, 0.41), chargeR = ss(sp, 0.36, 0.50), fieldR = ss(sp, 0.52, 0.66), collectR = ss(sp, 0.70, 0.82), brIn = ss(sp, 0.17, 0.24), recFrac = ss(sp, 0.88, 1.0);
-      if (intro) { intro.style.opacity = (1 - iv).toFixed(3); intro.style.transform = 'scale(' + (1 + 1.8 * iv).toFixed(3) + ')'; intro.style.visibility = iv > 0.98 ? 'hidden' : 'visible'; }
-      for (const el of fadeEls) el.style.opacity = iv.toFixed(3);
-      if (hudPanel) hudPanel.style.opacity = iv.toFixed(3);
-      if (skipFloat) { const so = iv * (1 - ss(p, 0.96, 1)); skipFloat.style.opacity = so.toFixed(3); skipFloat.style.visibility = so < 0.02 ? 'hidden' : 'visible'; }
-      ctx.clearRect(0, 0, W, H);
-      ctx.strokeStyle = schematic() ? 'rgba(120,150,170,0.08)' : 'rgba(120,150,170,0.04)'; ctx.lineWidth = 1; const gs = 56; ctx.beginPath(); for (let x = gs; x < W; x += gs) { ctx.moveTo(x, 0); ctx.lineTo(x, H); } for (let y = gs; y < H; y += gs) { ctx.moveTo(0, y); ctx.lineTo(W, y); } ctx.stroke();
-      const scenes = [];
-      if (lossA > 0.005) scenes.push({ a: lossA, draw: (gg) => drawMacro(gg, { mode: 'loss', zoom: zoomLoss, meshShow: 0 }, animate) });
-      if (microA > 0.005) scenes.push({ a: microA, draw: (gg) => drawMicro(gg, { eIn, chargeR, fieldR, brIn }, animate) });
-      if (retA > 0.005) scenes.push({ a: retA, draw: (gg) => drawMacro(gg, { mode: 'return', zoom: 1, meshShow: 1, recFrac }, animate) });
-      if (scenes.length <= 1) { if (scenes.length) { ctx.globalAlpha = scenes[0].a; scenes[0].draw(ctx); ctx.globalAlpha = 1; } }
-      else { const lys = [[layA, ctxA], [layB, ctxB]]; scenes.forEach((s, idx) => { const ly = lys[idx][0], lc = lys[idx][1]; lc.clearRect(0, 0, W, H); s.draw(lc); ctx.globalAlpha = s.a; ctx.drawImage(ly, 0, 0, W, H); }); ctx.globalAlpha = 1; }
-      if (!schematic()) { ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H); }
-      for (let i = 0; i < caps.length; i++) { const center = i / 5; let a = 1 - Math.min(1, Math.abs(sp - center) * 5); a = a * a * (3 - 2 * a) * iv; caps[i].style.opacity = a.toFixed(3); caps[i].style.transform = 'translateY(' + ((1 - a) * 14).toFixed(1) + 'px)'; caps[i].style.visibility = a < 0.01 ? 'hidden' : 'visible'; }
-      for (let i = 0; i < rails.length; i++) { rails[i].style.opacity = i === stg ? '1' : '0.38'; const bar = rails[i].firstElementChild; if (bar) { bar.style.width = i === stg ? '30px' : '16px'; bar.style.background = i === stg ? '#56C8DF' : 'rgba(120,150,170,0.5)'; } }
-      if (hud.phase) hud.phase.textContent = PHASES[stg];
-      if (hud.v) hud.v.textContent = (10 * chargeR).toFixed(1) + ' kV';
-      if (hud.i) hud.i.textContent = (0.010 * chargeR).toFixed(3) + ' mA';
-      if (hud.g) hud.g.textContent = '\u00D7' + (1 + 7 * fieldR).toFixed(1);
-      const recNow = Math.round(7400 * Math.max(recFrac, collectR * 0.2));
-      if (hud.r) hud.r.textContent = recNow.toLocaleString('en-US') + ' L/d';
-      const rpo = ss(sp, 0.86, 0.93);
-      if (retpanel) retpanel.style.opacity = rpo.toFixed(3);
-      if (railWrap && W >= 980 && H >= 660) railWrap.style.opacity = (iv * (1 - rpo)).toFixed(3);
-      if (recEl) recEl.textContent = Math.round(7400 * recFrac).toLocaleString('en-US');
-      if (barA) barA.style.width = (6 + 94 * recFrac).toFixed(0) + '%';
-      tick++;
-    };
-
-    fit();
-    this._techResize = () => { fit(); if (this._reduced()) draw(false); };
-    window.addEventListener('resize', this._techResize);
-    if (this._reduced()) { this._techScroll = () => draw(false); window.addEventListener('scroll', this._techScroll, { passive: true }); draw(false); return; }
-    let run = true;
-    new IntersectionObserver((es) => { run = es[0].isIntersecting; }).observe(stage);
-    const loop = () => { if (run) draw(true); this._techRaf = requestAnimationFrame(loop); };
-    this._techRaf = requestAnimationFrame(loop);
-  }
-
-  // ---------- RENDER ----------
-  renderVals() {
-    return {
-      heroRef: this._heroRef,
-      techRef: this._techRef,
-      sent: this.state.sent,
-      menuOpen: !!(this.state && this.state.menuOpen),
-      toggleMenu: this._tm || (this._tm = () => this.setState((s) => ({ menuOpen: !(s && s.menuOpen) }))),
-      closeMenu: this._cm || (this._cm = () => this.setState({ menuOpen: false })),
-      notSent: !this.state.sent,
-      esNote: this.state.esNote,
-      textareaRows: 4,
-      onSubmit: this._submit || (this._submit = (e) => {
-        e.preventDefault();
-        if (e.target.checkValidity()) this.setState({ sent: true });
-        else e.target.reportValidity();
-      }),
-      esClick: this._es || (this._es = () => {
-        this.setState({ esNote: true });
-        clearTimeout(this._esT);
-        this._esT = setTimeout(() => this.setState({ esNote: false }), 2400);
-      })
-    };
-  }
-}
-</script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>

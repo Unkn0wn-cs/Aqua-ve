@@ -1,0 +1,1405 @@
+/* ==========================================================================
+   AQUA — electrostatic fog recovery
+   Production stylesheet. Mobile-first corrections layered over a dark base.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --bg:            #0B1218;
+  --bg-alt:        #0C141C;
+  --bg-deep:       #0A1118;
+  --bg-foot:       #0A1016;
+  --surface:       #0E161E;
+
+  --text:          #E7EEF2;
+  --heading:       #EDF4F8;
+  --muted:         #A7BAC7;
+  --dim:           #8CA0AE;
+  --dim-2:         #7E93A2;
+  --faint:         #5F7484;
+  --faintest:      #42525F;
+
+  --accent:        #56C8DF;
+  --accent-bright: #7FDCEE;
+  --accent-deep:   #2BA8C6;
+  --accent-ink:    #06222B;
+  --accent-soft:   #9BE0EF;
+
+  --light-bg:      #EEF2F4;
+  --light-surface: #F7FAFB;
+  --light-ink:     #101B24;
+  --light-text:    #17222B;
+  --light-muted:   #4A5D6B;
+  --light-dim:     #5F7585;
+  --light-accent:  #1489A8;
+
+  --line:          rgba(120, 150, 170, 0.18);
+  --line-soft:     rgba(120, 150, 170, 0.10);
+  --line-strong:   rgba(120, 150, 170, 0.35);
+  --line-light:    rgba(20, 45, 60, 0.14);
+
+  --sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --disp:  'Space Grotesk', var(--sans);
+  --mono:  'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --pad-x: 6vw;
+  --nav-h: 58px;
+  --radius: 6px;
+
+  /* Full-height unit. `svh` is the viewport WITH browser chrome visible, which
+     is the height that is actually guaranteed to be on screen on a phone.
+     `--app-vh` is a JS-measured fallback for engines without svh support. */
+  --app-vh: 100vh;
+  --screen: var(--app-vh);
+}
+
+@supports (height: 100svh) {
+  :root { --screen: 100svh; }
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* Stop iOS/Android from re-flowing type when the phone is rotated. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Wide canvases and transformed panels must never create a sideways scroll. */
+  overflow-x: clip;
+  /* Kill the grey flash when tapping links/buttons on iOS. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+
+a { color: var(--accent-bright); text-decoration: none; }
+a:hover { color: #C9EFF8; }
+
+h1, h2, h3 { margin: 0; font-family: var(--disp); font-weight: 600; }
+p { margin: 0; }
+
+::selection { background: rgba(86, 200, 223, 0.32); }
+input::placeholder, textarea::placeholder { color: #5F7484; opacity: 1; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: 0 0 var(--radius) 0;
+}
+.skip-link:focus {
+  left: 0;
+  color: var(--accent-ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Scroll snapping  (all devices, touch included)
+
+   Snap on a phone normally fails for one specific reason: the snap targets are
+   sized in `vh` or `dvh`, so when the URL bar slides away the viewport grows,
+   every target silently changes height, and the positions shift under the
+   finger mid-gesture. The browser then fights the fling. That is what made the
+   original build unusable on mobile.
+
+   Here every target is sized from --screen, which resolves to `svh` — the
+   SMALL viewport, the one that does not change when browser chrome hides. The
+   snap positions are therefore constant for the whole session. Combined with
+   `scroll-snap-align: start` (unlike `center`, start alignment does not depend
+   on scrollport height either), the geometry stays put and snapping behaves
+   the same on a phone as on a desktop.
+
+   `mandatory`, not `proximity`. Proximity only engages if you happen to come
+   to rest near a snap point, so most gestures end wherever momentum died —
+   which reads as "it stops midway and feels soft". Mandatory always resolves
+   to a snap point, so every gesture lands on a stage.
+
+   Mandatory has one hazard: it re-snaps from ANY resting position, so content
+   in a section taller than the screen can become impossible to rest on. On a
+   phone that is every section, once the cards stack. The fix is not to weaken
+   the snapping but to guarantee a snap point at least every screen — see
+   .snap-fill below and snapFill() in assets/site.js.
+
+   The six technology stages additionally get `scroll-snap-stop: always`, so a
+   fling cannot skip past a stage — each one is stopped at and read. The Skip
+   button is the escape hatch, and it suspends snapping while it animates.
+   -------------------------------------------------------------------------- */
+html {
+  scroll-snap-type: y mandatory;
+  /* A programmatic scroll (nav link, Skip) briefly sets this to none — see
+     assets/site.js, withSnapSuspended(). */
+}
+
+header#home,
+main > section[id] {
+  scroll-snap-align: start;
+}
+
+/* Each stage of the technology walkthrough is a guaranteed stop. */
+.tech__anchor {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+footer { scroll-snap-align: end; }
+
+/* Snap targets land flush with the top of the screen; their own top padding
+   (76-90px) already clears the fixed nav, so no scroll-margin offset here —
+   an offset would leave a sliver of the previous section showing. Other
+   in-page targets (footnote references) keep the offset, set in section 5. */
+header#home,
+main > section[id] { scroll-margin-top: 0; }
+
+/* Generated snap points.
+
+   Under `mandatory` the reader can only ever rest ON a snap point, so any gap
+   between two snap points wider than one screen hides the content in between —
+   there is no resting position that shows it. JS measures the real gaps and
+   drops a 1px target into each one at even intervals, so consecutive points are
+   never more than a screen apart and nothing is unreachable. This is what lets
+   the snapping stay hard everywhere instead of being softened to compensate. */
+body { position: relative; }
+
+.snap-fill-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.snap-fill {
+  position: absolute;
+  left: 0;
+  width: 1px; height: 1px;
+  pointer-events: none;
+  scroll-snap-align: start;
+}
+
+/* Vestibular-safety opt-out: honour the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; scroll-snap-type: none; }
+  header#home, main > section[id], .tech__anchor, footer {
+    scroll-snap-align: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Shared primitives
+   -------------------------------------------------------------------------- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.eyebrow--light { color: var(--light-accent); }
+
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  padding: 2px 5px;
+  border: 1px solid rgba(110, 140, 160, 0.35);
+  border-radius: 3px;
+  color: #6E8494;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+.badge + .badge { margin-left: 4px; }
+.badge-ref { color: #6E8494; }
+a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
+
+.section-title {
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--heading);
+  text-wrap: balance;
+}
+.section-title--light { color: var(--light-ink); }
+
+.lede {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 68ch;
+}
+.lede--light { color: var(--light-muted); font-size: 14.5px; }
+
+/* Small print set beneath a section's cards. */
+.footnote {
+  margin-top: 28px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--faint);
+  max-width: 780px;
+}
+.section-note {
+  margin-top: 28px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--dim-2);
+  max-width: 640px;
+}
+.is-right { text-align: right; }
+
+.section {
+  min-height: var(--screen);
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  padding: 90px var(--pad-x) 56px;
+  border-top: 1px solid var(--line-soft);
+}
+.section--light {
+  background: var(--light-bg);
+  color: var(--light-text);
+  border-top-color: var(--line-light);
+}
+.section__head {
+  max-width: 780px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--dim-2);
+}
+.card__label--accent { color: var(--accent); }
+.card__stat {
+  font-family: var(--disp);
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 600;
+  color: var(--accent-soft);
+  line-height: 1.15;
+}
+.card__title {
+  font-family: var(--disp);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--heading);
+}
+.card p:not([class]) { font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 32px;
+}
+
+/* Buttons ------------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 22px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  /* 44px minimum touch target — WCAG 2.5.5 / iOS HIG. */
+  min-height: 44px;
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--accent-bright); color: var(--accent-ink); }
+.btn--ghost { border-color: rgba(134, 170, 190, 0.4); color: #C9D9E2; background: transparent; }
+.btn--ghost:hover { border-color: var(--accent); color: var(--heading); }
+.btn--dark { background: var(--light-ink); color: var(--heading); align-self: flex-start; }
+.btn--dark:hover { background: #1F3240; color: var(--heading); }
+.btn--sm { font-size: 13px; padding: 9px 16px; min-height: 40px; }
+
+/* Reveal-on-scroll ---------------------------------------------------------
+   Content is visible by default and only hidden once JS has *armed* it. If
+   site.js fails to load or throws, nothing is ever hidden — the failure mode
+   is "no animation", never "no content". */
+.reveal--armed {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.reveal--armed.is-visible {
+  opacity: 1;
+  transform: none;
+  transition: opacity .6s ease, transform .6s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal--armed { opacity: 1; transform: none; transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Navigation
+   -------------------------------------------------------------------------- */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 13px 4vw;
+  background: rgba(11, 18, 24, 0.82);
+  border-bottom: 1px solid rgba(120, 150, 170, 0.14);
+}
+@supports ((backdrop-filter: blur(14px)) or (-webkit-backdrop-filter: blur(14px))) {
+  .nav {
+    background: rgba(11, 18, 24, 0.7);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  flex: none;
+}
+.nav__brand:hover { color: var(--text); }
+.nav__brand img {
+  width: 26px; height: 26px;
+  filter: drop-shadow(0 0 1px rgba(230, 245, 250, 0.9));
+}
+.nav__wordmark {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.28em;
+}
+
+.nav__links { display: flex; align-items: center; gap: 26px; }
+.nav__links a { font-size: 13px; color: #9FB3C0; }
+.nav__links a:hover,
+.nav__links a[aria-current="true"] { color: var(--text); }
+
+.nav__actions { display: flex; align-items: center; gap: 12px; }
+
+.nav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+}
+.nav__toggle:hover { border-color: var(--accent); }
+.nav__toggle span,
+.nav__toggle span::before,
+.nav__toggle span::after {
+  display: block;
+  width: 17px; height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.nav__toggle span { position: relative; }
+.nav__toggle span::before,
+.nav__toggle span::after { content: ''; position: absolute; left: 0; }
+.nav__toggle span::before { top: -5.5px; }
+.nav__toggle span::after  { top:  5.5px; }
+.nav__toggle[aria-expanded="true"] span { background: transparent; }
+.nav__toggle[aria-expanded="true"] span::before { transform: translateY(5.5px) rotate(45deg); }
+.nav__toggle[aria-expanded="true"] span::after  { transform: translateY(-5.5px) rotate(-45deg); }
+
+.nav__drawer {
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: rgba(9, 15, 22, 0.97);
+  border-bottom: 1px solid rgba(120, 150, 170, 0.2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  padding: 4px 4vw 18px;
+  /* Long menu on a short phone must scroll rather than clip. */
+  max-height: calc(var(--screen) - var(--nav-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nav__drawer[hidden] { display: none; }
+.nav__drawer a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 2px;
+  border-bottom: 1px solid rgba(120, 150, 170, 0.12);
+  font-size: 15px;
+  color: var(--text);
+  min-height: 44px;
+}
+.nav__drawer a:last-of-type { border-bottom: none; }
+.nav__drawer a:hover { color: var(--accent-bright); }
+.nav__drawer .nav__num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.nav__drawer .btn { margin-top: 14px; width: 100%; }
+
+@media (max-width: 920px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__toggle { display: inline-flex; }
+}
+
+/* Anchors must not land under the fixed bar. */
+[id] { scroll-margin-top: calc(var(--nav-h) + 8px); }
+
+/* --------------------------------------------------------------------------
+   6. Hero
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  height: var(--screen);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0B1218 0%, #0C141C 60%, #0B1218 100%);
+}
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 180px;
+  background: linear-gradient(180deg, rgba(11, 18, 24, 0) 0%, #0B1218 100%);
+  pointer-events: none;
+}
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px;
+  padding: 100px var(--pad-x) 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.hero h1 {
+  font-size: clamp(34px, 6.4vw, 82px);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  color: var(--heading);
+  text-wrap: balance;
+}
+.hero__lede {
+  max-width: 640px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+
+.hero__stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(120, 150, 170, 0.16);
+}
+.hero__stat { display: flex; flex-direction: column; gap: 4px; }
+.hero__stat b {
+  font-family: var(--disp);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--heading);
+}
+.hero__stat span { font-size: 12.5px; color: var(--dim); }
+
+/* --------------------------------------------------------------------------
+   7. Technology — sticky scroll-driven canvas
+   -------------------------------------------------------------------------- */
+.tech { border-top: 1px solid var(--line-soft); background: var(--bg-alt); position: relative; }
+.tech__scroller { position: relative; }
+.tech__stage {
+  position: sticky;
+  top: 0;
+  height: var(--screen);
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+.tech__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tech__anchor { height: var(--screen); }
+
+.tech__intro {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: rgba(6, 11, 17, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.tech__intro-inner {
+  max-width: 860px;
+  padding: 0 var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.tech__intro h2 {
+  font-size: clamp(30px, 4.2vw, 58px);
+  letter-spacing: -0.02em;
+  line-height: 1.06;
+  color: var(--heading);
+  text-wrap: balance;
+}
+.tech__intro p:not([class]) {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 640px;
+}
+.tech__intro em { color: #C9E9F2; font-style: normal; }
+.tech__cue {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.tech__skip {
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid rgba(120, 150, 170, 0.4);
+  color: #9FB3C0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  padding: 12px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 44px;
+}
+.tech__skip:hover { border-color: var(--accent); color: var(--accent-bright); }
+.tech__skip--float {
+  position: absolute;
+  right: var(--pad-x);
+  bottom: 6vh;
+  z-index: 5;
+  background: rgba(10, 17, 24, 0.82);
+  font-size: 10px;
+  padding: 10px 14px;
+}
+
+.tech__note {
+  position: absolute;
+  left: 5vw;
+  top: 92px;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--faintest);
+  z-index: 3;
+}
+
+.tech__hud {
+  position: absolute;
+  top: 74px;
+  right: 5vw;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 17, 24, 0.82);
+  border: 1px solid rgba(120, 150, 170, 0.2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  pointer-events: none;
+  min-width: 214px;
+  z-index: 3;
+}
+.tech__hud div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 9px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.tech__hud div:first-child {
+  padding-top: 11px; padding-bottom: 11px;
+  border-bottom: 1px solid rgba(120, 150, 170, 0.14);
+}
+.tech__hud dt { color: var(--faint); }
+.tech__hud dd { margin: 0; color: var(--text); }
+.tech__hud .is-accent { color: var(--accent); }
+
+.tech__rail {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  pointer-events: none;
+  transition: opacity .4s;
+  z-index: 3;
+  margin: 0; padding: 0;
+  list-style: none;
+}
+.tech__rail li { display: flex; align-items: center; gap: 10px; opacity: .38; }
+.tech__rail i {
+  width: 16px; height: 2px;
+  background: rgba(120, 150, 170, 0.5);
+  display: block;
+  transition: width .3s ease, background-color .3s ease;
+}
+.tech__rail span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #9FB3C0;
+}
+.tech__rail li.is-active { opacity: 1; }
+.tech__rail li.is-active i { width: 30px; background: var(--accent); }
+
+.tech__captions {
+  position: absolute;
+  left: 5vw;
+  bottom: 6vh;
+  width: min(452px, 88vw);
+  pointer-events: none;
+  z-index: 3;
+}
+.tech__caption {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(10, 17, 24, 0.9);
+  border: 1px solid rgba(120, 150, 170, 0.2);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.tech__caption-step {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+.tech__caption h3 { font-size: 22px; color: var(--heading); }
+.tech__caption p:not([class]) { font-size: 14px; line-height: 1.6; color: var(--muted); }
+.tech__caption-foot {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--dim-2);
+  border-top: 1px solid rgba(120, 150, 170, 0.18);
+  padding-top: 10px;
+}
+
+.tech__return {
+  position: absolute;
+  right: 5vw;
+  bottom: 6vh;
+  width: min(330px, 86vw);
+  transition: opacity .5s;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 3;
+}
+.panel {
+  background: rgba(10, 17, 24, 0.88);
+  border: 1px solid rgba(120, 150, 170, 0.22);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.panel--accent { border-color: rgba(86, 200, 223, 0.28); gap: 4px; }
+.panel__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--dim-2);
+}
+.panel__label--accent { color: var(--accent); }
+.meter { display: flex; flex-direction: column; gap: 7px; }
+.meter__row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #9FB3C0;
+}
+.meter__row--accent { color: #C9E9F2; }
+.meter__track {
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(120, 150, 170, 0.18);
+  overflow: hidden;
+}
+.meter__track--accent { background: rgba(86, 200, 223, 0.16); }
+.meter__fill { height: 100%; width: 14%; background: var(--faint); border-radius: 4px; }
+.meter__fill--accent {
+  width: 0;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
+  transition: width .15s linear;
+}
+.panel__big {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.panel__big b {
+  font-family: var(--disp);
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--heading);
+  font-variant-numeric: tabular-nums;
+}
+.panel__big span { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.panel__compare {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.panel__compare div { display: flex; flex-direction: column; gap: 2px; }
+.panel__compare b { font-family: var(--disp); font-size: 20px; font-weight: 600; color: var(--accent-bright); }
+.panel__compare .is-muted { color: #9FB3C0; }
+.panel__vs { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.panel__compare small { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--dim-2); }
+.panel__foot {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  border-top: 1px solid rgba(120, 150, 170, 0.16);
+  padding-top: 9px;
+}
+
+/* Mobile payoff strip: the overlay panels are hidden on small screens, so the
+   same numbers are restated as normal flow content after the simulation. */
+.tech__summary { display: none; }
+
+/* The overlay elements start hidden ONLY once JS has taken control of the
+   stage (it adds .is-live). Their opacity is then driven per frame. */
+.tech.is-live .tech__note,
+.tech.is-live .tech__hud,
+.tech.is-live .tech__return { opacity: 0; }
+.tech.is-live .tech__caption,
+.tech.is-live .tech__skip--float { opacity: 0; visibility: hidden; }
+
+/* Fallback: no JS, or site.js failed to load. The sticky canvas story cannot
+   run, so the scroller collapses into the caption list as plain content —
+   every word of the explanation stays readable. */
+.tech:not(.is-live) .tech__scroller { height: auto; }
+.tech:not(.is-live) .tech__stage {
+  position: static;
+  height: auto;
+  padding: 90px var(--pad-x) 40px;
+}
+.tech:not(.is-live) .tech__canvas,
+.tech:not(.is-live) .tech__anchor,
+.tech:not(.is-live) .tech__skip,
+.tech:not(.is-live) .tech__rail,
+.tech:not(.is-live) .tech__note,
+.tech:not(.is-live) .tech__hud,
+.tech:not(.is-live) .tech__cue { display: none; }
+.tech:not(.is-live) .tech__intro {
+  position: static;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform: none;
+  text-align: left;
+}
+.tech:not(.is-live) .tech__intro-inner { align-items: flex-start; padding: 0; }
+.tech:not(.is-live) .tech__captions {
+  position: static;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+.tech:not(.is-live) .tech__caption { position: static; }
+.tech:not(.is-live) .tech__return {
+  position: static;
+  width: 100%;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.tech:not(.is-live) .tech__summary { display: none; }
+
+/* --------------------------------------------------------------------------
+   8. Product
+   -------------------------------------------------------------------------- */
+.product__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 22px;
+  align-items: flex-start;
+}
+.product__figure { flex: 1 1 460px; min-width: 0; margin: 0; }
+.product__figure img {
+  width: 100%;
+  height: auto;
+  /* Matches the asset's intrinsic 809x541 so nothing is cropped and the box
+     is reserved before the image decodes (no layout shift). */
+  aspect-ratio: 809 / 541;
+  border-radius: var(--radius);
+  background: #DDE5E9;
+}
+.product__figure figcaption {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--light-dim);
+}
+.product__side { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+
+.spec {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: rgba(20, 45, 60, 0.14);
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 0;
+}
+.spec > div {
+  background: var(--light-surface);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.spec dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--light-dim);
+}
+.spec dd {
+  margin: 0;
+  font-family: var(--disp);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--light-ink);
+}
+
+.disclaimer {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--light-dim);
+}
+.disclaimer .badge { border-color: rgba(60, 90, 110, 0.3); color: var(--light-dim); margin-right: 8px; }
+
+.models {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.model {
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  background: var(--light-surface);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.model__label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--light-accent);
+}
+.model__price { font-family: var(--disp); font-size: 18px; font-weight: 600; color: var(--light-ink); }
+.model p:not([class]) { font-size: 14px; line-height: 1.6; color: var(--light-muted); }
+
+/* --------------------------------------------------------------------------
+   9. Comparison table
+   -------------------------------------------------------------------------- */
+.cmp {
+  margin-top: 26px;
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--light-surface);
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.cmp thead th {
+  background: var(--light-ink);
+  padding: 11px 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--dim);
+}
+.cmp thead th:last-child { color: var(--accent-bright); }
+.cmp tbody tr { border-top: 1px solid rgba(20, 45, 60, 0.1); }
+.cmp th[scope="row"] {
+  padding: 14px 18px;
+  font-family: var(--disp);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--light-ink);
+  width: clamp(110px, 18%, 200px);
+  vertical-align: top;
+}
+.cmp td { padding: 14px 18px; font-size: 14px; line-height: 1.55; color: var(--light-muted); vertical-align: top; }
+.cmp td.is-aqua {
+  color: #17313C;
+  background: rgba(86, 200, 223, 0.1);
+  border-left: 2px solid var(--accent-deep);
+}
+
+/* --------------------------------------------------------------------------
+   10. About
+   -------------------------------------------------------------------------- */
+.about { background: var(--bg-alt); }
+.about__body { display: flex; flex-wrap: wrap; gap: 38px; align-items: flex-start; }
+.about__main { flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.about__main p:not([class]) { font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+.about__side { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
+.roadmap {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.roadmap__head {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(120, 150, 170, 0.14);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+.roadmap__row {
+  display: flex;
+  gap: 14px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.roadmap__row:last-child { border-bottom: none; }
+.roadmap__when {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  flex: none;
+  width: 78px;
+}
+.roadmap__what { font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  background: var(--surface);
+}
+.person__photo {
+  width: 76px; height: 76px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #16222C;
+  border: 1px solid var(--line);
+}
+.person__photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--disp);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(86, 200, 223, 0.08);
+}
+.person__name { font-family: var(--disp); font-size: 16px; font-weight: 600; color: var(--heading); }
+.person__role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--dim-2); }
+
+/* --------------------------------------------------------------------------
+   11. Contact
+   -------------------------------------------------------------------------- */
+.contact { min-height: 0; padding-bottom: 48px; }
+.contact__body { display: flex; flex-wrap: wrap; gap: 38px; align-items: flex-start; }
+.contact__intro { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.contact__intro p:not([class]) { font-size: 14.5px; line-height: 1.65; color: var(--muted); max-width: 52ch; }
+.contact__meta {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--dim);
+}
+.contact__meta dt {
+  color: var(--accent);
+  display: inline-block;
+  width: 52px;
+  flex: none;
+}
+.contact__meta > div { display: flex; gap: 10px; align-items: baseline; }
+.contact__meta dd { margin: 0; }
+
+.form {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  background: var(--surface);
+}
+/* `display:flex` above outranks the UA's [hidden]{display:none}; without this
+   the form would stay on screen next to the thank-you panel after sending. */
+.form[hidden] { display: none; }
+.form__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--dim-2);
+  text-transform: uppercase;
+}
+.form input,
+.form textarea {
+  background: var(--bg);
+  border: 1px solid rgba(120, 150, 170, 0.25);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 12px;
+  /* 16px prevents iOS Safari from auto-zooming the page on field focus. */
+  font-size: 16px;
+  font-family: var(--sans);
+  width: 100%;
+  min-height: 46px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.form textarea { min-height: 96px; resize: vertical; }
+.form input:focus, .form textarea:focus { border-color: var(--accent); outline: none; }
+.form input:focus-visible, .form textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.form input:user-invalid, .form textarea:user-invalid { border-color: #E2725B; }
+.form button { align-self: flex-start; }
+.form__hp { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
+
+.form__status {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #E2725B;
+  min-height: 0;
+}
+.form__status:empty { display: none; }
+
+.form-sent {
+  flex: 1 1 420px;
+  border: 1px solid rgba(86, 200, 223, 0.4);
+  border-radius: var(--radius);
+  padding: 44px 36px;
+  background: rgba(86, 200, 223, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-sent[hidden] { display: none; }
+.form-sent__label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--accent); }
+.form-sent__title { font-family: var(--disp); font-size: 24px; font-weight: 600; color: var(--heading); }
+.form-sent p:not([class]) { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+/* --------------------------------------------------------------------------
+   12. Footer & sources
+   -------------------------------------------------------------------------- */
+.footer {
+  border-top: 1px solid rgba(120, 150, 170, 0.14);
+  padding: 28px var(--pad-x) 20px;
+  background: var(--bg-foot);
+}
+.footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.footer__brand { display: flex; flex-direction: column; gap: 14px; max-width: 340px; }
+.footer__brand > div { display: flex; align-items: center; gap: 10px; }
+.footer__brand img { width: 24px; height: 24px; }
+.footer__brand span {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+  color: var(--text);
+}
+.footer__brand p { font-size: 13px; line-height: 1.6; color: var(--dim-2); }
+.footer__cols { display: flex; gap: 40px; flex-wrap: wrap; }
+.footer__col { display: flex; flex-direction: column; gap: 7px; }
+.footer__col h2 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+}
+.footer__col a, .footer__col span { font-size: 13px; color: #9FB3C0; }
+.footer__col a:hover { color: var(--text); }
+
+.sources {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+}
+.sources h2 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+  margin-bottom: 10px;
+}
+.sources ol {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sources li { font-size: 12px; line-height: 1.6; color: var(--dim-2); }
+.sources a { color: #9FB3C0; text-decoration: underline; text-underline-offset: 2px; }
+.sources a:hover { color: var(--accent); }
+.sources .todo {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #C9A227;
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+.footer__legal span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive — short viewports
+   -------------------------------------------------------------------------- */
+@media (max-height: 780px) {
+  .hero__inner { gap: 16px; padding: 80px var(--pad-x) 40px; }
+  .hero h1 { font-size: clamp(30px, 4.6vw, 44px); }
+  .hero__lede { font-size: 14.5px; }
+  .hero__stats { margin-top: 12px; padding-top: 14px; gap: 24px; }
+}
+@media (max-height: 600px) {
+  .hero__stats { display: none; }
+}
+
+/* Overlay HUD/rail/return only make sense when there is room beside the canvas. */
+@media (max-width: 1000px), (max-height: 660px) {
+  .tech__rail { display: none; }
+}
+@media (max-width: 700px), (max-height: 520px) {
+  .tech__hud { display: none; }
+}
+@media (max-width: 900px), (max-height: 540px) {
+  .tech.is-live .tech__return { display: none; }
+  .tech.is-live .tech__summary {
+    display: grid;
+    gap: 12px;
+    padding: 0 var(--pad-x) 56px;
+    background: var(--bg-alt);
+  }
+  .tech__summary .panel { background: var(--surface); }
+}
+@media (max-width: 680px), (max-height: 480px) {
+  .tech__skip--float { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   14. Responsive — phones
+   -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  :root { --pad-x: 5vw; }
+
+  .hero h1 { font-size: clamp(30px, 9.4vw, 42px); }
+  .hero__inner { padding: 84px var(--pad-x) 36px; gap: 20px; }
+  .hero__lede { font-size: 14.5px; }
+  .hero__actions { gap: 10px; }
+  .hero__actions .btn { flex: 1 1 auto; }
+  .hero__stats { gap: 16px 26px; margin-top: 16px; padding-top: 16px; }
+  .hero__stat b { font-size: 24px; }
+
+  .section { padding-top: 76px; padding-bottom: 44px; }
+  .grid-auto { gap: 14px; margin-top: 24px; }
+
+  .tech__intro h2 { font-size: clamp(28px, 8.4vw, 36px); }
+  .tech__intro p:not([class]) { font-size: 14px; }
+  .tech__intro-inner { gap: 12px; }
+  .tech__caption { padding: 15px 16px; gap: 8px; }
+  .tech__caption h3 { font-size: 17.5px; }
+  .tech__caption p:not([class]) { font-size: 13px; line-height: 1.55; }
+  .tech__caption-step { font-size: 10px; }
+  .tech__captions { left: 0; right: 0; bottom: 3vh; width: auto; padding: 0 var(--pad-x); }
+
+  /* Full-height anchors on mobile too, now that the stages snap: one swipe
+     advances exactly one stage, so anchor length no longer decides how much
+     dragging the section costs. Equal-height anchors also keep every snap
+     point exactly one screen apart, which is what makes the stepping feel
+     predictable under a thumb. */
+  .tech__anchor { height: var(--screen); }
+
+  .product__body { gap: 18px; }
+  .models { gap: 12px; margin-top: 18px; }
+  .about__body, .contact__body { gap: 26px; }
+  .form { padding: 18px; }
+  .form__row { gap: 12px; }
+
+  .footer__cols { gap: 26px; }
+  .footer__legal { gap: 8px; }
+
+  /* Comparison table becomes stacked cards; the header row is redundant once
+     each cell carries its own label. */
+  .cmp, .cmp tbody, .cmp tr, .cmp th, .cmp td { display: block; width: auto; }
+  .cmp thead { display: none; }
+  .cmp tbody tr { border-top: 1px solid rgba(20, 45, 60, 0.12); padding: 4px 0 10px; }
+  .cmp th[scope="row"] { padding: 12px 14px 2px; width: auto; }
+  .cmp td { padding: 10px 14px; }
+  .cmp td::before {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--light-dim);
+    margin-bottom: 5px;
+  }
+  .cmp td.is-passive::before { content: "PASSIVE MESH"; }
+  .cmp td.is-aqua::before { content: "AQUA SYSTEM"; color: var(--light-accent); }
+}
+
+@media (max-width: 400px) {
+  .hero__stats { gap: 14px 20px; }
+  .spec > div { padding: 12px 14px; }
+  .person { gap: 14px; padding: 14px 16px; }
+  .person__photo { width: 62px; height: 62px; }
+}
+
+/* --------------------------------------------------------------------------
+   15. Motion & data preferences
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  .tech__caption { transition: none; }
+}
+
+@media print {
+  .nav, .tech__stage, .hero__canvas, .tech__skip { display: none !important; }
+  body { background: #fff; color: #000; }
+  .section { min-height: 0; page-break-inside: avoid; }
+}
