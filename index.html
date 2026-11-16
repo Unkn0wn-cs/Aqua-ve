@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>Aqua — Electrostatic Fog Recovery for Refinery Cooling Towers</title>
-<meta name="description" content="Aqua builds modular electrostatic recovery systems for refinery cooling towers. A corona emitter charges escaping microdroplets and an electric field returns them to the loop — built on technology validated at MIT, engineered for Venezuela.">
+<title>Aqua — Electrostatic Fog Recovery for Industrial Cooling Towers</title>
+<meta name="description" content="A mid-size refinery running near capacity vents around 9 million litres of water a day as fog. Aqua builds modular electrostatic recovery systems that charge those microdroplets and pull them back into the cooling loop — so Venezuelan industry can scale without waiting on the water network.">
 <link rel="canonical" href="https://aqua-ve.com/">
 
 <meta name="theme-color" content="#0B1218">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Aqua">
 <meta property="og:title" content="Aqua — Electrostatic Fog Recovery">
-<meta property="og:description" content="The water your cooling towers lose as fog. Recovered. Modular electrostatic recovery systems for industrial cooling towers, engineered in Venezuela.">
+<meta property="og:description" content="The water lost as fog. Recovered. Modular electrostatic recovery systems for industrial cooling towers, engineered in Venezuela.">
 <meta property="og:url" content="https://aqua-ve.com/">
 <meta property="og:image" content="https://aqua-ve.com/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -29,7 +29,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Space+Grotesk:wght@600&display=swap">
+<!--
+  Only the weights actually used are requested: Plex Sans 400/600 (body, buttons),
+  Plex Mono 400 (labels, HUD), Space Grotesk 600 (headings). The preload warms the
+  connection a beat before the stylesheet blocks — the usual `media="print" onload`
+  swap is impossible here, since the CSP in netlify.toml sets script-src 'self'
+  with no 'unsafe-inline'.
+-->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&family=Space+Grotesk:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&family=Space+Grotesk:wght@600&display=swap">
 
 <link rel="stylesheet" href="assets/site.css">
 
@@ -59,13 +67,15 @@
     <span class="visually-hidden">Aqua — home</span>
   </a>
 
+  <!-- Six links is what fits above 920px without crowding the CTA; the drawer
+       below carries the full eight-section deck. -->
   <div class="nav__links" data-nav-links>
     <a href="#problem">Problem</a>
     <a href="#technology">Technology</a>
     <a href="#product">System</a>
-    <a href="#why">Why Aqua</a>
-    <a href="#applications">Applications</a>
-    <a href="#about">About</a>
+    <a href="#market">Market</a>
+    <a href="#model">Model</a>
+    <a href="#about">Team</a>
   </div>
 
   <div class="nav__actions">
@@ -82,8 +92,9 @@
     <a href="#technology"><span>Technology</span><span class="nav__num">02</span></a>
     <a href="#product"><span>System</span><span class="nav__num">03</span></a>
     <a href="#why"><span>Why Aqua</span><span class="nav__num">04</span></a>
-    <a href="#applications"><span>Applications</span><span class="nav__num">05</span></a>
-    <a href="#about"><span>About</span><span class="nav__num">06</span></a>
+    <a href="#market"><span>Market</span><span class="nav__num">05</span></a>
+    <a href="#model"><span>Business model</span><span class="nav__num">06</span></a>
+    <a href="#about"><span>Team</span><span class="nav__num">07</span></a>
     <a href="#contact" class="btn btn--primary">Request a consultation</a>
   </div>
 </nav>
@@ -95,67 +106,68 @@
   <canvas class="hero__canvas" data-hero-canvas aria-hidden="true"></canvas>
   <div class="hero__fade"></div>
   <div class="hero__inner">
-    <p class="eyebrow">Electrostatic fog recovery — Venezuela</p>
-    <h1>The water your cooling towers lose as fog. Recovered.</h1>
-    <p class="hero__lede">Aqua builds modular electrostatic recovery systems for refinery cooling towers: a corona emitter charges the microdroplets escaping in the plume, and a controlled electric field pulls them back into the loop. Built on technology validated at MIT — engineered for Venezuela's refining system.</p>
+    <h1>The water lost as fog. Recovered.</h1>
+    <p class="hero__lede">Modular electrostatic recovery systems that charge the microdroplets escaping a cooling tower and pull them back into the loop — built on technology validated at MIT, engineered so Venezuelan industry can grow without waiting on the water network.</p>
     <div class="hero__actions">
       <a href="#contact" class="btn btn--primary">Request a consultation</a>
       <a href="#technology" class="btn btn--ghost">How it works ↓</a>
     </div>
+    <!-- The three proof points frame the SCALE OF THE PROBLEM, not the product.
+         The product's own numbers live in the System section. -->
     <div class="hero__stats">
       <div class="hero__stat">
-        <b>20–30%</b>
-        <span>of cooling-tower water loss recovered <a class="badge badge-ref" href="#ref-3">FIELD DATA<span class="visually-hidden"> — see reference 3</span></a></span>
+        <b>~9.4M L</b>
+        <span>vented as fog daily by one mid-size refinery near capacity <a class="badge badge-ref" href="#ref-5">AQUA ESTIMATE<span class="visually-hidden"> — see reference 5</span></a></span>
       </div>
       <div class="hero__stat">
-        <b>~0.2 kWh/m³</b>
-        <span>energy per m³ recovered <a class="badge badge-ref" href="#ref-1">MIT LAB<span class="visually-hidden"> — see reference 1</span></a></span>
+        <b>$3–7M</b>
+        <span>a year to replace that water, at one plant <a class="badge badge-ref" href="#ref-5">AQUA ESTIMATE<span class="visually-hidden"> — see reference 5</span></a></span>
       </div>
       <div class="hero__stat">
-        <b>4–10 m³/day</b>
-        <span>returned per tower installation <span class="badge">ESTIMATE</span></span>
+        <b>0</b>
+        <span>recovery systems deployed in Venezuelan industry today</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============ PROBLEM ============ -->
+<!-- ============ 01 — PROBLEM ============ -->
 <section class="section" id="problem" aria-labelledby="problem-title">
   <div class="section__head reveal">
     <p class="eyebrow">01 — The problem</p>
-    <h2 class="section-title" id="problem-title">Refineries lose water they can never get back — as fog.</h2>
-    <p class="lede">Venezuela hosts some of the largest refineries on Earth. The Paraguaná Refining Complex — Amuay and Cardón, in Falcón — has installed capacity above 940,000 barrels a day<a class="badge badge-ref" href="#ref-4">4</a>; El Palito and Puerto La Cruz add more. All of them depend on cooling towers circulating massive volumes of fresh water — and a share of it leaves irrecoverably through the fan stacks, as an evaporative plume that recondenses into micron-scale droplets in the air above. No active recovery technology is deployed in the Venezuelan market today.</p>
+    <h2 class="section-title" id="problem-title">Water is the ceiling on Venezuelan industry.</h2>
+    <p class="lede">A plant cannot run hotter than it can cool. Cooling towers carry that heat away by evaporating water, which is why they account for more than 90% of a refinery's entire water demand<a class="badge badge-ref" href="#ref-6">6</a> — and why every litre that leaves through the fan stacks is a litre of production capacity. When makeup water falls short, cooling capacity falls with it: units run below rate, or come down. This is not only a refining problem. Petrochemicals, steel, aluminium and thermoelectric generation all run the same wet cooling towers, and Venezuela cannot rebuild its water network on the timescale its industry needs to restart.</p>
   </div>
 
   <div class="grid-auto">
     <div class="card reveal">
-      <p class="card__label">Lost to the plume</p>
-      <p class="card__stat">3–5%</p>
-      <p>of circulating cooling water leaves as evaporative loss — roughly 1% for every 10&nbsp;°F of cooling range. It rises through the fan stacks and recondenses as a plume of micron-scale droplets. Passive fog mesh recovers 1–2% of droplets that size: they simply follow the air around every wire.</p>
-      <p><a class="badge badge-ref" href="#ref-2">INDUSTRY DATA<span class="visually-hidden"> — see reference 2</span></a></p>
+      <p class="card__label">Lost per plant</p>
+      <p class="card__stat">~9.4M L/day</p>
+      <p>Fresh water consumed by a 150,000&nbsp;bpd refinery — the scale of El Palito or Puerto La Cruz — running at 90% capacity<a class="badge badge-ref" href="#ref-5">5</a>. Almost all of it leaves as plume, recondensing into micron-scale droplets above the stacks. Passive fog mesh recovers 1–2% of droplets that size: they simply follow the air around every wire.</p>
+      <p><a class="badge badge-ref" href="#ref-5">AQUA ESTIMATE<span class="visually-hidden"> — see reference 5</span></a></p>
     </div>
     <div class="card reveal">
       <p class="card__label">Water stress</p>
       <p class="card__stat">Falcón · Anzoátegui</p>
-      <p>The states hosting CRP and Puerto La Cruz have documented water deficits<a class="badge badge-ref" href="#ref-5">5</a>. Refineries and communities draw on the same aqueducts, with droughts more frequent — social tension that becomes operational risk.</p>
+      <p>The states hosting Paraguaná and Puerto La Cruz have documented water deficits<a class="badge badge-ref" href="#ref-4">4</a>. Plants and communities draw on the same aqueducts, with droughts more frequent — social tension that becomes operational risk.</p>
     </div>
     <div class="card reveal">
-      <p class="card__label">Avoidable cost</p>
-      <p class="card__stat">$150–400K/yr</p>
-      <p>What recovering 15% of the fog lost from a single tower can represent at complex scale — direct operating relief for installations running under severe financial pressure, on deteriorated infrastructure that makes every loss worse.</p>
-      <p><span class="badge">AQUA ESTIMATE</span></p>
+      <p class="card__label">The water itself</p>
+      <p class="card__stat">$3–7M/yr</p>
+      <p>What it costs to produce that same water again — by desalination or long-haul treatment — at that one plant, every year. This is not a saving Aqua offers. It is a loss operators already absorb, on infrastructure where every litre is harder to replace than it should be.</p>
+      <p><a class="badge badge-ref" href="#ref-5">AQUA ESTIMATE<span class="visually-hidden"> — see reference 5</span></a></p>
     </div>
   </div>
 
   <p class="reveal footnote">
     <span class="badge">SCALE</span>
-    For a sense of the stream being tapped: a US Department of Energy–funded full-scale prototype on the cooling tower of a 620&nbsp;MW power plant in Wisconsin — not an Aqua installation — recovered 20–30% of the water that plant was losing through its towers, a rate worth up to 150 million gallons a year at 600&nbsp;MW scale.<a class="badge badge-ref" href="#ref-3">3</a>
+    The stream is real and it has been tapped before: a US Department of Energy–funded full-scale prototype on the cooling tower of a 620&nbsp;MW power plant in Wisconsin — not an Aqua installation — recovered 20–30% of the water that plant was losing through its towers, a rate worth up to 150 million gallons a year at 600&nbsp;MW scale.<a class="badge badge-ref" href="#ref-3">3</a>
   </p>
 </section>
 
-<!-- ============ TECHNOLOGY ============ -->
+<!-- ============ 02 — TECHNOLOGY ============ -->
 <section class="tech" id="technology" aria-labelledby="tech-title">
-  <div class="tech__scroller">
+  <div class="tech__scroller" data-tech-scroller>
     <div class="tech__stage">
       <canvas class="tech__canvas" data-tech-canvas aria-hidden="true"></canvas>
 
@@ -164,7 +176,7 @@
         <div class="tech__intro-inner">
           <p class="eyebrow">02 — The technology</p>
           <h2 id="tech-title">Watch the physics work.</h2>
-          <p>A 10-micron fog droplet has almost no inertia — it rides the air around anything in its path, which is why denser mesh never helps. Scroll from the loss through <em>aerodynamics → ionization → acceleration → collection</em> to the return: the whole process runs live, computed in your browser from the physics published at MIT.<a class="badge badge-ref" href="#ref-1">1</a></p>
+          <p>A 10-micron droplet has almost no inertia — it rides the air around anything in its path, which is why denser mesh never helps. Charge it, and it can be pulled.<a class="badge badge-ref" href="#ref-1">1</a></p>
           <p class="tech__cue">Scroll — the experiment runs as you read ↓</p>
           <button class="tech__skip" type="button" data-skip>Skip the simulation ↓</button>
         </div>
@@ -218,41 +230,44 @@
         </div>
       </div>
 
+      <!-- Six captions, one per stage. The stage count is hardcoded in
+           assets/site.js (PHASES, and the /5 divisors in draw()) — adding or
+           removing a caption here breaks the simulation's progress mapping. -->
       <div class="tech__captions">
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 01 / 06 — The invisible loss</p>
           <h3>Every cooling tower loses water.</h3>
-          <p>Fans draw air up through the fill as warm water rains down inside. Most of it cools and returns — but 3–5% evaporates and leaves through the fan stacks, recondensing above the tower as a plume of micron-scale droplets. At that size, water moves like air: it can't be piped or filtered back.</p>
+          <p>Fans draw air up through the fill as warm water rains down inside. Most of it cools and returns; the rest leaves through the fan stacks as a plume of micron-scale droplets that cannot be piped or filtered back.</p>
           <p class="tech__caption-foot">3–5% of circulating water · leaves as plume</p>
         </div>
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 02 / 06 — Aerodynamics</p>
           <h3>Fog outruns the mesh.</h3>
-          <p>Zoom to a single collector wire, magnified ~1,000×. A fog droplet has too little inertia to leave its streamline, and the streamlines bend around the wire. Only the razor-thin window A₀ ever lands — which is why denser passive mesh never helps.</p>
+          <p>Zoom to a single collector wire. A fog droplet has too little inertia to leave its streamline, and the streamlines bend around the wire — only the razor-thin window A₀ ever lands.</p>
           <p class="tech__caption-foot">Passive capture window A₀ · 1–2% recovery</p>
         </div>
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 03 / 06 — Ionization</p>
           <h3>Charge the fog.</h3>
-          <p>An emitter is raised to ~10 kV. A corona discharge — drawing just ~0.01 mA — floods the air with ions that collide with the passing droplets and stick. Within milliseconds every droplet in the plume carries charge.</p>
+          <p>An emitter is raised to ~10 kV. A corona discharge floods the air with ions that collide with the passing droplets and stick — within milliseconds, every droplet in the plume carries charge.</p>
           <p class="tech__caption-foot">~10 kV · ~0.01 mA · ~40 W/m² of mesh</p>
         </div>
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 04 / 06 — Acceleration</p>
           <h3>Pull it across the flow.</h3>
-          <p>A charged droplet feels a force the moving air cannot cancel. The trajectories peel off the streamlines and bend onto the grounded wire — the effective capture window widens from A₀ to A, far larger than the wire itself.</p>
+          <p>A charged droplet feels a force the moving air cannot cancel. Trajectories peel off the streamlines and bend onto the grounded wire, widening the capture window from A₀ to A.</p>
           <p class="tech__caption-foot">Capture window A₀ → A · electrostatic force</p>
         </div>
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 05 / 06 — Collection</p>
           <h3>Captured and coalesced.</h3>
-          <p>Droplets land on the wire and merge into a running film. The same plume that slips straight through a bare mesh is now collected — from the very same footprint, with no change to the airflow the tower depends on.</p>
+          <p>Droplets land on the wire and merge into a running film. The same plume that slips straight through bare mesh is now collected — from the very same footprint.</p>
           <p class="tech__caption-foot">20–30% of tower water loss recovered</p>
         </div>
         <div class="tech__caption" data-caption>
           <p class="tech__caption-step">Stage 06 / 06 — Close the loop</p>
           <h3>Back to the basin.</h3>
-          <p>Scaled back out: circular collector arrays sit over each fan, capturing the plume before it clears the stack. Recovered water settles straight into the tower's full basin below: 4,000–10,000 L a day, at ~0.2 kWh/m³.</p>
+          <p>Scaled back out: circular collector arrays sit over each fan, capturing the plume before it clears the stack. Recovered water settles straight into the tower's own basin below.</p>
           <p class="tech__caption-foot">4,000–10,000 L/day · ~0.2 kWh/m³</p>
         </div>
       </div>
@@ -285,7 +300,7 @@
   </div>
 </section>
 
-<!-- ============ PRODUCT ============ -->
+<!-- ============ 03 — SYSTEM ============ -->
 <section class="section section--light" id="product" aria-labelledby="product-title">
   <div class="section__head reveal">
     <p class="eyebrow eyebrow--light">03 — The system</p>
@@ -306,35 +321,21 @@
         <div><dt>Recovery of tower water loss</dt><dd>20–30%</dd></div>
         <div><dt>Energy / m³ recovered</dt><dd>~0.2 kWh</dd></div>
         <div><dt>Electrode load</dt><dd>~40 W/m² · 0.01 mA</dd></div>
-        <div><dt>Recovery / installation</dt><dd>4,000–10,000 L/day</dd></div>
         <div><dt>Integration</dt><dd>Retrofit — no redesign</dd></div>
-        <div><dt>Payback</dt><dd>2–4 years</dd></div>
+        <div><dt>Tower airflow</dt><dd>Unchanged</dd></div>
       </dl>
 
       <p class="disclaimer">
         <span class="badge">STATUS</span>
-        Energy and electrode figures are laboratory results from the MIT research underlying Aqua's system<a class="badge badge-ref" href="#ref-1">1</a>; the 20–30% recovery rate is from a DOE-funded full-scale prototype on a 620&nbsp;MW plant<a class="badge badge-ref" href="#ref-3">3</a>. Volume per installation and payback are Aqua engineering estimates for CRP-scale towers, pending validation on our lab prototype. Payback applies to the capital-purchase route — under Model B below there is no upfront cost to pay back. Request the technical brief for current test data.
+        Energy and electrode figures are laboratory results from the MIT research underlying Aqua's system<a class="badge badge-ref" href="#ref-1">1</a>; the 20–30% recovery rate is from a DOE-funded full-scale prototype on a 620&nbsp;MW plant<a class="badge badge-ref" href="#ref-3">3</a>. Aqua's own reduced-scale prototype is in lab validation — request the technical brief for current test data.
       </p>
 
       <a href="#contact" class="btn btn--dark">Request the technical brief</a>
     </div>
   </div>
-
-  <div class="models reveal">
-    <div class="model">
-      <p class="model__label">Model A — fixed O&amp;M contract</p>
-      <p class="model__price">USD $20–50K per tower, annually</p>
-      <p>Aqua installs the system and operates it under a fixed annual contract: maintenance, remote monitoring, calibration and technical support. Predictable cost, long-term operating partner.</p>
-    </div>
-    <div class="model">
-      <p class="model__label">Model B — performance contract</p>
-      <p class="model__price">$0 upfront · 20–25% of certified savings</p>
-      <p>Aqua installs at no cost and is paid a share of the water and energy savings measured and certified each month. Validate results first — then migrate to a fixed contract if you prefer.</p>
-    </div>
-  </div>
 </section>
 
-<!-- ============ WHY AQUA ============ -->
+<!-- ============ 04 — WHY AQUA ============ -->
 <section class="section section--light" id="why" aria-labelledby="why-title">
   <div class="section__head reveal">
     <p class="eyebrow eyebrow--light">04 — Why Aqua</p>
@@ -380,42 +381,97 @@
   </table>
 </section>
 
-<!-- ============ APPLICATIONS ============ -->
-<section class="section" id="applications" aria-labelledby="applications-title">
+<!-- ============ 05 — MARKET ============ -->
+<section class="section" id="market" aria-labelledby="market-title">
   <div class="section__head reveal">
-    <p class="eyebrow">05 — Applications</p>
-    <h2 class="section-title" id="applications-title">Built for Venezuela's refining complexes first.</h2>
+    <p class="eyebrow">05 — Market</p>
+    <h2 class="section-title" id="market-title">Venezuela is the goal, not the stepping stone.</h2>
+    <p class="lede">Rebuilding a national water network takes a decade and billions of dollars. Making each industrial complex dramatically less thirsty takes a retrofit. That is the whole thesis: if Venezuelan industry recovers the water it already circulates, it can restart and scale now, at the water supply it actually has, instead of waiting for the supply it wishes it had. Refining is where we start because the towers are biggest and the water is scarcest — but the target is the industrial base.</p>
+  </div>
+
+  <div class="roadmap roadmap--wide reveal">
+    <p class="roadmap__head">Why the whole industrial base, not one sector</p>
+    <div class="roadmap__row">
+      <span class="roadmap__when">Same machine</span>
+      <span class="roadmap__what">A wet cooling tower is a wet cooling tower. Refining, Pequiven's three petrochemical complexes<a class="badge badge-ref" href="#ref-7">7</a>, the Guayana steel and aluminium plants<a class="badge badge-ref" href="#ref-8">8</a>, and thermoelectric generation all lose water the same way — so one module addresses all of them.</span>
+    </div>
+    <div class="roadmap__row">
+      <span class="roadmap__when">Faster than pipes</span>
+      <span class="roadmap__what">A module goes onto a tower in weeks and needs no new reservoir, aqueduct or treatment plant. It adds usable water to a plant's balance without a single kilometre of pipe being laid.</span>
+    </div>
+    <div class="roadmap__row">
+      <span class="roadmap__when">Scarcity pricing</span>
+      <span class="roadmap__what">Recovered water is worth what replacing it costs, and in Falcón and Anzoátegui replacement is genuinely hard<a class="badge badge-ref" href="#ref-4">4</a>. The same litre is worth more here than in a water-rich market.</span>
+    </div>
+    <div class="roadmap__row">
+      <span class="roadmap__when">No incumbent</span>
+      <span class="roadmap__what">No active fog-recovery technology is deployed anywhere in Venezuelan industry. The competition is the status quo — passive mesh at 1–2%, or nothing at all.</span>
+    </div>
+    <div class="roadmap__row">
+      <span class="roadmap__when">Capital</span>
+      <span class="roadmap__what">Capital, not willingness, is the binding constraint for these operators — which is exactly what the zero-capex performance contract removes.</span>
+    </div>
   </div>
 
   <div class="grid-auto">
     <div class="card reveal">
-      <p class="card__label">A-01</p>
-      <p class="card__title">Refinery cooling towers</p>
-      <p>The primary target. CRP alone — Amuay and Cardón — concentrates more than 40 operating cooling towers; El Palito and Puerto La Cruz extend the map. Massive circulating volumes in water-stressed states.</p>
+      <p class="card__label">TAM — global</p>
+      <p class="card__stat">$10.8B</p>
+      <p>Every industrial wet cooling tower in the world. Narrowed to sites where water already costs more than $2/m³ — the ones where recovery pays for itself on day one — <b>$3.8B</b>.</p>
+      <p class="card__sub">Refining alone: <b>$900M</b>, or <b>$270M</b> filtered</p>
     </div>
     <div class="card reveal">
-      <p class="card__label">A-02</p>
-      <p class="card__title">Petrochemical complexes</p>
-      <p>Pequiven plants run the same cooling-tower infrastructure with the same evaporative losses — the natural second market once refinery pilots are proven.</p>
+      <p class="card__label">SAM — Latin America</p>
+      <p class="card__stat">$267M</p>
+      <p>Industrial cooling across the region, reachable from a Venezuelan base with the same module and the same service model.</p>
+      <p class="card__sub">Refining alone: <b>~$80M</b> across ~530 cells, of which <b>~$32M</b> sits in water-stressed sites</p>
     </div>
     <div class="card reveal">
-      <p class="card__label">A-03</p>
-      <p class="card__title">Thermoelectric generation</p>
-      <p>Steam-cycle power plants lose water through their towers the same way — recovery feeds directly into the plant water balance.</p>
+      <p class="card__label">SOM — Venezuela</p>
+      <p class="card__stat">$4.5–6.5M</p>
+      <p>What is realistically winnable in Venezuelan industry against a <b>$42M</b> theoretical ceiling — the gap being plants that are idle, unfundable or too small to retrofit today.</p>
+      <p class="card__sub">Refining beachhead: <b>~$1.5M</b> realistic of <b>$10.8M</b> theoretical</p>
     </div>
   </div>
 
-  <p class="reveal section-note">First deployments target PDVSA and mixed-enterprise refineries; petrochemical and power applications follow in the medium term.</p>
+  <p class="reveal section-note">
+    <b>Expansion is modular, not bespoke.</b> The unit is sized per fan cell, so scaling is a question of how many cells — not a new design per site. That is what lets one product serve a refinery, a fertiliser plant and an aluminium smelter, and what carries it outward to Caribbean and Latin American industry, and ultimately to anything that vents a wet cooling plume, from district cooling to data centres.
+  </p>
 </section>
 
-<!-- ============ ABOUT ============ -->
+<!-- ============ 06 — BUSINESS MODEL ============ -->
+<section class="section section--light" id="model" aria-labelledby="model-title">
+  <div class="section__head reveal">
+    <p class="eyebrow eyebrow--light">06 — Business model</p>
+    <h2 class="section-title section-title--light" id="model-title">Two ways to buy it.</h2>
+    <p class="lede lede--light">Aqua sells the recovered water, not the hardware. The client chooses how that is priced: a fixed fee they can budget, or a share of what the system actually returns.</p>
+  </div>
+
+  <div class="models reveal">
+    <div class="model">
+      <p class="model__label">Model A — fixed service contract</p>
+      <p class="model__price">Fixed annual fee per tower</p>
+      <p>Aqua installs the system and operates it: maintenance, remote monitoring, calibration and technical support. A predictable line item that can be budgeted a year ahead, with no exposure to how savings get measured.</p>
+    </div>
+    <div class="model">
+      <p class="model__label">Model B — performance contract</p>
+      <p class="model__price">No capex · % of certified savings</p>
+      <p>Aqua installs at no cost and is paid a share — 20–25% — of the water and energy savings measured and certified each month. The client risks nothing, and Aqua only earns when the system runs.</p>
+    </div>
+  </div>
+
+  <p class="reveal section-note section-note--light">Both exist because state-owned and mixed-enterprise operators budget differently. Model B is what gets a first pilot signed when capital is the constraint; Model A is the annuity once the results are certified and the operator wants a fixed cost.</p>
+</section>
+
+<!-- ============ 07 — TEAM ============ -->
 <section class="section about" id="about" aria-labelledby="about-title">
   <div class="about__body">
     <div class="about__main reveal">
-      <p class="eyebrow">06 — About</p>
+      <p class="eyebrow">07 — Team</p>
       <h2 class="section-title" id="about-title">Engineered in Venezuela.</h2>
       <p>Aqua was founded by Samuel Hernández to bring frontier water-recovery technology to the industry Venezuela is built on. The science is published and validated — electrostatic fog collection by space-charge injection, from MIT<a class="badge badge-ref" href="#ref-1">1</a> — and we are building the first reduced-scale prototype that reproduces the plume of a real cooling tower.</p>
-      <p>Our mission is to make the water Venezuelan industry already circulates go further — for the refineries, and for the communities sharing the same basins. A single CRP-scale installation can return 4,000–10,000 liters a day to the local water balance.</p>
+      <p>The engineering problem is one he already works in daily: a physical system, instrumented and held at a setpoint by a controller rather than an operator. Recovering fog from a cooling tower is that same problem — measure the plume, hold the field, close the loop — applied to the resource Venezuelan industry has least of.</p>
+      <p>The mission is to make the water Venezuelan industry already circulates go further, so the country's plants can grow on the water supply they have rather than the one they are waiting for — and so the communities sharing those basins are not competing with them for it. It is work that sits squarely on SDG 6, 9 and 13: recovery returns water to the local balance and cuts the energy embedded in extracting, treating and pumping a replacement.</p>
 
       <div class="roadmap">
         <p class="roadmap__head">Status — early prototype · lab validation</p>
@@ -429,7 +485,7 @@
         </div>
         <div class="roadmap__row">
           <span class="roadmap__when">Months 4–6</span>
-          <span class="roadmap__what">Sign the first pilot at a refining installation; apply prototype data to international innovation funds (IDB Lab, CAF, UN Environment) to finance industrial scale.</span>
+          <span class="roadmap__what">Sign the first pilot at an installation, continous research and development.</span>
         </div>
       </div>
     </div>
@@ -445,25 +501,77 @@
         </div>
       </div>
 
-      <div class="card reveal">
-        <p class="card__label card__label--accent">Impact</p>
-        <p>Aligned with SDG 6 (clean water), SDG 9 (industry &amp; innovation) and SDG 13 (climate action): recovered water eases pressure on the aqueducts that supply refineries and communities from the same watershed, and cuts the energy embedded in extracting, treating and pumping replacement water.</p>
+      <div class="roadmap roadmap--wide reveal">
+        <p class="roadmap__head">Founder — background</p>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Education</span>
+          <span class="roadmap__what">Systems engineering, Universidad Metropolitana, Caracas.</span>
+        </div>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Certification</span>
+          <span class="roadmap__what">Entrepreneurship certificate, MIT. CS50X: introduction to computer science at Harvard.</span>
+        </div>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Current role</span>
+          <span class="roadmap__what">Tryento Systems — builds autonomous climate-control systems for automated farms: the same problem as a cooling tower, sensed and controlled in a closed loop.</span>
+        </div>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Focus</span>
+          <span class="roadmap__what">Artificial intelligence and control theory — how a physical system is measured, modelled and held at a setpoint without a human in the loop.</span>
+        </div>
+        <div class="roadmap__row">
+          <span class="roadmap__when">Leadership</span>
+          <span class="roadmap__what">Leads the competitive divisions at Universidad Metropolitana, heading both the robotics and competitive-programming teams.</span>
+        </div>
       </div>
+
+      <!--
+        Credits toggle. A native details/summary rather than a JS tab: it opens with
+        JavaScript blocked, is keyboard-operable and announced by screen readers
+        without any extra ARIA, which matches how the rest of this page degrades.
+        TODO — replace the placeholder rows with real names and roles.
+      -->
+      <details class="credits reveal">
+        <summary>
+          <span>Network</span>
+          <span class="credits__hint" aria-hidden="true"></span>
+        </summary>
+        <div class="credits__body">
+          <p class="credits__intro">Aqua has been moved forward by people who gave it time, expertise or access.</p>
+          <div class="credits__row">
+            <span class="credits__name">Augusto Madrigal</span>
+            <span class="credits__role">Founder of Fully; technical advisor</span>
+          </div>
+          <div class="credits__row">
+            <span class="credits__name">Robert Veiga</span>
+            <span class="credits__role">Top-100 innovation leader; director of the entrepreneurship programme at Universidad Metropolitana</span>
+          </div>
+          <div class="credits__row">
+            <span class="credits__name">Bruno Pacillo</span>
+            <span class="credits__role">Data and finance analyst; adviser on international and legal affairs</span>
+          </div>
+          <div class="credits__row">
+            <span class="credits__name">Carlos Bracho</span>
+            <span class="credits__role">Professor of applied physics at the Universidad Central de Venezuela; technical advisor</span>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </section>
 
-<!-- ============ CONTACT ============ -->
+<!-- ============ 08 — CONTACT ============ -->
 <section class="section contact" id="contact" aria-labelledby="contact-title">
   <div class="contact__body">
     <div class="contact__intro reveal">
-      <p class="eyebrow">07 — Contact</p>
+      <p class="eyebrow">08 — Contact</p>
       <h2 class="section-title" id="contact-title">Request a consultation.</h2>
-      <p>Tell us about your towers — cell count, circulating flow, water constraints — and we'll come back with a recovery estimate. Pilots run under performance contracts: no upfront investment, Aqua is paid from certified savings. For investors: same form, mention it in the message.</p>
+      <p>Tell us about your towers — cell count, circulating flow, water constraints — and we'll come back with a recovery estimate. Pilots run under performance contracts: no upfront investment, with Aqua paid from certified savings.</p>
       <dl class="contact__meta">
         <div><dt>Mail</dt><dd><a href="mailto:sam@aqua-ve.com">sam@aqua-ve.com</a></dd></div>
         <div><dt>HQ</dt><dd>Caracas, Venezuela</dd></div>
       </dl>
+      <p class="contact__aside">Investors — same form. Mention it in the message.</p>
     </div>
 
     <!--
@@ -492,7 +600,7 @@
         </label>
       </div>
       <label>Message
-        <textarea name="message" rows="4" required placeholder="Tower count, circulating flow, cooling range, water constraints…"></textarea>
+        <textarea name="message" rows="3" required placeholder="Tower count, circulating flow, cooling range, water constraints…"></textarea>
       </label>
 
       <!-- honeypot: bots fill this, humans never see it -->
@@ -527,10 +635,12 @@
     <div class="footer__cols">
       <div class="footer__col">
         <h2>Site</h2>
+        <a href="#problem">Problem</a>
         <a href="#technology">Technology</a>
         <a href="#product">System</a>
-        <a href="#applications">Applications</a>
-        <a href="#about">About</a>
+        <a href="#market">Market</a>
+        <a href="#model">Business model</a>
+        <a href="#about">Team</a>
       </div>
       <div class="footer__col">
         <h2>Contact</h2>
@@ -544,10 +654,19 @@
     <h2>References</h2>
     <ol>
       <li id="ref-1">Damak, M. &amp; Varanasi, K. K. “Electrostatically driven fog collection using space charge injection.” <cite>Science Advances</cite> <b>4</b>(6), eaao5323 (2018). <a href="https://doi.org/10.1126/sciadv.aao5323" rel="noopener">doi:10.1126/sciadv.aao5323</a> — source of the ~0.2 kWh/m³ figure for concentrated cooling-tower plumes, the ~10 kV emitter voltage, the ~0.01 mA corona current, the ~40 W/m² electrode load, and the 3–5 kWh/m³ reverse-osmosis comparison.</li>
-      <li id="ref-2">Li, D. <i>et al.</i> “Sustainable solutions for water scarcity: a review of electrostatic fog harvesting technology.” <cite>Communications Engineering</cite> <b>4</b>, 34 (2025). <a href="https://doi.org/10.1038/s44172-025-00381-x" rel="noopener">doi:10.1038/s44172-025-00381-x</a> — source of the 1–2% collection efficiency of passive fog mesh.</li>
+      <li id="ref-2">Li, D. <i>et al.</i> “Sustainable solutions for water scarcity: a review of electrostatic fog harvesting technology.” <cite>Communications Engineering</cite> <b>4</b>, 34 (2025). <a href="https://doi.org/10.1038/s44172-025-00381-x" rel="noopener">doi:10.1038/s44172-025-00381-x</a> — source of the 1–2% collection efficiency of passive fog mesh, and of the 3–5% evaporative loss of circulating cooling water (≈1% per 10 °F of cooling range).</li>
       <li id="ref-3">Patel, S. C. “Harnessing Cooling Tower Plumes to Provide Purified Water.” <cite>POWER Magazine</cite> (2022), and US DOE/NETL, “NETL Supports Start-Up’s Technology to Produce Clean Water from Cooling Tower Plumes.” <a href="https://www.powermag.com/harnessing-cooling-tower-plumes-to-provide-purified-water/" rel="noopener">powermag.com</a> · <a href="https://netl.doe.gov/node/11907" rel="noopener">netl.doe.gov</a> — full-scale prototype at the 620 MW Fox Energy Center (Wrightstown, Wisconsin), reported to recover 20–30% of cooling-tower water loss, up to 150 million gallons a year at 600 MW scale.</li>
-      <li id="ref-4">Paraguaná Refinery Complex (Amuay + Cardón), combined nameplate capacity 955,000 bbl/day. <a href="https://www.nsenergybusiness.com/projects/paraguana-refinery-complex/" rel="noopener">NS Energy — Paraguaná Refinery Complex</a>.</li>
-      <li id="ref-5">PROVEA, <cite>Informe Anual 2024: la crisis del agua compromete la salud de la población</cite>, and Observatorio de Ecología Política de Venezuela, “La crisis del agua en Venezuela: algunos datos” — Falcón and Anzoátegui among the states with the highest incidence of water-service failure. <a href="https://provea.org/actualidad/informe-anual-crisis-del-agua-compromete-la-salud-de-la-poblacion-y-el-desarrollo-sostenible-del-pais/" rel="noopener">provea.org</a> · <a href="https://ecopoliticavenezuela.org/la-crisis-del-agua-en-venezuela-algunos-datos/" rel="noopener">ecopoliticavenezuela.org</a>.</li>
+      <li id="ref-4">PROVEA, <cite>Informe Anual 2024: la crisis del agua compromete la salud de la población</cite>, and Observatorio de Ecología Política de Venezuela, “La crisis del agua en Venezuela: algunos datos” — Falcón and Anzoátegui among the states with the highest incidence of water-service failure. <a href="https://provea.org/actualidad/informe-anual-crisis-del-agua-compromete-la-salud-de-la-poblacion-y-el-desarrollo-sostenible-del-pais/" rel="noopener">provea.org</a> · <a href="https://ecopoliticavenezuela.org/la-crisis-del-agua-en-venezuela-algunos-datos/" rel="noopener">ecopoliticavenezuela.org</a>.</li>
+      <li id="ref-5"><b>Aqua estimates — derivation.</b> Every figure below is ours, not a published measurement, and is shown so it can be checked.
+        <br><b>Water consumed per plant.</b> We size on a representative Venezuelan refinery rather than on Paraguaná: the country's mega-complex is an outlier, and quoting it at full nameplate would describe a plant that does not currently exist — Amuay and Cardón ran at roughly 25% of their combined 955,000&nbsp;bbl/day through 2025<a href="#ref-9">9</a>. A 150,000&nbsp;bbl/day refinery is the scale of El Palito (140,000) and Puerto La Cruz (200,000)<a href="#ref-9">9</a>. At 90% utilisation that is 135,000&nbsp;bbl/day, and at 0.44 barrels of water consumed per barrel of crude for a light-coking configuration<a href="#ref-6">6</a> it consumes ≈ 59,400&nbsp;bbl/day of water = <b>≈ 9,445 m³/day, or ~9.4 million litres a day</b>, ≈ 3.4 million m³/year. Cooling towers account for more than 90% of that demand<a href="#ref-6">6</a>, so effectively all of it leaves through the fan stacks.
+        <br><b>Value of that water.</b> 3.4 million m³/year × $1–2/m³ — the cost of producing the same water again, within the $0.50–2.50/m³ range reported for desalinated supply<a href="#ref-10">10</a> and at the upper half of it given how hard replacement is in Falcón and Anzoátegui<a href="#ref-4">4</a> — = <b>$3–7 million a year at one plant</b>. Stated as the replacement cost of what is lost, not as savings Aqua delivers.
+        <br><b>TAM / SAM / SOM.</b> Serviceable cooling-tower population × annual contract value, computed for all industrial cooling and, separately, for refining alone. TAM: <b>$10.8B</b> globally, <b>$3.8B</b> once filtered to sites where water already costs more than $2/m³ (refining alone: $900M, $270M filtered). SAM: <b>$267M</b> across Latin America (refining alone: ~$80M over ~530 cells, ~$32M of it water-stressed). SOM: <b>$42M</b> theoretical in Venezuela against <b>$4.5–6.5M</b> realistically winnable, the gap being plants that are idle, unfundable or too small to retrofit (refining beachhead: $10.8M theoretical, ~$1.5M realistic).
+        <br>These are planning estimates pending validation on Aqua's prototype and a site survey; they are not a forecast of contracted revenue.</li>
+      <li id="ref-6">Han, J. <i>et al.</i> “Estimation of U.S. refinery water consumption and allocation to refinery products.” <cite>Fuel</cite> <b>221</b>, 546–557 (2018). <a href="https://doi.org/10.1016/j.fuel.2017.07.060" rel="noopener">doi:10.1016/j.fuel.2017.07.060</a>, summarised by <a href="https://www.fluencecorp.com/water-use-in-petroleum-refining/" rel="noopener">Fluence</a> — source of the water-consumption intensities of 0.34, 0.44 and 0.47 barrels of water per barrel of crude for cracking, light-coking and heavy-coking refinery configurations, and of the finding that cooling towers account for more than 90% of a refinery's water demand.</li>
+      <li id="ref-7">Pequiven operates three petrochemical complexes — El Tablazo (Zulia), Morón (Carabobo) and Jose (Anzoátegui) — with a combined production capacity on the order of 8 million tonnes a year. <a href="https://www.offshore-technology.com/data-insights/pequiven-jose-complex-venezuela/" rel="noopener">Offshore Technology — Pequiven Jose Complex</a>.</li>
+      <li id="ref-8">Corporación Venezolana de Guayana (CVG) heavy industry in Bolívar State: the SIDOR steel complex and the Alcasa and Venalum aluminium smelters, together Venezuela's principal centre of heavy industry. <a href="https://en.wikipedia.org/wiki/Corporaci%C3%B3n_Venezolana_de_Guayana" rel="noopener">CVG</a> · <a href="https://en.wikipedia.org/wiki/SIDOR" rel="noopener">SIDOR</a>.</li>
+      <li id="ref-9">Venezuelan refinery nameplate capacities and utilisation: El Palito 140,000 bbl/day, Puerto La Cruz 200,000 bbl/day, Amuay + Cardón 955,000 bbl/day combined, with the Paraguaná pair reported operating at about 25% of capacity in April 2025 and the major refineries together processing roughly 450,000 bbl/day as of early 2026. <a href="https://www.hydrocarbonprocessing.com/news/2025/04/venezuela-restarts-amuay-refinerys-fcc-after-el-palito-halts-unit/" rel="noopener">Hydrocarbon Processing</a> · <a href="https://en.wikipedia.org/wiki/El_Palito_refinery" rel="noopener">El Palito</a> · <a href="https://en.wikipedia.org/wiki/Puerto_La_Cruz_refinery" rel="noopener">Puerto La Cruz</a> · <a href="https://www.nsenergybusiness.com/projects/paraguana-refinery-complex/" rel="noopener">NS Energy — Paraguaná Refinery Complex</a>.</li>
+      <li id="ref-10">Desalinated water delivered into distribution reported at roughly US$0.50–2.50/m³ for seawater and US$0.60–2.00/m³ for brackish sources, with large municipal and industrial projects at $0.50–1.50/m³. <a href="https://prod-cm.advisian.com/en/global-perspectives/the-cost-of-desalination" rel="noopener">Advisian — The Cost of Desalination</a>.</li>
     </ol>
   </div>
 

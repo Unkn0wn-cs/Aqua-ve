@@ -133,54 +133,86 @@ input::placeholder, textarea::placeholder { color: #5F7484; opacity: 1; }
 }
 
 /* --------------------------------------------------------------------------
-   3. Scroll snapping  (all devices, touch included)
+   3. Scroll snapping  —  HERO → PROBLEM → TECHNOLOGY only
 
-   Snap on a phone normally fails for one specific reason: the snap targets are
-   sized in `vh` or `dvh`, so when the URL bar slides away the viewport grows,
-   every target silently changes height, and the positions shift under the
-   finger mid-gesture. The browser then fights the fling. That is what made the
-   original build unusable on mobile.
+   The page is a pitch deck with one interactive exhibit in it. Snapping is
+   right for that exhibit and wrong for everything after it: the System, Market,
+   Model and Team sections are dense reading, and a reader must be able to come
+   to rest anywhere inside them. So the snap zone ends at the bottom of the
+   technology scroller, and the rest of the page scrolls freely.
 
-   Here every target is sized from --screen, which resolves to `svh` — the
-   SMALL viewport, the one that does not change when browser chrome hides. The
-   snap positions are therefore constant for the whole session. Combined with
-   `scroll-snap-align: start` (unlike `center`, start alignment does not depend
-   on scrollport height either), the geometry stays put and snapping behaves
-   the same on a phone as on a desktop.
+   Removing `scroll-snap-align` from the later sections is NOT enough to achieve
+   that. Under `mandatory`, a scrollport with no snap target in range still
+   resolves to the nearest one — the reader gets dragged backwards. The snap
+   TYPE itself has to be switched off past the zone, which is done in JS:
+   see applySnap() and the IntersectionObserver on .tech__scroller in site.js.
 
-   `mandatory`, not `proximity`. Proximity only engages if you happen to come
-   to rest near a snap point, so most gestures end wherever momentum died —
-   which reads as "it stops midway and feels soft". Mandatory always resolves
-   to a snap point, so every gesture lands on a stage.
+   Within the zone, snapping is deliberately hard:
+
+   - Every target is sized from --screen, which resolves to `svh` — the SMALL
+     viewport, the one that does not change when a phone's URL bar hides. Snap
+     positions are therefore constant for the whole session. `vh`/`dvh` targets
+     silently change height mid-gesture, which is what makes snap feel broken
+     on mobile. `scroll-snap-align: start` (unlike `center`) likewise does not
+     depend on scrollport height.
+
+   - `mandatory`, not `proximity`. Proximity only engages if you happen to come
+     to rest near a snap point, so most gestures end wherever momentum died —
+     which reads as "it stops midway and feels soft".
+
+   - `scroll-snap-stop: always` on the section itself AND on each of the six
+     technology stages, so a fling cannot skip a stage: each one is stopped at
+     and read. The Skip button is the escape hatch, and it suspends snapping
+     while it animates.
+
+   - A settle corrector in JS nudges any rest position that lands off a stage
+     boundary back onto it, because engines honour `mandatory` loosely after a
+     hard fling. See settleTech() in site.js.
 
    Mandatory has one hazard: it re-snaps from ANY resting position, so content
-   in a section taller than the screen can become impossible to rest on. On a
-   phone that is every section, once the cards stack. The fix is not to weaken
-   the snapping but to guarantee a snap point at least every screen — see
-   .snap-fill below and snapFill() in assets/site.js.
-
-   The six technology stages additionally get `scroll-snap-stop: always`, so a
-   fling cannot skip past a stage — each one is stopped at and read. The Skip
-   button is the escape hatch, and it suspends snapping while it animates.
+   in a section taller than the screen can become impossible to rest on — on a
+   phone that is the Problem section once its cards stack. The fix is not to
+   weaken the snapping but to guarantee a snap point at least every screen —
+   see .snap-fill below and snapFill() in assets/site.js.
    -------------------------------------------------------------------------- */
 html {
   scroll-snap-type: y mandatory;
-  /* A programmatic scroll (nav link, Skip) briefly sets this to none — see
-     assets/site.js, withSnapSuspended(). */
+  /* Set to none by JS both for programmatic scrolls (nav link, Skip) and for
+     the whole page past the technology section — see applySnap(). */
 }
 
+/* Every section keeps a snap alignment, even though only the hero, Problem and
+   Technology are ever meant to snap. This is a safety floor, not the mechanism.
+
+   What actually delivers "no snapping after Technology" is the snap TYPE being
+   switched off past the System section in JS. These alignments are inert while
+   that is off — `scroll-snap-type: none` disables them entirely.
+
+   They matter only when it is NOT off: with JavaScript blocked, or if the zone
+   toggle ever missed its cue. In that case a page whose later sections had no
+   snap positions would be worse than snappy, it would be STUCK — `mandatory`
+   with no target below the reader resolves every attempt to scroll on straight
+   back to the last one. Keeping the alignments means the bad case degrades to
+   the old behaviour (snapping everywhere, entirely readable) instead of a page
+   that cannot be scrolled to the end. The System section additionally serves as
+   the walkthrough's deliberate exit step: the scroller's final screen, where
+   the sticky stage scrolls away, carries no snap point of its own. */
 header#home,
 main > section[id] {
   scroll-snap-align: start;
 }
+
+footer { scroll-snap-align: end; }
+
+/* Entering the walkthrough is itself a guaranteed stop, so a fast fling out of
+   the Problem section cannot fly straight past the intro overlay. */
+#technology { scroll-snap-stop: always; }
 
 /* Each stage of the technology walkthrough is a guaranteed stop. */
 .tech__anchor {
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
-
-footer { scroll-snap-align: end; }
 
 /* Snap targets land flush with the top of the screen; their own top padding
    (76-90px) already clears the fixed nav, so no scroll-margin offset here —
@@ -193,10 +225,11 @@ main > section[id] { scroll-margin-top: 0; }
 
    Under `mandatory` the reader can only ever rest ON a snap point, so any gap
    between two snap points wider than one screen hides the content in between —
-   there is no resting position that shows it. JS measures the real gaps and
-   drops a 1px target into each one at even intervals, so consecutive points are
-   never more than a screen apart and nothing is unreachable. This is what lets
-   the snapping stay hard everywhere instead of being softened to compensate. */
+   there is no resting position that shows it. JS measures the real gaps inside
+   the snap zone and drops a 1px target into each one at even intervals, so
+   consecutive points are never more than a screen apart and nothing is
+   unreachable. This is what lets the snapping stay hard instead of being
+   softened to compensate. Fillers are never generated past the zone. */
 body { position: relative; }
 
 .snap-fill-layer {
@@ -218,6 +251,7 @@ body { position: relative; }
   html { scroll-behavior: auto; scroll-snap-type: none; }
   header#home, main > section[id], .tech__anchor, footer {
     scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 }
 
@@ -281,6 +315,9 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   color: var(--dim-2);
   max-width: 640px;
 }
+.section-note b { color: var(--text); font-weight: 600; }
+.section-note--light { color: var(--light-muted); max-width: 68ch; }
+.section-note--light b { color: var(--light-ink); }
 .is-right { text-align: right; }
 
 .section {
@@ -303,6 +340,29 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   gap: 16px;
 }
 
+/* Off-screen sections are skipped entirely — no layout, no paint, no style
+   resolution — until they are scrolled near. On a phone this is the difference
+   between compositing one screenful and compositing the whole deck.
+
+   `auto` on contain-intrinsic-size makes the browser remember each section's
+   real height after its first render, so the placeholder is only a guess once
+   and the scrollbar stops drifting after a single pass.
+
+   Deliberately excluded:
+   - #home / #problem / #technology — snapFill() measures their real geometry,
+     and .tech__stage is sticky (containment would break it).
+   - footer — it holds the #ref-N link targets that footnotes all over the page
+     jump into. A placeholder height that misses would land those jumps in the
+     wrong place, and the saving there is small. */
+#product,
+#why,
+#market,
+#model,
+#about {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
 .card {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -311,6 +371,10 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* A card's layout and paint never affect anything outside its own box, so
+     the engine can skip re-checking that. Cheap win on phones, where these
+     grids stack into long columns. */
+  contain: content;
 }
 .card__label {
   font-family: var(--mono);
@@ -333,6 +397,21 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   color: var(--heading);
 }
 .card p:not([class]) { font-size: 14px; line-height: 1.6; color: var(--muted); }
+.card p:not([class]) b { color: var(--text); font-weight: 600; }
+
+/* Secondary figure under a card's headline stat — the market tiers use it to
+   carry the refining-only subset beneath the all-industry number. */
+.card__sub {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  color: var(--dim-2);
+}
+.card__sub b { color: var(--accent); font-weight: 400; }
 
 .grid-auto {
   display: grid;
@@ -356,6 +435,9 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   cursor: pointer;
   /* 44px minimum touch target — WCAG 2.5.5 / iOS HIG. */
   min-height: 44px;
+  /* Opts out of double-tap-to-zoom on this element, so the tap fires without
+     the browser waiting to see whether a second one is coming. */
+  touch-action: manipulation;
   transition: background-color .18s ease, border-color .18s ease, color .18s ease;
 }
 .btn--primary { background: var(--accent); color: var(--accent-ink); }
@@ -398,11 +480,18 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   background: rgba(11, 18, 24, 0.82);
   border-bottom: 1px solid rgba(120, 150, 170, 0.14);
 }
-@supports ((backdrop-filter: blur(14px)) or (-webkit-backdrop-filter: blur(14px))) {
-  .nav {
-    background: rgba(11, 18, 24, 0.7);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+/* The blur is desktop-only on purpose. A backdrop-filter on a FIXED bar has to
+   re-sample everything behind it on every scroll frame; over a page that is
+   also running a canvas and hard snapping, that was the single largest
+   compositing cost on a phone. Touch devices get the opaque background above,
+   which reads almost identically. */
+@media (min-width: 921px) and (pointer: fine) {
+  @supports ((backdrop-filter: blur(14px)) or (-webkit-backdrop-filter: blur(14px))) {
+    .nav {
+      background: rgba(11, 18, 24, 0.7);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+    }
   }
 }
 
@@ -443,6 +532,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   color: var(--text);
   cursor: pointer;
   padding: 0;
+  touch-action: manipulation;
 }
 .nav__toggle:hover { border-color: var(--accent); }
 .nav__toggle span,
@@ -489,6 +579,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   font-size: 15px;
   color: var(--text);
   min-height: 44px;
+  touch-action: manipulation;
 }
 .nav__drawer a:last-of-type { border-bottom: none; }
 .nav__drawer a:hover { color: var(--accent-bright); }
@@ -559,7 +650,17 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   padding-top: 26px;
   border-top: 1px solid rgba(120, 150, 170, 0.16);
 }
-.hero__stat { display: flex; flex-direction: column; gap: 4px; }
+/* Given a basis rather than left to size from their own text: the first two
+   descriptions are long enough that natural sizing pushed the third stat onto
+   a second row, which broke the three-across reading of the problem's scale. */
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 190px;
+  min-width: 0;
+  max-width: 300px;
+}
 .hero__stat b {
   font-family: var(--disp);
   font-size: 28px;
@@ -583,6 +684,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
 .tech__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .tech__anchor { height: var(--screen); }
 
+
 .tech__intro {
   position: absolute;
   inset: 0;
@@ -593,8 +695,12 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   justify-content: center;
   text-align: center;
   pointer-events: none;
-  will-change: transform, opacity;
 }
+/* Promoted only while it is actually being scaled and faded — the draw loop
+   adds this class for the ~15% of the section where the zoom runs and drops it
+   again. A permanent `will-change` here pinned a full-viewport composited layer
+   for the entire session, which is memory a phone does not have to spare. */
+.tech__intro.is-animating { will-change: transform, opacity; }
 .tech__intro-inner {
   max-width: 860px;
   padding: 0 var(--pad-x);
@@ -637,6 +743,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   border-radius: 4px;
   cursor: pointer;
   min-height: 44px;
+  touch-action: manipulation;
 }
 .tech__skip:hover { border-color: var(--accent); color: var(--accent-bright); }
 .tech__skip--float {
@@ -779,6 +886,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 14px;
+  contain: content;
 }
 .panel--accent { border-color: rgba(86, 200, 223, 0.28); gap: 4px; }
 .panel__label {
@@ -980,6 +1088,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  contain: content;
 }
 .model__label {
   font-family: var(--mono);
@@ -1072,6 +1181,86 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
 }
 .roadmap__what { font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 
+/* Wider label column, for label/value rows rather than the timeline's dates —
+   "Why Venezuela first" in the Market section and the founder background block
+   in the Team section both use it. */
+.roadmap--wide { margin-top: 32px; }
+.roadmap--wide .roadmap__when {
+  width: 104px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.roadmap--wide .roadmap__row { padding: 14px 18px; }
+
+/* Credits — a native <details> styled as a toggle tab. Chosen over a JS tab so
+   it still opens with JavaScript blocked and is announced by screen readers
+   without any extra ARIA. */
+.credits {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.credits > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 20px;
+  cursor: pointer;
+  list-style: none;
+  min-height: 48px;
+  touch-action: manipulation;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+/* Safari still paints the default disclosure triangle without this. */
+.credits > summary::-webkit-details-marker { display: none; }
+.credits > summary:hover { color: var(--accent-bright); }
+.credits__hint {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+}
+.credits[open] > summary {
+  border-bottom: 1px solid rgba(120, 150, 170, 0.14);
+}
+/* The label is generated so the open/closed states cannot drift apart. The
+   span itself is aria-hidden — <summary> already announces its own state. */
+.credits__hint::before { content: '+ Show'; }
+.credits[open] .credits__hint::before { content: '− Hide'; }
+
+.credits__body {
+  display: flex;
+  flex-direction: column;
+}
+.credits__intro {
+  padding: 14px 20px 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--dim-2);
+}
+.credits__row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--line-soft);
+}
+.credits__row:first-of-type { border-top: none; }
+.credits__name {
+  font-family: var(--disp);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading);
+}
+.credits__role { font-size: 13px; line-height: 1.55; color: var(--muted); }
+
 .person {
   display: flex;
   align-items: center;
@@ -1105,10 +1294,28 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
 /* --------------------------------------------------------------------------
    11. Contact
    -------------------------------------------------------------------------- */
-.contact { min-height: 0; padding-bottom: 48px; }
-.contact__body { display: flex; flex-wrap: wrap; gap: 38px; align-items: flex-start; }
-.contact__intro { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
-.contact__intro p:not([class]) { font-size: 14.5px; line-height: 1.65; color: var(--muted); max-width: 52ch; }
+/* The closing slide should read as one screen, so the section is sized to the
+   viewport and its contents centred in it. `min-height`, never `height`: on a
+   phone the form legitimately runs longer than one screen and must be allowed
+   to — snapping is off down here, so nothing traps the overflow. */
+.contact {
+  min-height: var(--screen);
+  /* `safe` matches .section: if the form ever outgrows the viewport, centring
+     degrades to start alignment instead of pushing the top out of reach. */
+  justify-content: safe center;
+  padding-bottom: 48px;
+}
+.contact__body { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; }
+.contact__intro { flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.contact__intro p:not([class]) { font-size: 14.5px; line-height: 1.6; color: var(--muted); max-width: 50ch; }
+.contact__aside {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+  border-top: 1px solid var(--line-soft);
+  padding-top: 12px;
+}
 .contact__meta {
   margin-top: 12px;
   display: flex;
@@ -1132,16 +1339,16 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 22px;
+  padding: 20px;
   background: var(--surface);
 }
 /* `display:flex` above outranks the UA's [hidden]{display:none}; without this
    the form would stay on screen next to the thank-you panel after sending. */
 .form[hidden] { display: none; }
-.form__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.form__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 .form label {
   display: flex;
   flex-direction: column;
@@ -1167,7 +1374,7 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   letter-spacing: normal;
   text-transform: none;
 }
-.form textarea { min-height: 96px; resize: vertical; }
+.form textarea { min-height: 72px; resize: vertical; }
 .form input:focus, .form textarea:focus { border-color: var(--accent); outline: none; }
 .form input:focus-visible, .form textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .form input:user-invalid, .form textarea:user-invalid { border-color: #E2725B; }
@@ -1293,8 +1500,48 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   .hero__lede { font-size: 14.5px; }
   .hero__stats { margin-top: 12px; padding-top: 14px; gap: 24px; }
 }
+
+/* Laptops and landscape phones: compress the closing slide rather than let it
+   spill past the fold. */
+@media (max-height: 760px) {
+  .contact__body { gap: 22px; }
+  .contact__intro { gap: 10px; }
+  .contact__intro p:not([class]) { font-size: 13.5px; }
+  .contact__meta { margin-top: 4px; gap: 7px; font-size: 12px; }
+  .contact__aside { padding-top: 9px; }
+  .form { padding: 16px; gap: 10px; }
+  .form label { gap: 5px; }
+  .form input, .form textarea { padding: 9px 12px; min-height: 42px; }
+  .form textarea { min-height: 62px; }
+}
+
+/* Shorter still. The form cannot go below 44px touch targets or 16px inputs
+   (that is the iOS auto-zoom threshold), so past this point the savings come
+   out of chrome — padding, the secondary meta line — rather than the controls.
+   Below roughly 700px of viewport the section will exceed one screen on a
+   phone and simply scrolls; snapping is off down here, so that is fine. */
+@media (max-height: 700px) {
+  .contact { padding-top: 68px; padding-bottom: 28px; }
+  .contact__aside { display: none; }
+  .contact__meta { flex-direction: row; flex-wrap: wrap; gap: 6px 22px; margin-top: 2px; }
+  .contact__intro p:not([class]) { font-size: 13px; }
+  .form textarea { min-height: 54px; }
+}
+
+/* A landscape phone used to lose all three hero proof points to `display:none`.
+   They are the scale of the problem — the reason to keep reading — so they get
+   compressed into one inline row instead of being dropped. */
 @media (max-height: 600px) {
-  .hero__stats { display: none; }
+  .hero__stats {
+    flex-wrap: nowrap;
+    gap: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  .hero__stat { min-width: 0; }
+  .hero__stat b { font-size: 19px; }
+  .hero__stat span { font-size: 10.5px; line-height: 1.35; }
+  .hero__stat .badge { display: none; }
 }
 
 /* Overlay HUD/rail/return only make sense when there is room beside the canvas. */
@@ -1329,7 +1576,9 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   .hero__lede { font-size: 14.5px; }
   .hero__actions { gap: 10px; }
   .hero__actions .btn { flex: 1 1 auto; }
-  .hero__stats { gap: 16px 26px; margin-top: 16px; padding-top: 16px; }
+  .hero__stats { gap: 16px 22px; margin-top: 16px; padding-top: 16px; }
+  /* Two across on a phone rather than three shrunken ones or three stacked. */
+  .hero__stat { flex-basis: 132px; max-width: none; }
   .hero__stat b { font-size: 24px; }
 
   .section { padding-top: 76px; padding-bottom: 44px; }
@@ -1354,8 +1603,29 @@ a.badge-ref:hover { color: var(--accent); border-color: var(--accent); }
   .product__body { gap: 18px; }
   .models { gap: 12px; margin-top: 18px; }
   .about__body, .contact__body { gap: 26px; }
-  .form { padding: 18px; }
-  .form__row { gap: 12px; }
+  .form { padding: 16px; }
+
+  /* Keep the paired fields side by side on a phone. At the 180px floor used on
+     desktop every row collapses to one column, which alone adds ~150px to the
+     closing slide and pushes it well past one screen. 132px still auto-falls
+     back to a single column below ~350px of form width, so the narrowest
+     phones degrade on their own rather than being crushed. */
+  .form__row { gap: 10px; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); }
+
+  /* The closing slide is the one section explicitly meant to match the display
+     height, so it gets tighter margins than the rest. */
+  .contact { padding-top: 64px; padding-bottom: 28px; }
+  .contact__body { gap: 20px; }
+  .contact__meta { flex-direction: row; flex-wrap: wrap; gap: 6px 22px; margin-top: 2px; }
+
+  /* A 104px label column leaves too little for the text on a phone, so the
+     label/value rows stack instead. The timeline rows (plain .roadmap) keep
+     their side-by-side layout — their labels are short dates. */
+  .roadmap--wide { margin-top: 24px; }
+  .roadmap--wide .roadmap__row { flex-direction: column; gap: 6px; padding: 13px 16px; }
+  .roadmap--wide .roadmap__when { width: auto; }
+  .credits > summary { padding: 13px 16px; }
+  .credits__intro, .credits__row { padding-left: 16px; padding-right: 16px; }
 
   .footer__cols { gap: 26px; }
   .footer__legal { gap: 8px; }

@@ -26,11 +26,19 @@
 
   /* Device budget. Phones and low-core machines get a fraction of the
      particles and a lower backing-store resolution — the visual reads the
-     same at a third of the fill cost. */
+     same at a third of the fill cost.
+
+     The bottleneck on a phone is fill rate, not particle maths: the draw path
+     uses additive blending (globalCompositeOperation = 'lighter') in nine
+     places, so every backing-store pixel is touched several times per frame.
+     That is why the harshest cut is to the DPR, not the particle count — a
+     device that is both small and low-core renders at 1.25× instead of 2×,
+     which is roughly two-fifths of the pixels. */
   var smallScreen = Math.min(window.innerWidth, window.innerHeight) < 760;
   var lowCore = (navigator.hardwareConcurrency || 4) <= 4;
-  var budget = smallScreen || lowCore ? 0.42 : 1;
-  var maxDpr = smallScreen ? 1.5 : 2;
+  var weakDevice = smallScreen && lowCore;
+  var budget = weakDevice ? 0.32 : (smallScreen || lowCore ? 0.42 : 1);
+  var maxDpr = weakDevice ? 1.25 : (smallScreen ? 1.5 : 2);
 
   function dpr() {
     return Math.min(maxDpr, window.devicePixelRatio || 1);
@@ -67,20 +75,41 @@
   /* ========================================================================
      2. Scroll snapping support
 
-     The CSS does the snapping. These two pieces make it safe:
+     The CSS declares the snap targets; this section decides WHEN the page is
+     allowed to snap at all. Two independent conditions switch it off:
 
-       a) `scroll-snap-stop: always` on the six technology stages means a user
-          gesture cannot fly past a stage. That is the point on a phone, but it
-          also applies to PROGRAMMATIC scrolls in some engines — a nav link to
-          "System" would be caught at the first stage instead of clearing the
-          section. So every in-page navigation suspends snapping for the
-          duration of its animation and restores it once the scroll settles.
+       a) A programmatic scroll is in flight. `scroll-snap-stop: always` on the
+          six technology stages means a user gesture cannot fly past a stage —
+          which is the point — but in some engines it applies to programmatic
+          scrolls too, so a nav link to "Market" would be caught at the first
+          stage instead of clearing the section. Every in-page navigation
+          therefore suspends snapping until its scroll settles.
 
-       b) Every snap target is sized from --screen (svh), so the snap positions
-          never move when the phone's URL bar hides. That is what the CSS notes
-          above depend on, and it is the whole reason this works on touch.
+       b) The reader is past the technology section. Snapping is for the
+          walkthrough; the reading sections after it must be restable anywhere.
+          Note that dropping `scroll-snap-align` from those sections is NOT
+          enough — under `mandatory` a scrollport with no target in range still
+          resolves to the nearest one and drags the reader backwards. The snap
+          TYPE has to come off, which is what inSnapZone does.
+
+     Both conditions write the same inline property, so they go through one
+     function rather than fighting over it.
+
+     Every snap target is sized from --screen (svh), so snap positions never
+     move when a phone's URL bar hides. That is what the CSS notes depend on,
+     and it is the whole reason this works on touch.
      ====================================================================== */
   var snapWatch = 0;
+  var snapHeld = false;    // (a) a programmatic scroll is running
+  var inSnapZone = true;   // (b) we are at or above the technology section
+
+  /* Re-derives (b) from live geometry. Assigned by snapZone() below; callable
+     from anywhere that has reason to believe the cached answer is stale. */
+  var refreshSnapZone = function () {};
+
+  function applySnap() {
+    root.style.scrollSnapType = (snapHeld || !inSnapZone) ? 'none' : '';
+  }
 
   /* Suspends snapping, runs a programmatic scroll, and restores snapping only
      once the page has actually come to rest.
@@ -94,8 +123,11 @@
   function withSnapSuspended(scrollFn) {
     if (reduced) { scrollFn(); return; }
 
-    var html = root;
-    html.style.scrollSnapType = 'none';
+    snapHeld = true;
+    applySnap();
+    // Only one programmatic scroll can be in flight; a new one replaces the
+    // old watcher rather than stacking, which is why this is a flag and not a
+    // counter — a counter would leak a hold every time it was cancelled.
     if (snapWatch) cancelAnimationFrame(snapWatch);
 
     scrollFn();
@@ -108,12 +140,180 @@
       // ~10 frames still (about 160ms), or a 5s ceiling as a hard stop.
       if (atRest > 9 || Date.now() - startedAt > 5000) {
         snapWatch = 0;
-        html.style.scrollSnapType = '';
+        snapHeld = false;
+        applySnap();
         return;
       }
       snapWatch = requestAnimationFrame(watch);
     })();
   }
+
+  /* Condition (b) — where the snap zone ends.
+
+     Above the boundary snapping is armed; at or below it the page scrolls
+     freely. The boundary is the top of the System section, which is the last
+     snap position on the page (see the note beside `scroll-snap-align` in
+     site.css for why System carries one). So snapping stays armed for the whole
+     walkthrough including the step out of it, and is released as that step
+     lands. Releasing any earlier would strand the reader: the scroller's final
+     screen, where the sticky stage scrolls away, holds no snap point, so
+     `mandatory` would keep resolving back onto stage six.
+
+     This compares positions against scrollY rather than observing an element,
+     because an IntersectionObserver misses the crossing entirely on an instant
+     jump — a nav link from the hero to Contact takes the boundary from below
+     the viewport to above it in a single frame, the intersection ratio is 0
+     both times, no callback fires, and snapping stays armed over the whole
+     free-scroll region. */
+  (function snapZone() {
+    if (reduced) return;
+    var exit = doc.getElementById('product');
+    if (!exit) return;
+
+    /* The boundary is the LAST snap point on the page — the top of the System
+       section — less a small tolerance.
+
+       Tying it to that element, rather than to a marker a few pixels further
+       down, is the whole trick. The release must never sit BELOW the last snap
+       position: if it does, arriving at System leaves `mandatory` armed with no
+       target beneath it, every attempt to read on resolves back to System, and
+       the reader is wedged at the bottom of the deck. Erring a few pixels EARLY
+       is harmless by comparison — the browser is landing on that snap point
+       anyway. */
+    var TOLERANCE = 4;
+    var boundaryY = Infinity;   // until measured, assume we are in the zone
+
+    function boundary() {
+      return Math.round(exit.getBoundingClientRect().top + window.scrollY) - TOLERANCE;
+    }
+    function measure() {
+      boundaryY = boundary();
+      check();
+    }
+    function check() {
+      var y = window.scrollY;
+
+      /* Re-measure only in the band within one screen of the boundary. The
+         cached value is fine far away, but it drifts by tens of pixels as
+         content above settles (webfonts alone are enough), and near the
+         boundary a stale value is exactly what wedges the page. Confining the
+         layout read to the crossing keeps it off the hot path everywhere else,
+         and a gesture cannot cross the band without firing an event inside it.
+         An instant jump that skips the band lands far enough past the boundary
+         that a stale value still resolves correctly. */
+      if (Math.abs(y - boundaryY) < window.innerHeight) boundaryY = boundary();
+
+      var next = y < boundaryY;
+      if (next === inSnapZone) return;
+      inSnapZone = next;
+      applySnap();
+    }
+
+    /* Deferred a frame on purpose: this module runs near the top of the file,
+       but the technology walkthrough further down is what adds `.is-live` to
+       the section — and until it does, the CSS no-JS fallback is in force,
+       collapsing the sticky stage and setting the six stage anchors to
+       `display: none`. Measuring before that switch reports a position
+       thousands of pixels too high. */
+    requestAnimationFrame(measure);
+
+    /* Getting this state wrong is not symmetrical. A stale "below the
+       boundary" merely costs some snapping; a stale "still in the zone" past
+       the last snap point leaves `mandatory` armed with nothing beneath it to
+       resolve to, and the reader cannot scroll down at all. So besides the
+       live check on every scroll, the answer is re-derived whenever scrolling
+       comes to rest — scroll events coalesce, and the end of a fling is
+       exactly where one can be dropped. */
+    var restTimer = 0;
+    window.addEventListener('scroll', function () {
+      check();
+      clearTimeout(restTimer);
+      restTimer = setTimeout(measure, 160);
+    }, { passive: true });
+
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', measure, { passive: true });
+    }
+
+    // settleTech() re-checks through this before it acts on the zone state.
+    refreshSnapZone = measure;
+
+    /* Last-resort release, on a mechanism that does not depend on scroll events
+       at all. If any part of the closing section is on screen, the reader is
+       unambiguously past the last snap point, and snapping must be off — so if
+       every scroll-driven path above somehow failed, this still frees the page
+       rather than leaving it wedged. It can only ever release, never arm, so it
+       cannot fight the normal logic. */
+    if ('IntersectionObserver' in window) {
+      var tail = doc.getElementById('contact');
+      if (tail) {
+        new IntersectionObserver(function (entries) {
+          if (!entries[entries.length - 1].isIntersecting) return;
+          if (!inSnapZone) return;
+          inSnapZone = false;
+          applySnap();
+        }, { threshold: 0 }).observe(tail);
+      }
+    }
+
+    onResize(measure);
+    window.addEventListener('load', measure);
+    if (doc.fonts && doc.fonts.ready && doc.fonts.ready.then) {
+      doc.fonts.ready.then(measure).catch(function () {});
+    }
+  })();
+
+  /* Settle corrector — what makes the walkthrough feel locked.
+
+     `mandatory` + `scroll-snap-stop: always` is honoured loosely after a hard
+     fling: engines routinely come to rest tens of pixels off a boundary, which
+     leaves a caption half-faded and reads as mushy. This waits until scrolling
+     has genuinely stopped and, if the rest position is off a stage boundary by
+     more than a couple of pixels, corrects it instantly.
+
+     It only ever runs at rest, never during a gesture and never while a
+     programmatic scroll is in flight, so it cannot take the scroll away from
+     the reader — it is a correction, not a hijack. */
+  (function settleTech() {
+    if (reduced) return;
+    var scroller = doc.querySelector('[data-tech-scroller]');
+    var stage = scroller && scroller.querySelector('.tech__stage');
+    if (!scroller || !stage) return;
+
+    // Must match the .tech__anchor count in index.html.
+    var STAGES = 6;
+
+    function settle() {
+      // Scrolling has stopped, so this is the cheapest moment to confirm which
+      // side of the boundary we came to rest on before acting on it.
+      refreshSnapZone();
+      if (snapHeld || !inSnapZone) return;
+
+      var screenH = stage.getBoundingClientRect().height;
+      if (screenH < 200) return;
+
+      // How far into the pinned sequence we are. Boundaries sit at exact
+      // multiples of one screen.
+      var into = -scroller.getBoundingClientRect().top;
+      var n = Math.round(into / screenH);
+      if (n < 0 || n > STAGES) return;
+
+      var off = into - n * screenH;
+      if (Math.abs(off) < 2) return;
+
+      window.scrollTo({ top: window.scrollY - off, behavior: 'auto' });
+    }
+
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', settle, { passive: true });
+    } else {
+      var timer = 0;
+      window.addEventListener('scroll', function () {
+        clearTimeout(timer);
+        timer = setTimeout(settle, 140);
+      }, { passive: true });
+    }
+  })();
 
   (function anchorNavigation() {
     doc.addEventListener('click', function (e) {
@@ -148,10 +348,17 @@
      Mandatory snapping means the reader can only come to rest ON a snap point.
      If two consecutive points are further apart than one screen, whatever sits
      between them cannot be brought fully into view at any resting position —
-     the mobile results strip after the last technology stage was exactly this
-     case, and every section is taller than a phone screen once its cards
-     stack. Rather than soften the snapping, this measures the real gaps and
-     drops a 1px target into each one at even intervals. */
+     on a phone the Problem section is exactly this case once its three cards
+     stack into a column. Rather than soften the snapping, this measures the
+     real gaps and drops a 1px target into each one at even intervals.
+
+     It covers the whole page, not just the snap zone, for the same reason the
+     CSS keeps an alignment on every section: past the walkthrough these points
+     are inert, because the snap type is switched off there. They exist for the
+     case where it is not — JavaScript blocked, or the zone toggle missing its
+     cue — so that the fallback is a readable snappy page rather than sections
+     the reader can never bring fully into view. A handful of empty 1px divs is
+     a cheap insurance premium. */
   (function snapFill() {
     if (reduced) return;
 
@@ -174,6 +381,7 @@
       var y = window.scrollY;
       var points = [];
 
+      // Exactly the elements that carry `scroll-snap-align` in the CSS.
       toArray(doc.querySelectorAll('.hero, main > section[id], .tech__anchor'))
         .forEach(function (el) {
           points.push(Math.round(el.getBoundingClientRect().top + y));
@@ -208,7 +416,11 @@
       layer.dataset.count = made;
     }
 
-    build();
+    /* Deferred a frame for the same reason as snapZone(): the technology
+       walkthrough has not added `.is-live` yet, so the six stage anchors are
+       still `display: none` under the no-JS fallback and would all measure at
+       zero. */
+    requestAnimationFrame(build);
     onResize(build);
     // Webfonts and the product image both change section heights after load.
     window.addEventListener('load', build);
@@ -403,6 +615,11 @@
     var canvas = doc.querySelector('[data-hero-canvas]');
     if (!canvas) return;
 
+    /* Purely decorative, and the hero is where first-input responsiveness
+       matters most — a device that is both small and low-core keeps the CSS
+       gradient underneath and never starts the loop at all. */
+    if (weakDevice) { canvas.remove(); return; }
+
     var ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
@@ -526,7 +743,16 @@
     var canvas = doc.querySelector('[data-tech-canvas]');
     if (!canvas) return;
 
-    var ctx = canvas.getContext('2d', { alpha: true });
+    /* Opaque. The canvas fills the stage edge to edge and the stage's own
+       background is never meant to show through, so there is nothing to gain
+       from an alpha channel — and plenty to lose: a transparent full-viewport
+       canvas has to be blended against the page on every composite. The frame
+       opens with a fillRect of the stage colour instead of clearRect.
+
+       The two cross-fade layers in getLayers() stay transparent; they are drawn
+       onto this one with globalAlpha and genuinely need the channel. */
+    var BG = '#0A1118';   /* --bg-deep */
+    var ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     var stage = canvas.parentElement;
@@ -550,6 +776,13 @@
     var intro = stage.querySelector('[data-tech-intro]');
     var fadeEls = toArray(stage.querySelectorAll('[data-fade-in]'));
     var skipFloat = stage.querySelector('[data-skip-float]');
+
+    /* How far the intro overlay zooms as it dissolves into the simulation.
+       2.8× a full-viewport layer is a lot of overdraw for a phone to composite
+       while it is also drawing the canvas and running a snap; 1.9× reads the
+       same and costs roughly a third less. */
+    var INTRO_ZOOM = smallScreen ? 0.9 : 1.8;
+    var introAnimating = false;
 
     var hud = {};
     ['phase', 'v', 'i', 'g', 'r'].forEach(function (k) {
@@ -1002,7 +1235,9 @@
       }
 
       if (ANNOTATE) {
-        g2.font = '500 ' + Math.max(9, fpx - 1) + "px 'IBM Plex Mono', monospace";
+        // 400 is the only Plex Mono weight the page loads; asking for 500 here
+        // just made the engine synthesise one.
+        g2.font = '400 ' + Math.max(9, fpx - 1) + "px 'IBM Plex Mono', monospace";
         g2.fillStyle = 'rgba(140,170,190,0.6)';
         g2.fillText('AIR STREAMLINES →', 18, H - 20);
         g2.textAlign = 'center';
@@ -1308,7 +1543,7 @@
 
       if (ANNOTATE) {
         var fpx = Math.max(10, Math.round(11 * Math.min(W, H) / 640));
-        g2.font = '500 ' + fpx + "px 'IBM Plex Mono', monospace";
+        g2.font = '400 ' + fpx + "px 'IBM Plex Mono', monospace";
         g2.textAlign = 'center';
         g2.fillStyle = meshOn ? 'rgba(86,200,223,0.9)' : 'rgba(150,180,200,0.85)';
         g2.fillText(
@@ -1343,8 +1578,16 @@
 
       if (intro) {
         intro.style.opacity = (1 - iv).toFixed(3);
-        intro.style.transform = 'scale(' + (1 + 1.8 * iv).toFixed(3) + ')';
+        intro.style.transform = 'scale(' + (1 + INTRO_ZOOM * iv).toFixed(3) + ')';
         intro.style.visibility = iv > 0.98 ? 'hidden' : 'visible';
+        /* Promote the layer only while it is genuinely mid-transition. Leaving
+           `will-change` on a full-viewport element permanently costs a
+           composited layer for the entire session. */
+        var animating = iv > 0.001 && iv < 0.999;
+        if (animating !== introAnimating) {
+          introAnimating = animating;
+          intro.classList.toggle('is-animating', animating);
+        }
       }
       fadeEls.forEach(function (el) { el.style.opacity = iv.toFixed(3); });
       if (hudPanel) hudPanel.style.opacity = iv.toFixed(3);
@@ -1354,7 +1597,8 @@
         skipFloat.style.visibility = so < 0.02 ? 'hidden' : 'visible';
       }
 
-      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, W, H);
       ctx.strokeStyle = 'rgba(120,150,170,0.04)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -1409,6 +1653,9 @@
       setHud('v', (10 * chargeR).toFixed(1) + ' kV');
       setHud('i', (0.010 * chargeR).toFixed(3) + ' mA');
       setHud('g', '×' + (1 + 7 * fieldR).toFixed(1));
+      // 7,400 L/day is the midpoint of the 4,000–10,000 L/day per-installation
+      // range quoted in the caption and the .tech__summary panels. Volume is
+      // stated in litres everywhere on this site; do not reintroduce m³.
       setHud('r', Math.round(7400 * Math.max(recFrac, collectR * 0.2)).toLocaleString('en-US') + ' L/d');
 
       var rpo = ss(sp, 0.86, 0.93);
